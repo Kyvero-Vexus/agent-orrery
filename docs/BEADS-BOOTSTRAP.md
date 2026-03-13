@@ -1,0 +1,47 @@
+# Beads Bootstrap Map
+
+Initial roadmap beads for Agent Orrery V1.
+
+- `agent-orrery-eb0` (epic, P1) — Program: Agent Orrery V1 delivery
+- `agent-orrery-eb0.1` (epic, P1) — Epic 1: Typed core foundation and scaffolding
+- `agent-orrery-eb0.1.1` (task, P1) — Initialize CL project skeleton (.asd, packages, Coalton core module)
+- `agent-orrery-eb0.1.2` (task, P1) — Enforce static typing policy in CI (Coalton + SBCL declaration checks)
+- `agent-orrery-eb0.1.3` (task, P1) — Define adapter protocol contracts and normalized domain types
+- `agent-orrery-eb0.1.4` (task, P1) — Build deterministic fixture runtime harness
+- `agent-orrery-eb0.1.5` (task, P0) — E2E Gate (Epic 1): Typed core + fixture smoke scenarios pass
+- `agent-orrery-eb0.2` (epic, P1) — Epic 2: OpenClaw adapter and normalized data pipeline
+- `agent-orrery-eb0.2.1` (feature, P1) — Implement OpenClaw adapter client for health/sessions/cron/history
+- `agent-orrery-eb0.2.2` (task, P1) — Implement event ingest and projection pipeline
+- `agent-orrery-eb0.2.3` (task, P1) — Implement snapshot + incremental sync store
+- `agent-orrery-eb0.2.4` (task, P1) — Adapter conformance suite (OpenClaw + generic adapter contract tests)
+- `agent-orrery-eb0.2.5` (task, P0) — E2E Gate (Epic 2): Scenario S1 passes on fixture and live runtime
+- `agent-orrery-eb0.3` (epic, P1) — Epic 3: Terminal UI (TUI) operations console
+- `agent-orrery-eb0.3.1` (feature, P1) — Build TUI dashboard shell, navigation, and panel layout
+- `agent-orrery-eb0.3.2` (task, P1) — Add TUI session drill-down, history tail, filter/search workflows
+- `agent-orrery-eb0.3.3` (task, P1) — Add TUI cron operations (trigger, pause/resume) and status transitions
+- `agent-orrery-eb0.3.4` (task, P1) — Add TUI analytics cards (usage/cost/models/sub-agents)
+- `agent-orrery-eb0.3.5` (task, P0) — E2E Gate (Epic 3): PTY scenarios S1-S5 pass for TUI
+- `agent-orrery-eb0.4` (epic, P1) — Epic 4: Web dashboard interface
+- `agent-orrery-eb0.4.1` (feature, P1) — Build web server + dashboard shell with live updates
+- `agent-orrery-eb0.4.2` (task, P1) — Implement web session drill-down and timeline filtering
+- `agent-orrery-eb0.4.3` (task, P1) — Implement web cron operations and action audit trail
+- `agent-orrery-eb0.4.4` (task, P1) — Implement web alert center and policy thresholds UI
+- `agent-orrery-eb0.4.5` (task, P0) — E2E Gate (Epic 4): Playwright scenarios S1-S6 pass for Web UI
+- `agent-orrery-eb0.5` (epic, P1) — Epic 5: McCLIM operations interface
+- `agent-orrery-eb0.5.1` (feature, P1) — Build McCLIM frame/panes for dashboard observability views
+- `agent-orrery-eb0.5.2` (task, P1) — Implement McCLIM command tables for session/cron operations
+- `agent-orrery-eb0.5.3` (task, P1) — Implement McCLIM inspectors for sessions/events/alerts
+- `agent-orrery-eb0.5.4` (task, P2) — Add McCLIM accessibility and keyboard parity pass
+- `agent-orrery-eb0.5.5` (task, P0) — E2E Gate (Epic 5): CLIM event scenarios S1-S6 pass
+- `agent-orrery-eb0.6` (epic, P1) — Epic 6: Cross-UI parity and plugin/adapter SDK
+- `agent-orrery-eb0.6.1` (feature, P1) — Define plugin SDK for custom cards and commands
+- `agent-orrery-eb0.6.2` (task, P1) — Implement generic adapter starter kit for non-OpenClaw runtimes
+- `agent-orrery-eb0.6.3` (task, P1) — Build cross-UI parity test suite and conformance report
+- `agent-orrery-eb0.6.4` (task, P2) — Document extension API and compatibility guarantees
+- `agent-orrery-eb0.6.5` (task, P0) — E2E Gate (Epic 6): Scenarios S7-S8 + parity suite pass across all UIs
+- `agent-orrery-eb0.7` (epic, P1) — Epic 7: Production hardening and release
+- `agent-orrery-eb0.7.1` (task, P1) — Run performance/soak tests at high session and event volumes
+- `agent-orrery-eb0.7.2` (task, P1) — Run resilience suite for adapter faults and recovery behavior
+- `agent-orrery-eb0.7.3` (task, P1) — Package distributions (CLI/TUI/Web/McCLIM) and service recipes
+- `agent-orrery-eb0.7.4` (task, P2) — Publish operator runbook and release checklist
+- `agent-orrery-eb0.7.5` (task, P0) — E2E Gate (Epic 7): Full scenarios S1-S8 pass under soak profile
