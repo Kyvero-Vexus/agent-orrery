@@ -7,6 +7,7 @@
   :description "Dashboard for OpenClaw-compatible agent systems"
   :version "0.1.0"
   :license "MIT"
+  :depends-on ("dexador" "com.inuoe.jzon")
   :serial t
   :components
   ((:module "src"
@@ -16,7 +17,8 @@
      (:module "domain"
       :components ((:file "types")))
      (:module "adapter"
-      :components ((:file "protocol")))))))
+      :components ((:file "protocol")
+                   (:file "openclaw")))))))
 
 (defsystem "agent-orrery/test-harness"
   :description "Deterministic fixture runtime harness for Agent Orrery"
@@ -34,4 +36,5 @@
      (:file "generators")
      (:file "fixture-adapter")
      (:module "tests"
-      :components ((:file "harness-tests")))))))
+      :components ((:file "harness-tests")
+                   (:file "openclaw-adapter-tests")))))))

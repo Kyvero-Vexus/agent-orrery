@@ -82,3 +82,35 @@
    #:adapter-not-supported
    #:adapter-not-found
    #:adapter-not-found-id))
+
+(defpackage #:orrery/adapter/openclaw
+  (:use #:cl)
+  (:import-from #:orrery/domain
+                #:make-session-record
+                #:make-history-entry
+                #:make-cron-record
+                #:make-health-record
+                #:make-adapter-capability)
+  (:import-from #:orrery/adapter
+                #:adapter-list-sessions
+                #:adapter-session-history
+                #:adapter-list-cron-jobs
+                #:adapter-trigger-cron
+                #:adapter-pause-cron
+                #:adapter-resume-cron
+                #:adapter-system-health
+                #:adapter-usage-records
+                #:adapter-tail-events
+                #:adapter-list-alerts
+                #:adapter-acknowledge-alert
+                #:adapter-snooze-alert
+                #:adapter-list-subagents
+                #:adapter-capabilities
+                #:adapter-not-supported)
+  (:export
+   #:openclaw-adapter
+   #:make-openclaw-adapter
+   #:openclaw-base-url
+   #:openclaw-api-token
+   #:openclaw-timeout-s
+   #:%openclaw-request))
