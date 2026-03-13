@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "agent_orrery",
+  "project_id": "87ea7a88-0777-4a35-95e8-0794ee5b52ee"
+}
