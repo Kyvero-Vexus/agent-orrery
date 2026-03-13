@@ -169,13 +169,17 @@
       (true (every #'session-record-p sessions))
       (is string= "session-001" (sr-id (first sessions))))))
 
-(define-test (adapter-tests session-history)
+(define-test (adapter-tests session-history-typed)
+  "Session history returns HISTORY-ENTRY structs, not plists."
   (let ((a (make-fixture-adapter)))
     (let ((history (adapter-session-history a "session-001")))
       (true (listp history))
       (true (plusp (length history)))
-      ;; First message should be from :user
-      (is eq :user (getf (first history) :role)))))
+      (true (every #'history-entry-p history))
+      ;; First message is from :user
+      (is eq :user (he-role (first history)))
+      ;; Each entry has a positive token-count
+      (true (every (lambda (h) (plusp (he-token-count h))) history)))))
 
 (define-test (adapter-tests session-history-missing)
   (let ((a (make-fixture-adapter)))
@@ -197,8 +201,25 @@
       (is = (1+ old-run-count) (cr-run-count job)))))
 
 (define-test (adapter-tests trigger-cron-missing)
+  "Triggering a nonexistent cron job signals ADAPTER-NOT-FOUND."
   (let ((a (make-fixture-adapter)))
-    (is eq nil (adapter-trigger-cron a "nonexistent"))))
+    (fail (adapter-trigger-cron a "nonexistent") adapter-not-found)))
+
+(define-test (adapter-tests pause-resume-cron)
+  "Pause and resume a cron job, verifying status transitions."
+  (let ((a (make-fixture-adapter)))
+    (let ((job (find "cron-001" (fixture-cron-jobs a)
+                     :key #'cr-name :test #'string=)))
+      ;; Pause
+      (true (adapter-pause-cron a "cron-001"))
+      (is eq :paused (cr-status job))
+      ;; Resume
+      (true (adapter-resume-cron a "cron-001"))
+      (is eq :active (cr-status job)))))
+
+(define-test (adapter-tests pause-cron-missing)
+  (let ((a (make-fixture-adapter)))
+    (fail (adapter-pause-cron a "nonexistent") adapter-not-found)))
 
 (define-test (adapter-tests system-health)
   (let ((a (make-fixture-adapter)))
@@ -240,13 +261,64 @@
 
 (define-test (adapter-tests acknowledge-alert-missing)
   (let ((a (make-fixture-adapter)))
-    (is eq nil (adapter-acknowledge-alert a "nonexistent"))))
+    (fail (adapter-acknowledge-alert a "nonexistent") adapter-not-found)))
+
+(define-test (adapter-tests snooze-alert)
+  "Snooze an alert and verify snoozed-until is set."
+  (let ((a (make-fixture-adapter)))
+    (let* ((alert (first (fixture-alerts a)))
+           (now   (clock-now (fixture-adapter-clock a))))
+      (false (ar-snoozed-until alert))
+      (true (adapter-snooze-alert a (ar-id alert) 3600))
+      (is = (+ now 3600) (ar-snoozed-until alert)))))
+
+(define-test (adapter-tests snooze-alert-missing)
+  (let ((a (make-fixture-adapter)))
+    (fail (adapter-snooze-alert a "nonexistent" 3600) adapter-not-found)))
 
 (define-test (adapter-tests list-subagents)
   (let ((a (make-fixture-adapter)))
     (let ((subs (adapter-list-subagents a)))
       (is = 3 (length subs))
       (true (every #'subagent-record-p subs)))))
+
+;;; ============================================================
+;;; Capability Introspection Tests
+;;; ============================================================
+
+(define-test capability-tests)
+
+(define-test (capability-tests capabilities-returned)
+  "adapter-capabilities returns a list of adapter-capability structs."
+  (let* ((a (make-fixture-adapter))
+         (caps (adapter-capabilities a)))
+    (true (listp caps))
+    (true (plusp (length caps)))
+    (true (every #'adapter-capability-p caps))))
+
+(define-test (capability-tests fixture-supports-all)
+  "Fixture adapter reports all standard capabilities as supported."
+  (let* ((a (make-fixture-adapter))
+         (caps (adapter-capabilities a)))
+    (dolist (name '("trigger-cron" "pause-cron" "acknowledge-alert"
+                    "snooze-alert" "session-history"))
+      (let ((cap (find name caps :key #'cap-name :test #'string=)))
+        (true cap)
+        (true (cap-supported-p cap))))))
+
+;;; ============================================================
+;;; Adapter Conformance Suite Tests
+;;; ============================================================
+
+(define-test conformance-tests)
+
+(define-test (conformance-tests fixture-passes-conformance)
+  "The fixture adapter passes the full conformance suite."
+  (let ((a (make-fixture-adapter)))
+    (multiple-value-bind (passed-p failures)
+        (run-adapter-conformance a)
+      (true passed-p)
+      (is = 0 (length failures)))))
 
 ;;; ============================================================
 ;;; Full Scenario Replay
@@ -288,7 +360,6 @@
       (is = 4 executed))
 
     ;; Verify final state
-    ;; Session tokens increased
     (let ((s1 (first (fixture-sessions adapter))))
       (is = (+ 1500 500) (sr-total-tokens s1))
       (is = (+ 10 3) (sr-message-count s1)))
@@ -298,11 +369,37 @@
            (find "alert-001" (fixture-alerts adapter)
                  :key #'ar-id :test #'string=)))
 
-    ;; Cron job was triggered (run-count increased by 1 from original)
+    ;; Cron job was triggered
     (let ((job (find "cron-001" (fixture-cron-jobs adapter)
                      :key #'cr-name :test #'string=)))
-      ;; Original run-count was 5 (i=1, *5), trigger adds 1
       (is = 6 (cr-run-count job)))
 
-    ;; Clock advanced to target
+    ;; Clock advanced
     (is = (+ 3920000000 500) (clock-now clk))))
+
+(define-test (scenario-tests pause-resume-in-timeline)
+  "Scenario: pause a cron job, advance time, resume it."
+  (let* ((clk (make-fixture-clock :start-time 3920000000))
+         (adapter (make-fixture-adapter :clock clk))
+         (tl (fixture-adapter-timeline adapter)))
+
+    ;; At T+50: pause cron-001
+    (timeline-schedule tl (+ 3920000000 50)
+                       (lambda ()
+                         (adapter-pause-cron adapter "cron-001")))
+    ;; At T+150: resume cron-001
+    (timeline-schedule tl (+ 3920000000 150)
+                       (lambda ()
+                         (adapter-resume-cron adapter "cron-001")))
+
+    ;; Run to T+100 — pause should have fired
+    (timeline-run-until! tl clk (+ 3920000000 100))
+    (let ((job (find "cron-001" (fixture-cron-jobs adapter)
+                     :key #'cr-name :test #'string=)))
+      (is eq :paused (cr-status job)))
+
+    ;; Run to T+200 — resume should have fired
+    (timeline-run-until! tl clk (+ 3920000000 200))
+    (let ((job (find "cron-001" (fixture-cron-jobs adapter)
+                     :key #'cr-name :test #'string=)))
+      (is eq :active (cr-status job)))))

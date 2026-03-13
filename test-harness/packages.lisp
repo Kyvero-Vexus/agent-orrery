@@ -6,34 +6,41 @@
 (defpackage #:orrery/harness
   (:use #:cl)
   (:import-from #:orrery/domain
-                #:session-record #:make-session-record
+                #:session-record #:make-session-record #:session-record-p
                 #:sr-id #:sr-agent-name #:sr-channel #:sr-status #:sr-model
                 #:sr-created-at #:sr-updated-at #:sr-message-count
                 #:sr-total-tokens #:sr-estimated-cost-cents
-                #:cron-record #:make-cron-record
+                #:cron-record #:make-cron-record #:cron-record-p
                 #:cr-name #:cr-kind #:cr-interval-s #:cr-status
                 #:cr-last-run-at #:cr-next-run-at #:cr-run-count
                 #:cr-last-error #:cr-description
-                #:health-record #:make-health-record
+                #:health-record #:make-health-record #:health-record-p
                 #:hr-component #:hr-status #:hr-message #:hr-checked-at #:hr-latency-ms
-                #:usage-record #:make-usage-record
+                #:usage-record #:make-usage-record #:usage-record-p
                 #:ur-model #:ur-period #:ur-timestamp
                 #:ur-prompt-tokens #:ur-completion-tokens #:ur-total-tokens
                 #:ur-estimated-cost-cents
-                #:event-record #:make-event-record
+                #:event-record #:make-event-record #:event-record-p
                 #:er-id #:er-kind #:er-source #:er-message #:er-timestamp #:er-metadata
-                #:alert-record #:make-alert-record
+                #:alert-record #:make-alert-record #:alert-record-p
                 #:ar-id #:ar-severity #:ar-title #:ar-message #:ar-source
                 #:ar-fired-at #:ar-acknowledged-p #:ar-snoozed-until
-                #:subagent-record #:make-subagent-record
+                #:subagent-record #:make-subagent-record #:subagent-record-p
                 #:sar-id #:sar-parent-session #:sar-agent-name #:sar-status
-                #:sar-started-at #:sar-finished-at #:sar-total-tokens #:sar-result)
+                #:sar-started-at #:sar-finished-at #:sar-total-tokens #:sar-result
+                #:history-entry #:make-history-entry #:history-entry-p
+                #:he-role #:he-content #:he-timestamp #:he-token-count
+                #:adapter-capability #:make-adapter-capability #:adapter-capability-p
+                #:cap-name #:cap-description #:cap-supported-p)
   (:import-from #:orrery/adapter
                 #:adapter-list-sessions #:adapter-session-history
                 #:adapter-list-cron-jobs #:adapter-trigger-cron
+                #:adapter-pause-cron #:adapter-resume-cron
                 #:adapter-system-health #:adapter-usage-records
                 #:adapter-tail-events #:adapter-list-alerts
-                #:adapter-acknowledge-alert #:adapter-list-subagents)
+                #:adapter-acknowledge-alert #:adapter-snooze-alert
+                #:adapter-list-subagents #:adapter-capabilities
+                #:adapter-error #:adapter-not-supported #:adapter-not-found)
   (:export
    ;; Clock
    #:fixture-clock #:make-fixture-clock #:clock-now #:clock-advance! #:clock-set!
@@ -48,7 +55,9 @@
    #:fixture-adapter #:make-fixture-adapter
    #:fixture-adapter-clock #:fixture-adapter-timeline
    #:fixture-sessions #:fixture-cron-jobs #:fixture-health
-   #:fixture-usage #:fixture-events #:fixture-alerts #:fixture-subagents))
+   #:fixture-usage #:fixture-events #:fixture-alerts #:fixture-subagents
+   ;; Conformance testing
+   #:run-adapter-conformance))
 
 (defpackage #:orrery/harness-tests
   (:use #:cl #:parachute)
@@ -64,7 +73,8 @@
                 #:fixture-sessions #:fixture-cron-jobs #:fixture-health
                 #:fixture-usage #:fixture-events #:fixture-alerts
                 #:fixture-subagents
-                #:fixture-adapter-clock #:fixture-adapter-timeline)
+                #:fixture-adapter-clock #:fixture-adapter-timeline
+                #:run-adapter-conformance)
   (:import-from #:orrery/domain
                 #:session-record #:session-record-p
                 #:sr-id #:sr-agent-name #:sr-status
@@ -78,13 +88,20 @@
                 #:event-record #:event-record-p
                 #:er-id #:er-kind #:er-timestamp
                 #:alert-record #:alert-record-p
-                #:ar-id #:ar-acknowledged-p #:ar-severity
+                #:ar-id #:ar-acknowledged-p #:ar-severity #:ar-snoozed-until
                 #:subagent-record #:subagent-record-p
                 #:sar-id #:sar-status
-                #:make-session-record #:make-event-record #:make-alert-record)
+                #:make-session-record #:make-event-record #:make-alert-record
+                #:history-entry #:history-entry-p
+                #:he-role #:he-content #:he-timestamp #:he-token-count
+                #:adapter-capability #:adapter-capability-p
+                #:cap-name #:cap-supported-p)
   (:import-from #:orrery/adapter
                 #:adapter-list-sessions #:adapter-session-history
                 #:adapter-list-cron-jobs #:adapter-trigger-cron
+                #:adapter-pause-cron #:adapter-resume-cron
                 #:adapter-system-health #:adapter-usage-records
                 #:adapter-tail-events #:adapter-list-alerts
-                #:adapter-acknowledge-alert #:adapter-list-subagents))
+                #:adapter-acknowledge-alert #:adapter-snooze-alert
+                #:adapter-list-subagents #:adapter-capabilities
+                #:adapter-error #:adapter-not-supported #:adapter-not-found))

@@ -2,6 +2,8 @@
 ;;;
 ;;; types.lisp — Core domain types for Agent Orrery
 ;;;
+;;; All types use defstruct with :conc-name for clean accessor names.
+;;; All public constructor functions have (declaim ftype) declarations.
 
 (in-package #:orrery/domain)
 
@@ -106,3 +108,24 @@
   (finished-at    nil :type (or null fixnum))
   (total-tokens     0 :type fixnum)
   (result         nil :type (or null string)))
+
+;;; ============================================================
+;;; Message history entry
+;;; ============================================================
+
+(defstruct (history-entry (:conc-name he-))
+  "A single message in session history."
+  (role      :user :type keyword)
+  (content      "" :type string)
+  (timestamp     0 :type fixnum)
+  (token-count   0 :type fixnum))
+
+;;; ============================================================
+;;; Adapter capability descriptor
+;;; ============================================================
+
+(defstruct (adapter-capability (:conc-name cap-))
+  "Describes a command/operation an adapter supports."
+  (name        "" :type string)
+  (description "" :type string)
+  (supported-p  t :type boolean))
