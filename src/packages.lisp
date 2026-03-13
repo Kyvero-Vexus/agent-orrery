@@ -126,3 +126,38 @@
   (:export
    #:normalize-status-code
    #:estimate-cost-cents))
+
+(defpackage #:orrery/pipeline
+  (:use #:cl)
+  (:import-from #:orrery/domain
+                #:event-record #:event-record-p
+                #:usage-record #:make-usage-record
+                #:alert-record #:make-alert-record
+                #:er-kind #:er-source #:er-message #:er-timestamp #:er-metadata
+                #:ur-model #:ur-total-tokens #:ur-estimated-cost-cents
+                #:ar-id #:ar-severity #:ar-title #:ar-message #:ar-source #:ar-fired-at
+                #:ar-acknowledged-p #:ar-snoozed-until)
+  (:import-from #:orrery/coalton/core
+                #:estimate-cost-cents)
+  (:export
+   #:projection-state #:projection-state-p #:make-projection-state
+   #:ps-usage #:ps-activity #:ps-alerts
+   #:reduce-event #:ingest-events
+   #:project-usage-summary #:project-activity-feed #:project-alert-state))
+
+(defpackage #:orrery/store
+  (:use #:cl)
+  (:import-from #:orrery/domain
+                #:session-record #:cron-record #:health-record
+                #:usage-record #:event-record #:alert-record #:subagent-record)
+  (:import-from #:orrery/adapter
+                #:adapter-list-sessions #:adapter-list-cron-jobs #:adapter-system-health
+                #:adapter-usage-records #:adapter-tail-events #:adapter-list-alerts
+                #:adapter-list-subagents)
+  (:import-from #:orrery/pipeline
+                #:ingest-events #:project-usage-summary #:project-alert-state)
+  (:export
+   #:sync-store #:sync-store-p #:make-sync-store
+   #:ss-sessions #:ss-cron-jobs #:ss-health #:ss-usage #:ss-events #:ss-alerts #:ss-subagents
+   #:ss-last-sync-at #:ss-sync-token
+   #:snapshot-from-adapter #:apply-incremental-events #:replay-events #:store->plist))

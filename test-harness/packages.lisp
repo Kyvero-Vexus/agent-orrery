@@ -63,7 +63,8 @@
    #:fixture-sessions #:fixture-cron-jobs #:fixture-health
    #:fixture-usage #:fixture-events #:fixture-alerts #:fixture-subagents
    ;; Conformance testing
-   #:run-adapter-conformance))
+   #:run-adapter-conformance
+   #:run-adapter-conformance-suite))
 
 (defpackage #:orrery/harness-tests
   (:use #:cl #:parachute)
@@ -80,7 +81,8 @@
                 #:fixture-usage #:fixture-events #:fixture-alerts
                 #:fixture-subagents
                 #:fixture-adapter-clock #:fixture-adapter-timeline
-                #:run-adapter-conformance)
+                #:run-adapter-conformance
+                #:run-adapter-conformance-suite)
   (:import-from #:orrery/domain
                 #:session-record #:session-record-p
                 #:sr-id #:sr-agent-name #:sr-status
@@ -116,4 +118,13 @@
                 #:openclaw-base-url #:openclaw-api-token #:openclaw-timeout-s
                 #:%openclaw-request)
   (:import-from #:orrery/coalton/core
-                #:normalize-status-code #:estimate-cost-cents))
+                #:normalize-status-code #:estimate-cost-cents)
+  (:import-from #:orrery/pipeline
+                #:projection-state #:projection-state-p #:make-projection-state
+                #:reduce-event #:ingest-events
+                #:project-usage-summary #:project-activity-feed #:project-alert-state)
+  (:import-from #:orrery/store
+                #:sync-store #:sync-store-p #:make-sync-store
+                #:ss-sessions #:ss-cron-jobs #:ss-health #:ss-usage #:ss-events #:ss-alerts #:ss-subagents
+                #:ss-last-sync-at #:ss-sync-token
+                #:snapshot-from-adapter #:apply-incremental-events #:replay-events #:store->plist))

@@ -23,7 +23,7 @@
 
 ;; Packages subject to the typing policy
 (defvar *checked-packages*
-  '("ORRERY/DOMAIN" "ORRERY/ADAPTER")
+  '("ORRERY/DOMAIN" "ORRERY/ADAPTER" "ORRERY/PIPELINE" "ORRERY/STORE")
   "Packages whose exported function symbols must have ftype declarations.")
 
 ;; ASDF systems to load

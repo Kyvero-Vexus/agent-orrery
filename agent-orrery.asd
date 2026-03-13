@@ -32,7 +32,11 @@
       :components ((:file "types")))
      (:module "adapter"
       :components ((:file "protocol")
-                   (:file "openclaw")))))))
+                   (:file "openclaw")))
+     (:module "pipeline"
+      :components ((:file "events")))
+     (:module "store"
+      :components ((:file "sync")))))))
 
 (defsystem "agent-orrery/test-harness"
   :description "Deterministic fixture runtime harness for Agent Orrery"
@@ -48,8 +52,11 @@
      (:file "clock")
      (:file "timeline")
      (:file "generators")
+     (:file "conformance")
      (:file "fixture-adapter")
      (:module "tests"
       :components ((:file "harness-tests")
                    (:file "openclaw-adapter-tests")
+                   (:file "pipeline-store-tests")
+                   (:file "conformance-tests")
                    (:file "coalton-core-tests")))))))
