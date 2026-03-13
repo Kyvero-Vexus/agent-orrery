@@ -1,0 +1,21 @@
+══════════════════════════════════════════════════════════
+  Agent Orrery — Epic 2 E2E Gate (S1)
+══════════════════════════════════════════════════════════
+━━━ Scenario S1 (Fixture) ━━━
+  ✔ [fixture] system-health returns non-empty list
+  ✔ [fixture] all health entries are health-record
+  ✔ [fixture] health statuses are keyword symbols
+  ✔ [fixture] list-sessions returns list
+  ✔ [fixture] all session entries are session-record
+  ✔ [fixture] session ids are strings
+  ✔ [fixture] session model fields are strings
+  ✔ [fixture] session token counts are non-negative
+━━━ Scenario S1 (Live) ━━━
+  ⓘ [live] skipped: ORRERY_OPENCLAW_BASE_URL not set
+══════════════════════════════════════════════════════════
+  SUMMARY
+══════════════════════════════════════════════════════════
+
+Fixture: PASSED (8/8 checks)
+Live:    SKIPPED (endpoint not configured)
+══ EPIC 2 S1 GATE: PASSED ══

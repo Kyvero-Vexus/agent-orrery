@@ -1,0 +1,27 @@
+══════════════════════════════════════════════════════════
+  Agent Orrery — Epic 2 E2E Gate (S1)
+══════════════════════════════════════════════════════════
+━━━ Scenario S1 (Fixture) ━━━
+  ✔ [fixture] system-health returns non-empty list
+  ✔ [fixture] all health entries are health-record
+  ✔ [fixture] health statuses are keyword symbols
+  ✔ [fixture] list-sessions returns list
+  ✔ [fixture] all session entries are session-record
+  ✔ [fixture] session ids are strings
+  ✔ [fixture] session model fields are strings
+  ✔ [fixture] session token counts are non-negative
+━━━ Scenario S1 (Live) ━━━
+  ⓘ [live] base-url: http://127.0.0.1:18789
+  ✘ [live] system-health returns non-empty list
+  ✔ [live] all health entries are health-record
+  ✔ [live] health statuses are keyword symbols
+  ✘ [live] runtime error: Unexpected character in JSON data '<' (LESS-THAN_SIGN), at line 1, column 1.
+══════════════════════════════════════════════════════════
+  SUMMARY
+══════════════════════════════════════════════════════════
+
+Fixture: PASSED (8/8 checks)
+Live:    FAILED (0/1 checks)
+Live failures:
+  - Unexpected character in JSON data '<' (LESS-THAN_SIGN), at line 1, column 1.
+══ EPIC 2 S1 GATE: FAILED ══
