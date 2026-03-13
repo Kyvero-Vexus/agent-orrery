@@ -47,6 +47,11 @@
                 #:openclaw-transport-error #:openclaw-decode-error
                 #:openclaw-fetch-sessions #:openclaw-fetch-cron-jobs #:openclaw-fetch-health
                 #:openclaw-decode-sessions #:openclaw-decode-cron-jobs #:openclaw-decode-health
+                #:openclaw-live-contract-probe
+                #:probe-report #:probe-report-p #:probe-report-overall-ok-p #:probe-report-results
+                #:probe-endpoint-result #:probe-endpoint-result-endpoint #:probe-endpoint-result-ok-p
+                #:probe-endpoint-result-mismatches
+                #:probe-mismatch #:probe-mismatch-category
                 #:%openclaw-request)
   (:import-from #:orrery/coalton/core
                 #:normalize-status-code #:estimate-cost-cents)
@@ -122,13 +127,24 @@
                 #:openclaw-transport-error #:openclaw-decode-error
                 #:openclaw-fetch-sessions #:openclaw-fetch-cron-jobs #:openclaw-fetch-health
                 #:openclaw-decode-sessions #:openclaw-decode-cron-jobs #:openclaw-decode-health
+                #:openclaw-live-contract-probe
+                #:probe-report #:probe-report-p #:probe-report-overall-ok-p #:probe-report-results
+                #:probe-endpoint-result #:probe-endpoint-result-endpoint #:probe-endpoint-result-ok-p
+                #:probe-endpoint-result-mismatches
+                #:probe-mismatch #:probe-mismatch-category
                 #:%openclaw-request)
   (:import-from #:orrery/coalton/core
                 #:normalize-status-code #:estimate-cost-cents)
   (:import-from #:orrery/pipeline
                 #:projection-state #:projection-state-p #:make-projection-state
                 #:reduce-event #:ingest-events
-                #:project-usage-summary #:project-activity-feed #:project-alert-state)
+                #:project-usage-summary #:project-activity-feed #:project-alert-state
+                #:normalized-snapshot #:normalized-snapshot-p
+                #:normalized-snapshot-sessions #:normalized-snapshot-events
+                #:normalized-snapshot-alerts #:normalized-snapshot-sync-token
+                #:normalize-timestamp
+                #:normalize-session-payload #:normalize-event-payload #:normalize-alert-payload
+                #:normalize-snapshot-payload)
   (:import-from #:orrery/store
                 #:sync-store #:sync-store-p #:make-sync-store
                 #:ss-sessions #:ss-cron-jobs #:ss-health #:ss-usage #:ss-events #:ss-alerts #:ss-subagents

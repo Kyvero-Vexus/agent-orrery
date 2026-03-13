@@ -32,9 +32,11 @@
       :components ((:file "types")))
      (:module "adapter"
       :components ((:file "protocol")
-                   (:file "openclaw")))
+                   (:file "openclaw")
+                   (:file "contract-probe")))
      (:module "pipeline"
-      :components ((:file "events")))
+      :components ((:file "events")
+                   (:file "normalize")))
      (:module "store"
       :components ((:file "sync")))))))
 
@@ -59,4 +61,6 @@
                    (:file "openclaw-adapter-tests")
                    (:file "pipeline-store-tests")
                    (:file "conformance-tests")
+                   (:file "contract-probe-tests")
+                   (:file "normalization-tests")
                    (:file "coalton-core-tests")))))))

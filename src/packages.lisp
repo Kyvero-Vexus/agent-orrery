@@ -131,6 +131,16 @@
    #:openclaw-decode-sessions
    #:openclaw-decode-cron-jobs
    #:openclaw-decode-health
+   ;; Live endpoint contract probe
+   #:probe-mismatch #:probe-mismatch-p #:make-probe-mismatch
+   #:probe-mismatch-endpoint #:probe-mismatch-category #:probe-mismatch-detail
+   #:probe-endpoint-result #:probe-endpoint-result-p #:make-probe-endpoint-result
+   #:probe-endpoint-result-endpoint #:probe-endpoint-result-ok-p
+   #:probe-endpoint-result-http-status #:probe-endpoint-result-content-type
+   #:probe-endpoint-result-json-p #:probe-endpoint-result-mismatches
+   #:probe-report #:probe-report-p #:make-probe-report
+   #:probe-report-base-url #:probe-report-overall-ok-p #:probe-report-results
+   #:openclaw-live-contract-probe
    #:%openclaw-request))
 
 (defpackage #:orrery/coalton/core
@@ -142,7 +152,8 @@
 (defpackage #:orrery/pipeline
   (:use #:cl)
   (:import-from #:orrery/domain
-                #:event-record #:event-record-p
+                #:session-record #:make-session-record
+                #:event-record #:event-record-p #:make-event-record
                 #:usage-record #:make-usage-record
                 #:alert-record #:make-alert-record
                 #:er-kind #:er-source #:er-message #:er-timestamp #:er-metadata
@@ -155,7 +166,14 @@
    #:projection-state #:projection-state-p #:make-projection-state
    #:ps-usage #:ps-activity #:ps-alerts
    #:reduce-event #:ingest-events
-   #:project-usage-summary #:project-activity-feed #:project-alert-state))
+   #:project-usage-summary #:project-activity-feed #:project-alert-state
+   ;; Typed snapshot/event normalization
+   #:normalized-snapshot #:normalized-snapshot-p #:make-normalized-snapshot
+   #:normalized-snapshot-sessions #:normalized-snapshot-events
+   #:normalized-snapshot-alerts #:normalized-snapshot-sync-token
+   #:normalize-timestamp
+   #:normalize-session-payload #:normalize-event-payload #:normalize-alert-payload
+   #:normalize-snapshot-payload))
 
 (defpackage #:orrery/store
   (:use #:cl)

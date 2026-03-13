@@ -1,0 +1,2 @@
+══ Agent Orrery S1 Runtime Matrix Gate ══
+Env contract: FAIL (ORRERY_REQUIRE_LIVE_PROFILE=1 but ORRERY_OPENCLAW_BASE_URL is unset)

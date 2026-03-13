@@ -1,0 +1,5 @@
+══ Agent Orrery S1 Runtime Matrix Gate ══
+Env contract: PASS (ok)
+Fixture profile: PASS
+Live profile: SKIPPED (ORRERY_OPENCLAW_BASE_URL unset)
+Overall gate: PASS

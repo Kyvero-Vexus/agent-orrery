@@ -1,0 +1,9 @@
+══ Agent Orrery S1 Runtime Matrix Gate ══
+Env contract: PASS (ok)
+Fixture profile: PASS
+Live profile: FAIL (http://127.0.0.1:18789)
+  - /health: mismatch
+  - /sessions: mismatch
+  - /events: mismatch
+  - /snapshot: mismatch
+Overall gate: PASS
