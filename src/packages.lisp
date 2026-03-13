@@ -90,6 +90,10 @@
                 #:make-history-entry
                 #:make-cron-record
                 #:make-health-record
+                #:make-usage-record
+                #:make-event-record
+                #:make-alert-record
+                #:make-subagent-record
                 #:make-adapter-capability)
   (:import-from #:orrery/adapter
                 #:adapter-list-sessions
@@ -106,7 +110,9 @@
                 #:adapter-snooze-alert
                 #:adapter-list-subagents
                 #:adapter-capabilities
-                #:adapter-not-supported)
+                #:adapter-error
+                #:adapter-not-supported
+                #:adapter-not-found)
   (:export
    #:openclaw-adapter
    #:make-openclaw-adapter
@@ -114,3 +120,9 @@
    #:openclaw-api-token
    #:openclaw-timeout-s
    #:%openclaw-request))
+
+(defpackage #:orrery/coalton/core
+  (:use #:coalton #:coalton-prelude)
+  (:export
+   #:normalize-status-code
+   #:estimate-cost-cents))

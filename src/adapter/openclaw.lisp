@@ -1,9 +1,9 @@
 ;;; -*- Mode: Lisp; Syntax: Common-Lisp -*-
 ;;;
-;;; openclaw.lisp — OpenClaw adapter client (Epic 2 checkpoint)
+;;; openclaw.lisp — OpenClaw adapter client
 ;;;
 ;;; Implements the orrery/adapter protocol against OpenClaw-compatible HTTP APIs.
-;;; This checkpoint focuses on health/sessions/cron/history (+ trigger-cron).
+;;; This version includes full read surfaces, robust normalization, and error mapping.
 
 (in-package #:orrery/adapter/openclaw)
 
@@ -25,7 +25,7 @@
 (defun make-openclaw-adapter (&key (base-url "http://localhost:7474")
                                    (api-token nil)
                                    (timeout-s 10))
-  "Create an OpenClaw adapter client." 
+  "Create an OpenClaw adapter client."
   (make-instance 'openclaw-adapter
                  :base-url base-url
                  :api-token api-token
@@ -44,19 +44,32 @@
       '()))
 
 (defgeneric %openclaw-request (adapter method path &key payload)
-  (:documentation "Internal request hook. Tests can specialize this to avoid network I/O."))
+  (:documentation "Internal request hook. Tests specialize this to avoid network I/O."))
 
 (defmethod %openclaw-request ((adapter openclaw-adapter) method path &key payload)
   (declare (ignore payload))
   (let ((url (%path-url adapter path))
         (headers (%headers adapter)))
     (com.inuoe.jzon:parse
-     (ecase method
-       (:get
-        (dexador:get url :headers headers :connect-timeout (openclaw-timeout-s adapter)))
-       (:post
-        (dexador:post url :headers headers :connect-timeout (openclaw-timeout-s adapter)
-                      :content "{}"))))))
+     (handler-case
+         (ecase method
+           (:get
+            (dexador:get url :headers headers :connect-timeout (openclaw-timeout-s adapter)))
+           (:post
+            (dexador:post url :headers headers :connect-timeout (openclaw-timeout-s adapter)
+                          :content "{}")))
+       (dexador.error:http-request-failed (e)
+         ;; Normalize HTTP failures into adapter conditions.
+         (let ((status (ignore-errors (dexador.error:response-status e))))
+           (cond
+             ((= status 404)
+              (error 'adapter-not-found :adapter adapter :operation :http :id path))
+             ((= status 501)
+              (error 'adapter-not-supported :adapter adapter :operation :http))
+             (t
+              (error 'adapter-error
+                     :adapter adapter
+                     :operation :http)))))))))
 
 (defun %field (ht key &optional default)
   (if (hash-table-p ht)
@@ -64,57 +77,142 @@
         (if presentp v default))
       default))
 
-(defun %result-list (payload)
-  (let ((r (%field payload "result" nil)))
+(defun %int (value &optional (default 0))
+  "Best-effort integer coercion for robust normalization."
+  (cond
+    ((integerp value) value)
+    ((floatp value) (truncate value))
+    ((stringp value) (or (ignore-errors (parse-integer value)) default))
+    (t default)))
+
+(defun %kw (value fallback)
+  "Normalize VALUE to an uppercase keyword; return FALLBACK on failure."
+  (let* ((s (cond
+              ((keywordp value) (symbol-name value))
+              ((stringp value) value)
+              ((symbolp value) (symbol-name value))
+              (t nil)))
+         (k (and s (ignore-errors (intern (string-upcase s) :keyword)))))
+    (or k fallback)))
+
+(defun %ok-payload-p (payload)
+  "OpenClaw-style APIs commonly return {\"ok\": true, \"result\": ...}.
+If \"ok\" is absent, treat payload as OK for compatibility."
+  (let ((ok (%field payload "ok" :missing)))
+    (or (eq ok :missing) ok)))
+
+(defun %signal-payload-error (adapter payload operation &optional id)
+  (let ((code (or (%field payload "error_code" nil)
+                  (%field payload "code" nil)
+                  (%field payload "error" nil))))
     (cond
-      ((vectorp r) (coerce r 'list))
-      ((listp r) r)
-      (t '()))))
+      ((or (equal code 404)
+           (string-equal (princ-to-string code) "NOT_FOUND"))
+       (error 'adapter-not-found :adapter adapter :operation operation :id (or id "unknown")))
+      ((or (equal code 501)
+           (string-equal (princ-to-string code) "NOT_SUPPORTED"))
+       (error 'adapter-not-supported :adapter adapter :operation operation))
+      (t
+       (error 'adapter-error :adapter adapter :operation operation)))))
+
+(defun %request-result-list (adapter method path operation &key payload)
+  "Request PATH and normalize OpenClaw payload to a list result.
+Signals adapter conditions on explicit API errors." 
+  (let* ((resp (%openclaw-request adapter method path :payload payload)))
+    (unless (%ok-payload-p resp)
+      (%signal-payload-error adapter resp operation path))
+    (let ((r (%field resp "result" nil)))
+      (cond
+        ((vectorp r) (coerce r 'list))
+        ((listp r) r)
+        ((hash-table-p r) (list r))
+        ;; Some endpoints return the object directly (no "result").
+        ((hash-table-p resp) (list resp))
+        (t '())))))
 
 (defun %parse-session (obj)
   (make-session-record
    :id (or (%field obj "id" "") "")
-   :agent-name (or (%field obj "agent" "") "")
+   :agent-name (or (%field obj "agent" (%field obj "agent_name" "")) "")
    :channel (or (%field obj "channel" "") "")
-   :status (or (ignore-errors (intern (string-upcase (or (%field obj "status" "active") "active")) :keyword))
-               :active)
+   :status (%kw (%field obj "status" :active) :active)
    :model (or (%field obj "model" "") "")
-   :created-at (or (%field obj "created_at" 0) 0)
-   :updated-at (or (%field obj "updated_at" 0) 0)
-   :message-count (or (%field obj "message_count" 0) 0)
-   :total-tokens (or (%field obj "total_tokens" 0) 0)
-   :estimated-cost-cents (or (%field obj "estimated_cost_cents" 0) 0)))
+   :created-at (%int (%field obj "created_at" 0))
+   :updated-at (%int (%field obj "updated_at" 0))
+   :message-count (%int (%field obj "message_count" 0))
+   :total-tokens (%int (%field obj "total_tokens" 0))
+   :estimated-cost-cents (%int (%field obj "estimated_cost_cents" 0))))
 
 (defun %parse-history-entry (obj)
   (make-history-entry
-   :role (or (ignore-errors (intern (string-upcase (or (%field obj "role" "user") "user")) :keyword))
-             :user)
-   :content (or (%field obj "content" "") "")
-   :timestamp (or (%field obj "timestamp" 0) 0)
-   :token-count (or (%field obj "token_count" 0) 0)))
+   :role (%kw (%field obj "role" :user) :user)
+   :content (or (%field obj "content" (%field obj "text" "")) "")
+   :timestamp (%int (%field obj "timestamp" 0))
+   :token-count (%int (%field obj "token_count" (%field obj "tokens" 0)))))
 
 (defun %parse-cron (obj)
   (make-cron-record
    :name (or (%field obj "name" "") "")
-   :kind (or (ignore-errors (intern (string-upcase (or (%field obj "kind" "periodic") "periodic")) :keyword))
-             :periodic)
-   :interval-s (or (%field obj "interval_s" 0) 0)
-   :status (or (ignore-errors (intern (string-upcase (or (%field obj "status" "active") "active")) :keyword))
-               :active)
-   :last-run-at (%field obj "last_run_at" nil)
-   :next-run-at (or (%field obj "next_run_at" 0) 0)
-   :run-count (or (%field obj "run_count" 0) 0)
+   :kind (%kw (%field obj "kind" :periodic) :periodic)
+   :interval-s (%int (%field obj "interval_s" 0))
+   :status (%kw (%field obj "status" :active) :active)
+   :last-run-at (let ((v (%field obj "last_run_at" nil)))
+                  (and v (%int v)))
+   :next-run-at (%int (%field obj "next_run_at" 0))
+   :run-count (%int (%field obj "run_count" 0))
    :last-error (%field obj "last_error" nil)
    :description (or (%field obj "description" "") "")))
 
 (defun %parse-health (obj)
   (make-health-record
    :component (or (%field obj "component" "") "")
-   :status (or (ignore-errors (intern (string-upcase (or (%field obj "status" "ok") "ok")) :keyword))
-               :ok)
+   :status (%kw (%field obj "status" :ok) :ok)
    :message (or (%field obj "message" "") "")
-   :checked-at (or (%field obj "checked_at" 0) 0)
-   :latency-ms (or (%field obj "latency_ms" 0) 0)))
+   :checked-at (%int (%field obj "checked_at" 0))
+   :latency-ms (%int (%field obj "latency_ms" (%field obj "latency" 0)))))
+
+(defun %parse-usage (obj)
+  (make-usage-record
+   :model (or (%field obj "model" "") "")
+   :period (%kw (%field obj "period" :hourly) :hourly)
+   :timestamp (%int (%field obj "timestamp" 0))
+   :prompt-tokens (%int (%field obj "prompt_tokens" 0))
+   :completion-tokens (%int (%field obj "completion_tokens" 0))
+   :total-tokens (%int (%field obj "total_tokens" 0))
+   :estimated-cost-cents (%int (%field obj "estimated_cost_cents" 0))))
+
+(defun %parse-event (obj)
+  (make-event-record
+   :id (or (%field obj "id" "") "")
+   :kind (%kw (%field obj "kind" :info) :info)
+   :source (or (%field obj "source" "") "")
+   :message (or (%field obj "message" "") "")
+   :timestamp (%int (%field obj "timestamp" 0))
+   :metadata (%field obj "metadata" nil)))
+
+(defun %parse-alert (obj)
+  (make-alert-record
+   :id (or (%field obj "id" "") "")
+   :severity (%kw (%field obj "severity" :warning) :warning)
+   :title (or (%field obj "title" "") "")
+   :message (or (%field obj "message" "") "")
+   :source (or (%field obj "source" "") "")
+   :fired-at (%int (%field obj "fired_at" 0))
+   :acknowledged-p (not (null (%field obj "acknowledged" (%field obj "acknowledged_p" nil))))
+   :snoozed-until (let ((v (%field obj "snoozed_until" nil)))
+                    (and v (%int v)))))
+
+(defun %parse-subagent (obj)
+  (make-subagent-record
+   :id (or (%field obj "id" "") "")
+   :parent-session (or (%field obj "parent_session" "") "")
+   :agent-name (or (%field obj "agent_name" (%field obj "agent" "")) "")
+   :status (%kw (%field obj "status" :running) :running)
+   :started-at (%int (%field obj "started_at" 0))
+   :finished-at (let ((v (%field obj "finished_at" nil)))
+                  (and v (%int v)))
+   :total-tokens (%int (%field obj "total_tokens" 0))
+   :result (%field obj "result" nil)))
 
 ;;; ============================================================
 ;;; Adapter protocol methods
@@ -122,71 +220,86 @@
 
 (defmethod adapter-list-sessions ((adapter openclaw-adapter))
   (mapcar #'%parse-session
-          (%result-list (%openclaw-request adapter :get "/sessions"))))
+          (%request-result-list adapter :get "/sessions" :sessions)))
 
 (defmethod adapter-session-history ((adapter openclaw-adapter) session-id)
   (mapcar #'%parse-history-entry
-          (%result-list (%openclaw-request adapter :get
-                                           (format nil "/sessions/~A/history" session-id)))))
+          (%request-result-list adapter :get
+                                (format nil "/sessions/~A/history" session-id)
+                                :session-history)))
 
 (defmethod adapter-list-cron-jobs ((adapter openclaw-adapter))
   (mapcar #'%parse-cron
-          (%result-list (%openclaw-request adapter :get "/cron/jobs"))))
+          (%request-result-list adapter :get "/cron/jobs" :cron-jobs)))
 
 (defmethod adapter-trigger-cron ((adapter openclaw-adapter) job-name)
-  (let ((resp (%openclaw-request adapter :post (format nil "/cron/jobs/~A/run" job-name))))
+  (let ((resp (%request-result-list adapter :post
+                                    (format nil "/cron/jobs/~A/run" job-name)
+                                    :trigger-cron)))
     (declare (ignore resp))
     t))
 
 (defmethod adapter-pause-cron ((adapter openclaw-adapter) job-name)
-  (let ((resp (%openclaw-request adapter :post (format nil "/cron/jobs/~A/pause" job-name))))
+  (let ((resp (%request-result-list adapter :post
+                                    (format nil "/cron/jobs/~A/pause" job-name)
+                                    :pause-cron)))
     (declare (ignore resp))
     t))
 
 (defmethod adapter-resume-cron ((adapter openclaw-adapter) job-name)
-  (let ((resp (%openclaw-request adapter :post (format nil "/cron/jobs/~A/resume" job-name))))
+  (let ((resp (%request-result-list adapter :post
+                                    (format nil "/cron/jobs/~A/resume" job-name)
+                                    :resume-cron)))
     (declare (ignore resp))
     t))
 
 (defmethod adapter-system-health ((adapter openclaw-adapter))
-  (let* ((payload (%openclaw-request adapter :get "/health"))
-         (components (%result-list payload)))
-    (if components
-        (mapcar #'%parse-health components)
-        ;; Some APIs return a single status object instead of result list.
-        (list (%parse-health payload)))))
+  (mapcar #'%parse-health
+          (%request-result-list adapter :get "/health" :health)))
 
-(defmethod adapter-usage-records ((adapter openclaw-adapter) &key period)
+(defmethod adapter-usage-records ((adapter openclaw-adapter) &key (period :hourly))
   (declare (ignore period))
-  (error 'adapter-not-supported :adapter adapter :operation :usage))
+  (mapcar #'%parse-usage
+          (%request-result-list adapter :get "/usage" :usage)))
 
-(defmethod adapter-tail-events ((adapter openclaw-adapter) &key since limit)
+(defmethod adapter-tail-events ((adapter openclaw-adapter) &key (since 0) (limit 50))
   (declare (ignore since limit))
-  (error 'adapter-not-supported :adapter adapter :operation :events))
+  (mapcar #'%parse-event
+          (%request-result-list adapter :get "/events" :events)))
 
 (defmethod adapter-list-alerts ((adapter openclaw-adapter))
-  (error 'adapter-not-supported :adapter adapter :operation :alerts))
+  (mapcar #'%parse-alert
+          (%request-result-list adapter :get "/alerts" :alerts)))
 
 (defmethod adapter-acknowledge-alert ((adapter openclaw-adapter) alert-id)
-  (declare (ignore alert-id))
-  (error 'adapter-not-supported :adapter adapter :operation :acknowledge-alert))
+  (let ((resp (%request-result-list adapter :post
+                                    (format nil "/alerts/~A/ack" alert-id)
+                                    :acknowledge-alert)))
+    (declare (ignore resp))
+    t))
 
 (defmethod adapter-snooze-alert ((adapter openclaw-adapter) alert-id duration-seconds)
-  (declare (ignore alert-id duration-seconds))
-  (error 'adapter-not-supported :adapter adapter :operation :snooze-alert))
+  (declare (ignore duration-seconds))
+  (let ((resp (%request-result-list adapter :post
+                                    (format nil "/alerts/~A/snooze" alert-id)
+                                    :snooze-alert)))
+    (declare (ignore resp))
+    t))
 
 (defmethod adapter-list-subagents ((adapter openclaw-adapter))
-  (error 'adapter-not-supported :adapter adapter :operation :subagents))
+  (mapcar #'%parse-subagent
+          (%request-result-list adapter :get "/subagents" :subagents)))
 
 (defmethod adapter-capabilities ((adapter openclaw-adapter))
   (declare (ignore adapter))
+  ;; Must match implemented methods.
   (list
    (make-adapter-capability :name "trigger-cron" :description "Trigger cron runs" :supported-p t)
    (make-adapter-capability :name "pause-cron" :description "Pause cron jobs" :supported-p t)
    (make-adapter-capability :name "resume-cron" :description "Resume cron jobs" :supported-p t)
    (make-adapter-capability :name "session-history" :description "Read session histories" :supported-p t)
-   (make-adapter-capability :name "acknowledge-alert" :description "Acknowledge alerts" :supported-p nil)
-   (make-adapter-capability :name "snooze-alert" :description "Snooze alerts" :supported-p nil)
-   (make-adapter-capability :name "usage" :description "Usage analytics" :supported-p nil)
-   (make-adapter-capability :name "events" :description "Event tail" :supported-p nil)
-   (make-adapter-capability :name "subagents" :description "Sub-agent listing" :supported-p nil)))
+   (make-adapter-capability :name "acknowledge-alert" :description "Acknowledge alerts" :supported-p t)
+   (make-adapter-capability :name "snooze-alert" :description "Snooze alerts" :supported-p t)
+   (make-adapter-capability :name "usage" :description "Usage analytics" :supported-p t)
+   (make-adapter-capability :name "events" :description "Event tail" :supported-p t)
+   (make-adapter-capability :name "subagents" :description "Sub-agent listing" :supported-p t)))

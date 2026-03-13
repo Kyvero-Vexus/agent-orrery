@@ -26,8 +26,9 @@
   '("ORRERY/DOMAIN" "ORRERY/ADAPTER")
   "Packages whose exported function symbols must have ftype declarations.")
 
-;; ASDF system to load
+;; ASDF systems to load
 (defvar *system-name* "agent-orrery")
+(defvar *coalton-system-name* "agent-orrery/coalton")
 
 ;;; ============================================================
 ;;; Helpers
@@ -92,8 +93,11 @@ Returns (values clean-p warnings notes)."
            (push (format nil "  WARNING: ~A" c) *collected-warnings*)
            (muffle-warning c))))
     ;; Force recompile by clearing fasls
+    (asdf:clear-system *coalton-system-name*)
     (asdf:clear-system *system-name*)
     (declaim (optimize (safety 3) (debug 2)))
+    ;; Explicitly compile Coalton baseline first, then full system.
+    (asdf:load-system *coalton-system-name* :force t)
     (asdf:load-system *system-name* :force t))
   (values (and (null *collected-warnings*) (null *collected-notes*))
           (nreverse *collected-warnings*)
@@ -107,15 +111,16 @@ Returns (values clean-p warnings notes)."
   (let ((exit-code 0))
     (format t "~&=== Agent Orrery Type Policy Check ===~%~%")
 
-    ;; Step 1: Load the system
-    (format t "Step 1: Loading ~A...~%" *system-name*)
+    ;; Step 1: Load systems (core + coalton)
+    (format t "Step 1: Loading ~A and ~A...~%" *system-name* *coalton-system-name*)
     (handler-case
         (progn
           (push #P"/home/slime/projects/agent-orrery/"
                 asdf:*central-registry*)
           (asdf:clear-source-registry)
+          (ql:quickload *coalton-system-name* :silent t)
           (ql:quickload *system-name* :silent t)
-          (format t "  ✔ System loaded.~%~%"))
+          (format t "  ✔ Systems loaded.~%~%"))
       (error (e)
         (format *error-output* "~&  ✘ Load error: ~A~%" e)
         (sb-ext:exit :code 2)))

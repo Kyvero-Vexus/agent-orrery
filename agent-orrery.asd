@@ -3,11 +3,25 @@
 ;;; agent-orrery.asd — System definitions for Agent Orrery
 ;;;
 
+(defsystem "agent-orrery/coalton"
+  :description "Coalton pure-core baseline for Agent Orrery"
+  :version "0.1.0"
+  :license "MIT"
+  :depends-on ("coalton" "named-readtables")
+  :serial t
+  :components
+  ((:module "src"
+    :serial t
+    :components
+    ((:file "packages")
+     (:module "coalton"
+      :components ((:file "core")))))))
+
 (defsystem "agent-orrery"
   :description "Dashboard for OpenClaw-compatible agent systems"
   :version "0.1.0"
   :license "MIT"
-  :depends-on ("dexador" "com.inuoe.jzon")
+  :depends-on ("agent-orrery/coalton" "dexador" "com.inuoe.jzon")
   :serial t
   :components
   ((:module "src"
@@ -37,4 +51,5 @@
      (:file "fixture-adapter")
      (:module "tests"
       :components ((:file "harness-tests")
-                   (:file "openclaw-adapter-tests")))))))
+                   (:file "openclaw-adapter-tests")
+                   (:file "coalton-core-tests")))))))

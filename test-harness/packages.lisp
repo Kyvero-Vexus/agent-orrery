@@ -45,6 +45,8 @@
                 #:openclaw-adapter #:make-openclaw-adapter
                 #:openclaw-base-url #:openclaw-api-token #:openclaw-timeout-s
                 #:%openclaw-request)
+  (:import-from #:orrery/coalton/core
+                #:normalize-status-code #:estimate-cost-cents)
   (:export
    ;; Clock
    #:fixture-clock #:make-fixture-clock #:clock-now #:clock-advance! #:clock-set!
@@ -112,4 +114,6 @@
   (:import-from #:orrery/adapter/openclaw
                 #:openclaw-adapter #:make-openclaw-adapter
                 #:openclaw-base-url #:openclaw-api-token #:openclaw-timeout-s
-                #:%openclaw-request))
+                #:%openclaw-request)
+  (:import-from #:orrery/coalton/core
+                #:normalize-status-code #:estimate-cost-cents))
