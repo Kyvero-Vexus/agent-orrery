@@ -1,0 +1,108 @@
+This is SBCL 2.5.8, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+══════════════════════════════════════════════════════════
+  Agent Orrery — Epic 1 E2E Smoke (Fixture Runtime)
+══════════════════════════════════════════════════════════
+Clock epoch: 3920000000
+Adapter type: FIXTURE-ADAPTER
+
+━━━ Scenario S1: Health + Session Snapshot ━━━
+  ✔ system-health returns non-empty list
+  ✔ gateway component present
+  ✔ all components report :ok
+  ✔ latency-ms is non-negative
+  ✔ list-sessions returns non-empty list
+  ✔ all entries are session-record
+  ✔ sessions have non-empty model field
+  ✔ sessions have token counts
+  ── 8/8 checks passed
+
+━━━ Scenario S2: Session Drill-Down and History ━━━
+  ✔ target session exists
+  ✔ session-history returns a list
+  ✔ history is non-empty for active session
+  ✔ history entries are history-entry structs
+  ✔ history entries have timestamps
+  ✔ history is chronologically ordered
+  ✔ filter/search reduces result set
+  ── 7/7 checks passed
+
+━━━ Scenario S3: Cron Operations ━━━
+  ✔ list-cron-jobs returns non-empty list
+  ✔ all entries are cron-record
+  ✔ trigger-cron returns T
+  ✔ run-count incremented after trigger
+  ✔ cron job status is :active after completion
+  ✔ pause-cron returns T
+  ✔ status is :paused after pause
+  ✔ resume-cron returns T
+  ✔ status is :active after resume
+  ── 9/9 checks passed
+
+━━━ Scenario S4: Cost + Usage Analytics ━━━
+  ✔ usage-records returns non-empty list
+  ✔ all entries are usage-record
+  ✔ all entries have :hourly period
+  ✔ multiple models present
+  ✔ per-model totals are positive
+  ✔ time window filtering works (6h < 24h)
+  ── 6/6 checks passed
+
+━━━ Scenario S5: Sub-Agent Monitoring ━━━
+  ✔ list-subagents returns non-empty list
+  ✔ all entries are subagent-record
+  ✔ at least one running sub-agent
+  ✔ at least one completed sub-agent
+  ✔ completed agents have finished-at
+  ✔ sub-agents have token counts
+  ── 6/6 checks passed
+
+━━━ Scenario S6: Alert Engine ━━━
+  ✔ list-alerts returns non-empty list
+  ✔ all entries are alert-record
+  ✔ alerts have severity
+  ✔ alert is initially unacknowledged
+  ✔ acknowledge-alert returns T
+  ✔ alert is acknowledged after ack
+  ✔ snooze-alert returns T
+  ✔ snoozed-until is set correctly
+  ✔ event stream has entries
+  ── 9/9 checks passed
+
+━━━ Scenario CONF: Adapter Conformance Suite ━━━
+  ✔ conformance suite passes
+  ✔ zero conformance failures
+  ── 2/2 checks passed
+
+━━━ Scenario CAP: Capability Introspection ━━━
+  ✔ capabilities returned
+  ✔ all capabilities are adapter-capability structs
+  ✔ capability 'trigger-cron' present and supported
+  ✔ capability 'pause-cron' present and supported
+  ✔ capability 'acknowledge-alert' present and supported
+  ✔ capability 'snooze-alert' present and supported
+  ✔ capability 'session-history' present and supported
+  ── 7/7 checks passed
+
+══════════════════════════════════════════════════════════
+  SUMMARY
+══════════════════════════════════════════════════════════
+
+  ✔ S1: Health + Session Snapshot (8/8)
+  ✔ S2: Session Drill-Down and History (7/7)
+  ✔ S3: Cron Operations (9/9)
+  ✔ S4: Cost + Usage Analytics (6/6)
+  ✔ S5: Sub-Agent Monitoring (6/6)
+  ✔ S6: Alert Engine (9/9)
+  ✔ CONF: Adapter Conformance Suite (2/2)
+  ✔ CAP: Capability Introspection (7/7)
+
+  Scenarios: 8 passed, 0 failed
+  Checks:    54/54 passed
+
+  ══ EPIC 1 E2E GATE: PASSED ══

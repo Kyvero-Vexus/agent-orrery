@@ -45,3 +45,12 @@ jobs:
 
       - name: Run test suite
         run: sbcl --load ci/run-tests.lisp
+
+      - name: Run E2E smoke (fixture runtime)
+        run: sbcl --load ci/e2e-smoke.lisp | tee e2e-smoke-output.txt
+
+      - name: Upload E2E smoke artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-smoke-output
+          path: e2e-smoke-output.txt

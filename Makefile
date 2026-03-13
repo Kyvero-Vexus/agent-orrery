@@ -8,7 +8,7 @@
 
 SBCL ?= sbcl
 
-.PHONY: test check-types ci clean
+.PHONY: test check-types e2e-smoke ci clean
 
 test:
 	@$(SBCL) --load ci/run-tests.lisp
@@ -16,7 +16,10 @@ test:
 check-types:
 	@$(SBCL) --load ci/check-types.lisp
 
-ci: check-types test
+e2e-smoke:
+	@$(SBCL) --load ci/e2e-smoke.lisp
+
+ci: check-types test e2e-smoke
 	@echo ""
 	@echo "=== All CI checks passed ==="
 
