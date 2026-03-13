@@ -179,6 +179,18 @@
     (is eq :active (sr-status s))
     (is = 450 (sr-total-tokens s))))
 
+(define-test (openclaw-adapter-tests typed-fetch-and-decode-primitives)
+  (let* ((a (make-mock-adapter))
+         (raw-sessions (openclaw-fetch-sessions a))
+         (raw-cron (openclaw-fetch-cron-jobs a))
+         (raw-health (openclaw-fetch-health a)))
+    (is = 1 (length raw-sessions))
+    (is = 1 (length raw-cron))
+    (is = 1 (length raw-health))
+    (true (session-record-p (first (openclaw-decode-sessions raw-sessions))))
+    (true (cron-record-p (first (openclaw-decode-cron-jobs raw-cron))))
+    (true (health-record-p (first (openclaw-decode-health raw-health))))))
+
 (define-test (openclaw-adapter-tests session-history-normalization)
   (let* ((a (make-mock-adapter))
          (hist (adapter-session-history a "sess-1")))

@@ -44,6 +44,9 @@
   (:import-from #:orrery/adapter/openclaw
                 #:openclaw-adapter #:make-openclaw-adapter
                 #:openclaw-base-url #:openclaw-api-token #:openclaw-timeout-s
+                #:openclaw-transport-error #:openclaw-decode-error
+                #:openclaw-fetch-sessions #:openclaw-fetch-cron-jobs #:openclaw-fetch-health
+                #:openclaw-decode-sessions #:openclaw-decode-cron-jobs #:openclaw-decode-health
                 #:%openclaw-request)
   (:import-from #:orrery/coalton/core
                 #:normalize-status-code #:estimate-cost-cents)
@@ -116,6 +119,9 @@
   (:import-from #:orrery/adapter/openclaw
                 #:openclaw-adapter #:make-openclaw-adapter
                 #:openclaw-base-url #:openclaw-api-token #:openclaw-timeout-s
+                #:openclaw-transport-error #:openclaw-decode-error
+                #:openclaw-fetch-sessions #:openclaw-fetch-cron-jobs #:openclaw-fetch-health
+                #:openclaw-decode-sessions #:openclaw-decode-cron-jobs #:openclaw-decode-health
                 #:%openclaw-request)
   (:import-from #:orrery/coalton/core
                 #:normalize-status-code #:estimate-cost-cents)

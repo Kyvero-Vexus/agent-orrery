@@ -32,13 +32,50 @@
                  :timeout-s timeout-s))
 
 ;;; ============================================================
+;;; OpenClaw-specific typed conditions
+;;; ============================================================
+
+(define-condition openclaw-transport-error (adapter-error)
+  ((status :initarg :status :reader openclaw-transport-status :initform nil :type (or null fixnum))
+   (path :initarg :path :reader openclaw-transport-path :initform "" :type string))
+  (:documentation "Transport-layer error (request/HTTP failure) from OpenClaw adapter."))
+
+(define-condition openclaw-decode-error (adapter-error)
+  ((path :initarg :path :reader openclaw-decode-path :initform "" :type string)
+   (reason :initarg :reason :reader openclaw-decode-reason :initform "decode failure" :type string))
+  (:documentation "Raised when OpenClaw payload cannot be decoded to expected shape."))
+
+;;; ============================================================
 ;;; HTTP helpers
 ;;; ============================================================
 
+(declaim (ftype (function (openclaw-adapter string) string) %path-url)
+         (ftype (function (openclaw-adapter) list) %headers)
+         (ftype (function (t string &optional t) t) %field)
+         (ftype (function (t &optional fixnum) fixnum) %int)
+         (ftype (function (t keyword) keyword) %kw)
+         (ftype (function (t) boolean) %ok-payload-p)
+         (ftype (function (openclaw-adapter t keyword &optional t) *) %signal-payload-error)
+         (ftype (function (openclaw-adapter keyword string keyword &key (:payload t)) list)
+                %request-result-list)
+         (ftype (function (openclaw-adapter) list) openclaw-fetch-sessions)
+         (ftype (function (openclaw-adapter) list) openclaw-fetch-cron-jobs)
+         (ftype (function (openclaw-adapter) list) openclaw-fetch-health)
+         (ftype (function (list) list) openclaw-decode-sessions)
+         (ftype (function (list) list) openclaw-decode-cron-jobs)
+         (ftype (function (list) list) openclaw-decode-health)
+         (ftype (function (t) session-record) %parse-session)
+         (ftype (function (t) history-entry) %parse-history-entry)
+         (ftype (function (t) cron-record) %parse-cron)
+         (ftype (function (t) health-record) %parse-health))
+
 (defun %path-url (adapter path)
+  (declare (type openclaw-adapter adapter)
+           (type string path))
   (format nil "~A~A" (string-right-trim "/" (openclaw-base-url adapter)) path))
 
 (defun %headers (adapter)
+  (declare (type openclaw-adapter adapter))
   (if (openclaw-api-token adapter)
       `(("Authorization" . ,(format nil "Bearer ~A" (openclaw-api-token adapter))))
       '()))
@@ -47,29 +84,42 @@
   (:documentation "Internal request hook. Tests specialize this to avoid network I/O."))
 
 (defmethod %openclaw-request ((adapter openclaw-adapter) method path &key payload)
-  (declare (ignore payload))
+  (declare (ignore payload)
+           (type keyword method)
+           (type string path))
   (let ((url (%path-url adapter path))
         (headers (%headers adapter)))
-    (com.inuoe.jzon:parse
-     (handler-case
-         (ecase method
-           (:get
-            (dexador:get url :headers headers :connect-timeout (openclaw-timeout-s adapter)))
-           (:post
-            (dexador:post url :headers headers :connect-timeout (openclaw-timeout-s adapter)
-                          :content "{}")))
-       (dexador.error:http-request-failed (e)
-         ;; Normalize HTTP failures into adapter conditions.
-         (let ((status (ignore-errors (dexador.error:response-status e))))
-           (cond
-             ((= status 404)
-              (error 'adapter-not-found :adapter adapter :operation :http :id path))
-             ((= status 501)
-              (error 'adapter-not-supported :adapter adapter :operation :http))
-             (t
-              (error 'adapter-error
-                     :adapter adapter
-                     :operation :http)))))))))
+    (handler-case
+        (com.inuoe.jzon:parse
+         (handler-case
+             (ecase method
+               (:get
+                (dexador:get url :headers headers :connect-timeout (openclaw-timeout-s adapter)))
+               (:post
+                (dexador:post url :headers headers :connect-timeout (openclaw-timeout-s adapter)
+                              :content "{}")))
+           (dexador.error:http-request-failed (e)
+             ;; Normalize HTTP failures into adapter conditions.
+             (let ((status (ignore-errors (dexador.error:response-status e))))
+               (cond
+                 ((= status 404)
+                  (error 'adapter-not-found :adapter adapter :operation :http :id path))
+                 ((= status 501)
+                  (error 'adapter-not-supported :adapter adapter :operation :http))
+                 (t
+                  (error 'openclaw-transport-error
+                         :adapter adapter
+                         :operation :http
+                         :status status
+                         :path path)))))))
+      (error (e)
+        (if (typep e 'adapter-error)
+            (error e)
+            (error 'openclaw-decode-error
+                   :adapter adapter
+                   :operation :decode
+                   :path path
+                   :reason (princ-to-string e)))))))
 
 (defun %field (ht key &optional default)
   (if (hash-table-p ht)
@@ -218,9 +268,18 @@ Signals adapter conditions on explicit API errors."
 ;;; Adapter protocol methods
 ;;; ============================================================
 
+(defun openclaw-fetch-sessions (adapter)
+  "Impure transport primitive: fetch raw session payload list."
+  (declare (type openclaw-adapter adapter))
+  (%request-result-list adapter :get "/sessions" :sessions))
+
+(defun openclaw-decode-sessions (objects)
+  "Pure decode primitive: convert raw payload objects into SESSION-RECORD values."
+  (declare (type list objects))
+  (mapcar #'%parse-session objects))
+
 (defmethod adapter-list-sessions ((adapter openclaw-adapter))
-  (mapcar #'%parse-session
-          (%request-result-list adapter :get "/sessions" :sessions)))
+  (openclaw-decode-sessions (openclaw-fetch-sessions adapter)))
 
 (defmethod adapter-session-history ((adapter openclaw-adapter) session-id)
   (mapcar #'%parse-history-entry
@@ -228,9 +287,18 @@ Signals adapter conditions on explicit API errors."
                                 (format nil "/sessions/~A/history" session-id)
                                 :session-history)))
 
+(defun openclaw-fetch-cron-jobs (adapter)
+  "Impure transport primitive: fetch raw cron payload list."
+  (declare (type openclaw-adapter adapter))
+  (%request-result-list adapter :get "/cron/jobs" :cron-jobs))
+
+(defun openclaw-decode-cron-jobs (objects)
+  "Pure decode primitive: convert raw payload objects into CRON-RECORD values."
+  (declare (type list objects))
+  (mapcar #'%parse-cron objects))
+
 (defmethod adapter-list-cron-jobs ((adapter openclaw-adapter))
-  (mapcar #'%parse-cron
-          (%request-result-list adapter :get "/cron/jobs" :cron-jobs)))
+  (openclaw-decode-cron-jobs (openclaw-fetch-cron-jobs adapter)))
 
 (defmethod adapter-trigger-cron ((adapter openclaw-adapter) job-name)
   (let ((resp (%request-result-list adapter :post
@@ -253,9 +321,18 @@ Signals adapter conditions on explicit API errors."
     (declare (ignore resp))
     t))
 
+(defun openclaw-fetch-health (adapter)
+  "Impure transport primitive: fetch raw health payload list."
+  (declare (type openclaw-adapter adapter))
+  (%request-result-list adapter :get "/health" :health))
+
+(defun openclaw-decode-health (objects)
+  "Pure decode primitive: convert raw payload objects into HEALTH-RECORD values."
+  (declare (type list objects))
+  (mapcar #'%parse-health objects))
+
 (defmethod adapter-system-health ((adapter openclaw-adapter))
-  (mapcar #'%parse-health
-          (%request-result-list adapter :get "/health" :health)))
+  (openclaw-decode-health (openclaw-fetch-health adapter)))
 
 (defmethod adapter-usage-records ((adapter openclaw-adapter) &key (period :hourly))
   (declare (ignore period))

@@ -86,6 +86,10 @@
 (defpackage #:orrery/adapter/openclaw
   (:use #:cl)
   (:import-from #:orrery/domain
+                #:session-record
+                #:history-entry
+                #:cron-record
+                #:health-record
                 #:make-session-record
                 #:make-history-entry
                 #:make-cron-record
@@ -119,6 +123,14 @@
    #:openclaw-base-url
    #:openclaw-api-token
    #:openclaw-timeout-s
+   #:openclaw-transport-error
+   #:openclaw-decode-error
+   #:openclaw-fetch-sessions
+   #:openclaw-fetch-cron-jobs
+   #:openclaw-fetch-health
+   #:openclaw-decode-sessions
+   #:openclaw-decode-cron-jobs
+   #:openclaw-decode-health
    #:%openclaw-request))
 
 (defpackage #:orrery/coalton/core
