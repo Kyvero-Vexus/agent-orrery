@@ -174,6 +174,13 @@
    #:gdr-gate-id #:gdr-outcome #:gdr-reason #:gdr-next-actions
    #:gdr-evidence-gate-id #:gdr-blocker-count #:gdr-can-close-gate-p #:gdr-timestamp
    #:decide-s1-gate #:gate-decision-to-json
+   ;; Gate orchestrator (o0p)
+   #:remediation-step #:remediation-step-p #:make-remediation-step
+   #:rs-step-id #:rs-action-type #:rs-target #:rs-description #:rs-depends-on
+   #:resolution-plan #:resolution-plan-p #:make-resolution-plan
+   #:rp-decision-gate-id #:rp-primary-action #:rp-remediation-steps
+   #:rp-blocker-report #:rp-unblock-targets #:rp-timestamp
+   #:orchestrate-resolution #:resolution-plan-to-json
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version

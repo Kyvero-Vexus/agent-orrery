@@ -51,7 +51,8 @@
                    (:file "transcript-capture")
                    (:file "schema-drift")
                    (:file "evidence-bundle")
-                   (:file "gate-decision")))
+                   (:file "gate-decision")
+                   (:file "gate-orchestrator")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -98,4 +99,5 @@
                    (:file "transcript-capture-tests")
                    (:file "schema-drift-tests")
                    (:file "evidence-bundle-tests")
-                   (:file "gate-decision-tests")))))))
+                   (:file "gate-decision-tests")
+                   (:file "gate-orchestrator-tests")))))))
