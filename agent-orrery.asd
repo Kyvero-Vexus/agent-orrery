@@ -43,7 +43,8 @@
                    (:file "capability-contract")
                    (:file "preflight")
                    (:file "gate-runner")
-                   (:file "preflight-json")))
+                   (:file "preflight-json")
+                   (:file "contract-harness")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -83,4 +84,5 @@
                    (:file "../fixtures/live-gate-corpus")
                    (:file "live-gate-contract-tests")
                    (:file "capability-contract-tests")
-                   (:file "preflight-tests")))))))
+                   (:file "preflight-tests")
+                   (:file "contract-harness-tests")))))))

@@ -97,6 +97,17 @@
    #:apply-failure-policies #:run-gate
    ;; Preflight JSON (apd)
    #:preflight-report-to-json #:gate-result-to-json
+   ;; Contract harness (8ro)
+   #:runtime-target #:runtime-target-p #:make-runtime-target
+   #:rt-profile #:rt-base-url #:rt-token #:rt-description
+   #:contract-check #:contract-check-p #:make-contract-check
+   #:cc-endpoint-name #:cc-verdict #:cc-expected #:cc-actual #:cc-message
+   #:harness-result #:harness-result-p #:make-harness-result
+   #:chr-target #:chr-checks #:chr-pass-count #:chr-fail-count
+   #:chr-skip-count #:chr-overall-verdict #:chr-artifacts
+   #:*standard-contracts*
+   #:validate-runtime-target #:run-contract-harness
+   #:harness-result-to-json #:write-harness-artifact
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version
