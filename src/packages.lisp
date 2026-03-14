@@ -141,7 +141,22 @@
    #:probe-report #:probe-report-p #:make-probe-report
    #:probe-report-base-url #:probe-report-overall-ok-p #:probe-report-results
    #:openclaw-live-contract-probe
-   #:%openclaw-request))
+   #:%openclaw-request
+   ;; HTML fallback (sy2)
+   #:remediation-hint #:remediation-hint-p #:make-remediation-hint
+   #:rh-endpoint #:rh-problem #:rh-suggestion #:rh-alternative-url
+   #:fallback-result #:fallback-result-p #:make-fallback-result
+   #:fb-usable-p #:fb-original-url #:fb-resolved-url #:fb-hints
+   #:detect-content-kind #:evaluate-endpoint-fallback #:evaluate-all-endpoints
+   ;; Capability mapper (8oo)
+   #:command-request #:command-request-p #:make-command-request
+   #:cmd-req-kind #:cmd-req-target-id #:cmd-req-params
+   #:command-response #:command-response-p #:make-command-response
+   #:cmd-res-kind #:cmd-res-ok-p #:cmd-res-result #:cmd-res-error-detail
+   #:capability-gate #:capability-gate-p #:make-capability-gate
+   #:cg-allowed-ops #:cg-denied-ops
+   #:operation-denied
+   #:build-capability-gate #:operation-allowed-p #:safe-execute))
 
 (defpackage #:orrery/coalton/core
   (:use #:coalton #:coalton-prelude)

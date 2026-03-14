@@ -132,7 +132,17 @@
                 #:probe-endpoint-result #:probe-endpoint-result-endpoint #:probe-endpoint-result-ok-p
                 #:probe-endpoint-result-mismatches
                 #:probe-mismatch #:probe-mismatch-category
-                #:%openclaw-request)
+                #:%openclaw-request
+                ;; HTML fallback (sy2)
+                #:detect-content-kind #:evaluate-endpoint-fallback #:evaluate-all-endpoints
+                #:fallback-result #:fb-usable-p #:fb-resolved-url #:fb-hints
+                #:remediation-hint #:rh-endpoint #:rh-problem #:rh-suggestion #:rh-alternative-url
+                ;; Capability mapper (8oo)
+                #:command-request #:make-command-request #:cmd-req-kind
+                #:command-response #:cmd-res-ok-p #:cmd-res-kind #:cmd-res-error-detail
+                #:capability-gate #:make-capability-gate #:build-capability-gate
+                #:operation-allowed-p #:safe-execute
+                #:cg-allowed-ops #:cg-denied-ops)
   (:import-from #:orrery/coalton/core
                 #:normalize-status-code #:estimate-cost-cents)
   (:import-from #:orrery/pipeline

@@ -33,7 +33,9 @@
      (:module "adapter"
       :components ((:file "protocol")
                    (:file "openclaw")
-                   (:file "contract-probe")))
+                   (:file "contract-probe")
+                   (:file "html-fallback")
+                   (:file "capability-mapper")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -63,4 +65,6 @@
                    (:file "conformance-tests")
                    (:file "contract-probe-tests")
                    (:file "normalization-tests")
-                   (:file "coalton-core-tests")))))))
+                   (:file "coalton-core-tests")
+                   (:file "html-fallback-tests")
+                   (:file "capability-mapper-tests")))))))
