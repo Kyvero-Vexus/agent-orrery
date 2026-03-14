@@ -52,7 +52,8 @@
                    (:file "schema-drift")
                    (:file "evidence-bundle")
                    (:file "gate-decision")
-                   (:file "gate-orchestrator")))
+                   (:file "gate-orchestrator")
+                   (:file "interface-matrix")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -100,4 +101,5 @@
                    (:file "schema-drift-tests")
                    (:file "evidence-bundle-tests")
                    (:file "gate-decision-tests")
-                   (:file "gate-orchestrator-tests")))))))
+                   (:file "gate-orchestrator-tests")
+                   (:file "interface-matrix-tests")))))))

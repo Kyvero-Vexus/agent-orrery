@@ -181,6 +181,16 @@
    #:rp-decision-gate-id #:rp-primary-action #:rp-remediation-steps
    #:rp-blocker-report #:rp-unblock-targets #:rp-timestamp
    #:orchestrate-resolution #:resolution-plan-to-json
+   ;; Interface matrix (4od)
+   #:interface-capability #:interface-capability-p #:make-interface-capability
+   #:ic-name #:ic-interface #:ic-required-p #:ic-adapter-endpoint #:ic-fixture-available-p
+   #:work-packet #:work-packet-p #:make-work-packet
+   #:wp-interface-kind #:wp-epic-id #:wp-readiness
+   #:wp-capabilities #:wp-missing-capabilities #:wp-fixture-gaps #:wp-kickoff-checklist
+   #:interface-matrix #:interface-matrix-p #:make-interface-matrix
+   #:im-packets #:im-shared-fixtures #:im-adapter-coverage-pct #:im-timestamp
+   #:*tui-requirements* #:*web-requirements* #:*mcclim-requirements*
+   #:generate-interface-matrix #:interface-matrix-to-json
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version
