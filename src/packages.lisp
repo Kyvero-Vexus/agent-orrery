@@ -81,7 +81,23 @@
    #:adapter-error-operation
    #:adapter-not-supported
    #:adapter-not-found
-   #:adapter-not-found-id))
+   #:adapter-not-found-id
+   ;; Capability contract (aei)
+   #:capability-schema #:capability-schema-p #:make-capability-schema
+   #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version
+   #:cs-endpoints #:cs-semantic-map #:cs-metadata
+   #:endpoint-capability #:endpoint-capability-p #:make-endpoint-capability
+   #:ec-cap-path #:ec-cap-operation #:ec-cap-semantic
+   #:ec-cap-supported-p #:ec-cap-requires-auth
+   #:validation-issue #:validation-issue-p #:make-validation-issue
+   #:vi-severity #:vi-field #:vi-message
+   #:validation-result #:validation-result-p #:make-validation-result
+   #:vr-valid-p #:vr-issues
+   #:validate-schema #:validate-endpoint-capability
+   #:negotiation-result #:negotiation-result-p #:make-negotiation-result
+   #:nr-outcome #:nr-available-operations #:nr-denied-operations
+   #:nr-requires-elevation #:nr-diagnostics
+   #:negotiate-capabilities))
 
 (defpackage #:orrery/adapter/openclaw
   (:use #:cl)

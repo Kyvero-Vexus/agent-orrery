@@ -39,7 +39,8 @@
                    (:file "html-fallback")
                    (:file "capability-mapper")
                    (:file "endpoint-classifier")
-                   (:file "handshake-probe")))
+                   (:file "handshake-probe")
+                   (:file "capability-contract")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -77,4 +78,5 @@
                    (:file "handshake-probe-tests")
                    (:file "policy-law-checks")
                    (:file "../fixtures/live-gate-corpus")
-                   (:file "live-gate-contract-tests")))))))
+                   (:file "live-gate-contract-tests")
+                   (:file "capability-contract-tests")))))))
