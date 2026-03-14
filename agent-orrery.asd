@@ -15,7 +15,9 @@
     :components
     ((:file "packages")
      (:module "coalton"
-      :components ((:file "core")))))))
+      :serial t
+      :components ((:file "core")
+                   (:file "policy")))))))
 
 (defsystem "agent-orrery"
   :description "Dashboard for OpenClaw-compatible agent systems"
@@ -35,7 +37,8 @@
                    (:file "openclaw")
                    (:file "contract-probe")
                    (:file "html-fallback")
-                   (:file "capability-mapper")))
+                   (:file "capability-mapper")
+                   (:file "endpoint-classifier")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -67,4 +70,6 @@
                    (:file "normalization-tests")
                    (:file "coalton-core-tests")
                    (:file "html-fallback-tests")
-                   (:file "capability-mapper-tests")))))))
+                   (:file "capability-mapper-tests")
+                   (:file "endpoint-classifier-tests")
+                   (:file "policy-algebra-tests")))))))

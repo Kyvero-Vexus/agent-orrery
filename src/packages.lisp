@@ -156,13 +156,23 @@
    #:capability-gate #:capability-gate-p #:make-capability-gate
    #:cg-allowed-ops #:cg-denied-ops
    #:operation-denied
-   #:build-capability-gate #:operation-allowed-p #:safe-execute))
+   #:build-capability-gate #:operation-allowed-p #:safe-execute
+   ;; Endpoint classifier (1t2)
+   #:endpoint-classification #:endpoint-classification-p #:make-endpoint-classification
+   #:ec-path #:ec-surface #:ec-http-status #:ec-content-type #:ec-body-shape #:ec-confidence
+   #:classify-endpoint-response #:detect-body-shape))
 
 (defpackage #:orrery/coalton/core
   (:use #:coalton #:coalton-prelude)
   (:export
    #:normalize-status-code
-   #:estimate-cost-cents))
+   #:estimate-cost-cents
+   ;; Policy algebra (fhk)
+   #:PolicyDecision #:Allow #:Deny #:Ask
+   #:PolicyRule #:PolicySet
+   #:rule-operation #:rule-decision
+   #:combine-decisions #:evaluate-policy #:merge-policies
+   #:decision-permits-p #:make-policy))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)

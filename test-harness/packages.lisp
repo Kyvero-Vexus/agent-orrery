@@ -142,7 +142,12 @@
                 #:command-response #:cmd-res-ok-p #:cmd-res-kind #:cmd-res-error-detail
                 #:capability-gate #:make-capability-gate #:build-capability-gate
                 #:operation-allowed-p #:safe-execute
-                #:cg-allowed-ops #:cg-denied-ops)
+                #:cg-allowed-ops #:cg-denied-ops
+                ;; Endpoint classifier (1t2)
+                #:endpoint-classification #:make-endpoint-classification
+                #:ec-path #:ec-surface #:ec-http-status #:ec-content-type
+                #:ec-body-shape #:ec-confidence
+                #:classify-endpoint-response #:detect-body-shape)
   (:import-from #:orrery/coalton/core
                 #:normalize-status-code #:estimate-cost-cents)
   (:import-from #:orrery/pipeline
