@@ -44,7 +44,9 @@
                    (:file "preflight")
                    (:file "gate-runner")
                    (:file "preflight-json")
-                   (:file "contract-harness")))
+                   (:file "contract-harness")
+                   (:file "probe-orchestrator")
+                   (:file "compatibility-report")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -85,4 +87,5 @@
                    (:file "live-gate-contract-tests")
                    (:file "capability-contract-tests")
                    (:file "preflight-tests")
-                   (:file "contract-harness-tests")))))))
+                   (:file "contract-harness-tests")
+                   (:file "probe-orchestrator-tests")))))))

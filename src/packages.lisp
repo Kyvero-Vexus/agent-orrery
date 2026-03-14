@@ -108,6 +108,23 @@
    #:*standard-contracts*
    #:validate-runtime-target #:run-contract-harness
    #:harness-result-to-json #:write-harness-artifact
+   ;; Probe orchestrator (cbw)
+   #:classified-failure #:classified-failure-p #:make-classified-failure
+   #:cf-failure-class #:cf-check #:cf-remediation
+   #:s1-gate-result #:s1-gate-result-p #:make-s1-gate-result
+   #:s1-verdict #:s1-profile #:s1-harness-result
+   #:s1-classified-failures #:s1-diagnostics
+   #:classify-check-failure #:run-s1-probe #:s1-gate-result-to-json
+   ;; Compatibility report (xg8)
+   #:capability-gap #:capability-gap-p #:make-capability-gap
+   #:cg-capability-name #:cg-required-by #:cg-status #:cg-remediation
+   #:parity-gate-signal #:parity-gate-signal-p #:make-parity-gate-signal
+   #:pgs-epic-name #:pgs-readiness #:pgs-gaps #:pgs-summary
+   #:compatibility-report #:compatibility-report-p #:make-compatibility-report
+   #:cr-source-verdict #:cr-signals #:cr-overall-readiness
+   #:cr-total-gaps #:cr-timestamp
+   #:*epic-requirements*
+   #:generate-compatibility-report #:compatibility-report-to-json
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version
