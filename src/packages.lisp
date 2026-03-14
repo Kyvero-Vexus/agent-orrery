@@ -125,6 +125,16 @@
    #:cr-total-gaps #:cr-timestamp
    #:*epic-requirements*
    #:generate-compatibility-report #:compatibility-report-to-json
+   ;; Conformance matrix (dbc)
+   #:coverage-entry #:coverage-entry-p #:make-coverage-entry
+   #:ce-endpoint-name #:ce-coverage #:ce-tested-at #:ce-test-verdict #:ce-notes
+   #:conformance-matrix #:conformance-matrix-p #:make-conformance-matrix
+   #:cm-adapter-name #:cm-adapter-version #:cm-entries
+   #:cm-degradation-mode #:cm-minimum-coverage #:cm-built-at
+   #:conformance-check-result #:conformance-check-result-p
+   #:make-conformance-check-result
+   #:ccr-conformant-p #:ccr-violations #:ccr-degradation-action #:ccr-summary
+   #:build-conformance-matrix #:check-conformance #:conformance-matrix-to-json
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version
