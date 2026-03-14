@@ -158,6 +158,15 @@
    #:*health-schema* #:*sessions-list-schema* #:*standard-schemas*
    #:parse-payload-fields #:detect-drift #:detect-all-drift
    #:drift-report-to-json
+   ;; Evidence bundle (7rj)
+   #:blocker-entry #:blocker-entry-p #:make-blocker-entry
+   #:be-blocker-class #:be-reason-code #:be-description
+   #:be-resolution #:be-remediation-hint
+   #:evidence-bundle #:evidence-bundle-p #:make-evidence-bundle
+   #:eb-gate-id #:eb-target-profile #:eb-decision
+   #:eb-s1-verdict #:eb-conformance-summary #:eb-drift-compatible-p
+   #:eb-blockers #:eb-artifact-shas #:eb-timestamp #:eb-notes
+   #:classify-blockers #:build-evidence-bundle #:evidence-bundle-to-json
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version

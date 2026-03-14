@@ -49,7 +49,8 @@
                    (:file "compatibility-report")
                    (:file "conformance-matrix")
                    (:file "transcript-capture")
-                   (:file "schema-drift")))
+                   (:file "schema-drift")
+                   (:file "evidence-bundle")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -94,4 +95,5 @@
                    (:file "probe-orchestrator-tests")
                    (:file "conformance-matrix-tests")
                    (:file "transcript-capture-tests")
-                   (:file "schema-drift-tests")))))))
+                   (:file "schema-drift-tests")
+                   (:file "evidence-bundle-tests")))))))
