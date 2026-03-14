@@ -75,4 +75,6 @@
                    (:file "endpoint-classifier-tests")
                    (:file "policy-algebra-tests")
                    (:file "handshake-probe-tests")
-                   (:file "policy-law-checks")))))))
+                   (:file "policy-law-checks")
+                   (:file "../fixtures/live-gate-corpus")
+                   (:file "live-gate-contract-tests")))))))
