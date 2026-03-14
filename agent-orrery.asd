@@ -47,7 +47,8 @@
                    (:file "contract-harness")
                    (:file "probe-orchestrator")
                    (:file "compatibility-report")
-                   (:file "conformance-matrix")))
+                   (:file "conformance-matrix")
+                   (:file "transcript-capture")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -90,4 +91,5 @@
                    (:file "preflight-tests")
                    (:file "contract-harness-tests")
                    (:file "probe-orchestrator-tests")
-                   (:file "conformance-matrix-tests")))))))
+                   (:file "conformance-matrix-tests")
+                   (:file "transcript-capture-tests")))))))

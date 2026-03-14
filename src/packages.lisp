@@ -135,6 +135,16 @@
    #:make-conformance-check-result
    #:ccr-conformant-p #:ccr-violations #:ccr-degradation-action #:ccr-summary
    #:build-conformance-matrix #:check-conformance #:conformance-matrix-to-json
+   ;; Transcript capture (5lt)
+   #:transcript-entry #:transcript-entry-p #:make-transcript-entry
+   #:te-direction #:te-method #:te-path #:te-status-code
+   #:te-content-type #:te-body #:te-timestamp
+   #:transcript #:transcript-p #:make-transcript
+   #:tx-name #:tx-target-url #:tx-entries #:tx-captured-at #:tx-notes
+   #:replay-result #:replay-result-p #:make-replay-result
+   #:rr-transcript #:rr-matches #:rr-mismatches #:rr-replay-verdict
+   #:capture-response #:build-transcript
+   #:transcript-to-json #:load-transcript-from-json #:replay-transcript
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version
