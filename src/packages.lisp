@@ -145,6 +145,19 @@
    #:rr-transcript #:rr-matches #:rr-mismatches #:rr-replay-verdict
    #:capture-response #:build-transcript
    #:transcript-to-json #:load-transcript-from-json #:replay-transcript
+   ;; Schema drift detector (gk1)
+   #:schema-field #:schema-field-p #:make-schema-field
+   #:sf-name #:sf-expected-type #:sf-required-p
+   #:protocol-schema #:protocol-schema-p #:make-protocol-schema
+   #:ps-endpoint-name #:ps-version #:ps-fields
+   #:drift-finding #:drift-finding-p #:make-drift-finding
+   #:df-field-name #:df-drift-type #:df-severity #:df-message #:df-remediation
+   #:drift-report #:drift-report-p #:make-drift-report
+   #:dr-endpoint-name #:dr-schema-version #:dr-findings
+   #:dr-compatible-p #:dr-max-severity #:dr-timestamp
+   #:*health-schema* #:*sessions-list-schema* #:*standard-schemas*
+   #:parse-payload-fields #:detect-drift #:detect-all-drift
+   #:drift-report-to-json
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version
