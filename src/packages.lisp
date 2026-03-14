@@ -167,6 +167,13 @@
    #:eb-s1-verdict #:eb-conformance-summary #:eb-drift-compatible-p
    #:eb-blockers #:eb-artifact-shas #:eb-timestamp #:eb-notes
    #:classify-blockers #:build-evidence-bundle #:evidence-bundle-to-json
+   ;; Gate decision engine (g8s)
+   #:next-action #:next-action-p #:make-next-action
+   #:na-action-id #:na-urgency #:na-description #:na-owner
+   #:gate-decision-record #:gate-decision-record-p #:make-gate-decision-record
+   #:gdr-gate-id #:gdr-outcome #:gdr-reason #:gdr-next-actions
+   #:gdr-evidence-gate-id #:gdr-blocker-count #:gdr-can-close-gate-p #:gdr-timestamp
+   #:decide-s1-gate #:gate-decision-to-json
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version

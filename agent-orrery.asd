@@ -50,7 +50,8 @@
                    (:file "conformance-matrix")
                    (:file "transcript-capture")
                    (:file "schema-drift")
-                   (:file "evidence-bundle")))
+                   (:file "evidence-bundle")
+                   (:file "gate-decision")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -96,4 +97,5 @@
                    (:file "conformance-matrix-tests")
                    (:file "transcript-capture-tests")
                    (:file "schema-drift-tests")
-                   (:file "evidence-bundle-tests")))))))
+                   (:file "evidence-bundle-tests")
+                   (:file "gate-decision-tests")))))))
