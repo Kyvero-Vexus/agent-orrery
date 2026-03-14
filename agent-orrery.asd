@@ -38,7 +38,8 @@
                    (:file "contract-probe")
                    (:file "html-fallback")
                    (:file "capability-mapper")
-                   (:file "endpoint-classifier")))
+                   (:file "endpoint-classifier")
+                   (:file "handshake-probe")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -72,4 +73,6 @@
                    (:file "html-fallback-tests")
                    (:file "capability-mapper-tests")
                    (:file "endpoint-classifier-tests")
-                   (:file "policy-algebra-tests")))))))
+                   (:file "policy-algebra-tests")
+                   (:file "handshake-probe-tests")
+                   (:file "policy-law-checks")))))))

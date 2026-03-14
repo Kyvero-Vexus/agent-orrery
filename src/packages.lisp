@@ -160,7 +160,13 @@
    ;; Endpoint classifier (1t2)
    #:endpoint-classification #:endpoint-classification-p #:make-endpoint-classification
    #:ec-path #:ec-surface #:ec-http-status #:ec-content-type #:ec-body-shape #:ec-confidence
-   #:classify-endpoint-response #:detect-body-shape))
+   #:classify-endpoint-response #:detect-body-shape
+   ;; Handshake probe (bq1)
+   #:handshake-result #:handshake-result-p #:make-handshake-result
+   #:hs-base-url #:hs-family #:hs-ready-p #:hs-classification #:hs-remediation
+   #:handshake-report #:handshake-report-p #:make-handshake-report
+   #:hr-results #:hr-overall-ready-p #:hr-summary
+   #:classify-response-family #:make-family-remediation #:run-handshake-probe))
 
 (defpackage #:orrery/coalton/core
   (:use #:coalton #:coalton-prelude)
