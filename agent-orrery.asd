@@ -40,7 +40,10 @@
                    (:file "capability-mapper")
                    (:file "endpoint-classifier")
                    (:file "handshake-probe")
-                   (:file "capability-contract")))
+                   (:file "capability-contract")
+                   (:file "preflight")
+                   (:file "gate-runner")
+                   (:file "preflight-json")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -79,4 +82,5 @@
                    (:file "policy-law-checks")
                    (:file "../fixtures/live-gate-corpus")
                    (:file "live-gate-contract-tests")
-                   (:file "capability-contract-tests")))))))
+                   (:file "capability-contract-tests")
+                   (:file "preflight-tests")))))))

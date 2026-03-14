@@ -82,6 +82,21 @@
    #:adapter-not-supported
    #:adapter-not-found
    #:adapter-not-found-id
+   ;; Preflight (cne)
+   #:preflight-check #:preflight-check-p #:make-preflight-check
+   #:pc-name #:pc-status #:pc-message #:pc-details
+   #:preflight-report #:preflight-report-p #:make-preflight-report
+   #:pr-checks #:pr-overall-status #:pr-timestamp #:pr-adapter-name
+   #:run-preflight #:compute-overall-status #:preflight-report-to-sexp
+   ;; Gate runner (id9)
+   #:failure-policy #:failure-policy-p #:make-failure-policy
+   #:fp-check-name #:fp-action #:fp-rationale
+   #:gate-result #:gate-result-p #:make-gate-result
+   #:gr-gate-passed-p #:gr-applied-policies #:gr-report #:gr-exit-code
+   #:*default-failure-policies*
+   #:apply-failure-policies #:run-gate
+   ;; Preflight JSON (apd)
+   #:preflight-report-to-json #:gate-result-to-json
    ;; Capability contract (aei)
    #:capability-schema #:capability-schema-p #:make-capability-schema
    #:cs-adapter-name #:cs-adapter-version #:cs-protocol-version
