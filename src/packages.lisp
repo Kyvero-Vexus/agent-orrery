@@ -283,6 +283,19 @@
    #:normalize-sample-to-finding #:assemble-snapshot
    #:snapshot-to-artifact #:snapshot-to-replay-stream
    #:run-capture #:capture-to-decision
+   ;; Action-intent algebra (3st)
+   #:intent-kind #:intent-category
+   #:action-intent #:action-intent-p #:make-action-intent
+   #:ai-kind #:ai-target-id #:ai-params
+   #:result-status
+   #:intent-result #:intent-result-p #:make-intent-result
+   #:ir-status #:ir-payload #:ir-error-message #:ir-intent
+   #:intent-list-sessions #:intent-list-cron-jobs #:intent-system-health
+   #:intent-list-alerts #:intent-list-subagents #:intent-capabilities
+   #:intent-session-history #:intent-trigger-cron #:intent-pause-cron
+   #:intent-resume-cron #:intent-acknowledge-alert #:intent-snooze-alert
+   #:intent-usage-records #:intent-tail-events
+   #:interpret-intent #:interpret-intents #:describe-intent
    ;; Fixture replay compiler (qyn)
    #:fixture-replay-bundle #:fixture-replay-bundle-p #:make-fixture-replay-bundle
    #:frb-bundle-id #:frb-source #:frb-streams #:frb-artifacts
@@ -554,3 +567,80 @@
    #:ss-sessions #:ss-cron-jobs #:ss-health #:ss-usage #:ss-events #:ss-alerts #:ss-subagents
    #:ss-last-sync-at #:ss-sync-token
    #:snapshot-from-adapter #:apply-incremental-events #:replay-events #:store->plist))
+
+(defpackage #:orrery/provider
+  (:use #:cl)
+  (:import-from #:orrery/domain
+                #:session-record #:session-record-p
+                #:sr-id #:sr-agent-name #:sr-channel #:sr-status #:sr-model
+                #:sr-created-at #:sr-updated-at #:sr-message-count
+                #:sr-total-tokens #:sr-estimated-cost-cents
+                #:cron-record #:cron-record-p
+                #:cr-name #:cr-kind #:cr-interval-s #:cr-status
+                #:cr-last-run-at #:cr-next-run-at #:cr-run-count
+                #:cr-last-error #:cr-description
+                #:health-record #:health-record-p
+                #:hr-component #:hr-status #:hr-message #:hr-checked-at #:hr-latency-ms
+                #:usage-record #:usage-record-p
+                #:ur-model #:ur-period #:ur-timestamp
+                #:ur-prompt-tokens #:ur-completion-tokens #:ur-total-tokens
+                #:ur-estimated-cost-cents
+                #:event-record #:event-record-p
+                #:er-id #:er-kind #:er-source #:er-message #:er-timestamp #:er-metadata
+                #:alert-record #:alert-record-p
+                #:ar-id #:ar-severity #:ar-title #:ar-message #:ar-source
+                #:ar-fired-at #:ar-acknowledged-p #:ar-snoozed-until
+                #:subagent-record #:subagent-record-p
+                #:sar-id #:sar-parent-session #:sar-agent-name #:sar-status
+                #:sar-started-at #:sar-finished-at #:sar-total-tokens #:sar-result)
+  (:import-from #:orrery/store
+                #:sync-store #:sync-store-p
+                #:ss-sessions #:ss-cron-jobs #:ss-health #:ss-usage
+                #:ss-events #:ss-alerts #:ss-subagents
+                #:ss-last-sync-at #:ss-sync-token)
+  (:export
+   ;; Page container
+   #:page #:page-p #:make-page #:copy-page
+   #:page-items #:page-offset #:page-limit #:page-total
+   ;; Sort spec
+   #:sort-spec #:sort-spec-p #:make-sort-spec #:copy-sort-spec
+   #:sort-spec-key #:sort-spec-direction
+   ;; Filter spec
+   #:filter-spec #:filter-spec-p #:make-filter-spec #:copy-filter-spec
+   #:filter-spec-field #:filter-spec-op #:filter-spec-value
+   ;; Session view
+   #:session-view #:session-view-p #:make-session-view #:copy-session-view
+   #:sv-record #:sv-age-seconds #:sv-cost-display #:sv-token-display
+   ;; Cron view
+   #:cron-view #:cron-view-p #:make-cron-view #:copy-cron-view
+   #:cv-record #:cv-overdue-p #:cv-error-p #:cv-interval-display
+   ;; Health view
+   #:health-view #:health-view-p #:make-health-view #:copy-health-view
+   #:hv-record #:hv-ok-p #:hv-latency-display
+   ;; Event view
+   #:event-view #:event-view-p #:make-event-view #:copy-event-view
+   #:ev-record #:ev-age-seconds #:ev-severity-indicator
+   ;; Alert view
+   #:alert-view #:alert-view-p #:make-alert-view #:copy-alert-view
+   #:alv-record #:alv-active-p #:alv-age-seconds #:alv-urgency
+   ;; Usage view
+   #:usage-view #:usage-view-p #:make-usage-view #:copy-usage-view
+   #:uv-record #:uv-cost-display #:uv-token-display
+   ;; Dashboard summary
+   #:dashboard-summary #:dashboard-summary-p #:make-dashboard-summary
+   #:copy-dashboard-summary
+   #:ds-session-count #:ds-active-session-count
+   #:ds-cron-count #:ds-overdue-cron-count
+   #:ds-health-ok-p #:ds-degraded-components
+   #:ds-alert-count #:ds-critical-alert-count
+   #:ds-total-tokens #:ds-total-cost-cents
+   #:ds-last-sync-at
+   ;; Query functions — pure transforms
+   #:query-sessions #:query-cron-jobs #:query-health
+   #:query-events #:query-alerts #:query-usage
+   #:build-dashboard-summary
+   ;; Display helpers
+   #:format-tokens #:format-cost-cents #:format-age
+   #:format-interval))
+
+

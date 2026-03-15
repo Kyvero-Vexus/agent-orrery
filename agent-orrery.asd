@@ -67,12 +67,15 @@
                    (:file "snapshot-drift")
                    (:file "health-monitor")
                    (:file "capture-differ")
-                   (:file "decision-audit")))
+                   (:file "decision-audit")
+                   (:file "action-intent")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
      (:module "store"
-      :components ((:file "sync")))))))
+      :components ((:file "sync")))
+     (:module "provider"
+      :components ((:file "tui")))))))
 
 (defsystem "agent-orrery/test-harness"
   :description "Deterministic fixture runtime harness for Agent Orrery"
@@ -130,4 +133,6 @@
                    (:file "snapshot-drift-tests")
                    (:file "health-monitor-tests")
                    (:file "capture-differ-tests")
-                   (:file "decision-audit-tests")))))))
+                   (:file "decision-audit-tests")
+                   (:file "action-intent-tests")
+                   (:file "tui-provider-tests")))))))

@@ -254,6 +254,18 @@
                 #:normalize-sample-to-finding #:assemble-snapshot
                 #:snapshot-to-artifact #:snapshot-to-replay-stream
                 #:run-capture #:capture-to-decision
+                ;; Action-intent algebra (3st)
+                #:action-intent #:action-intent-p #:make-action-intent
+                #:ai-kind #:ai-target-id #:ai-params
+                #:intent-category
+                #:intent-result #:intent-result-p #:make-intent-result
+                #:ir-status #:ir-payload #:ir-error-message #:ir-intent
+                #:intent-list-sessions #:intent-list-cron-jobs #:intent-system-health
+                #:intent-list-alerts #:intent-list-subagents #:intent-capabilities
+                #:intent-session-history #:intent-trigger-cron #:intent-pause-cron
+                #:intent-resume-cron #:intent-acknowledge-alert #:intent-snooze-alert
+                #:intent-usage-records #:intent-tail-events
+                #:interpret-intent #:interpret-intents #:describe-intent
                 ;; Fixture replay compiler (qyn)
                 #:fixture-replay-bundle #:fixture-replay-bundle-p #:make-fixture-replay-bundle
                 #:frb-bundle-id #:frb-source #:frb-streams #:frb-artifacts
