@@ -541,7 +541,20 @@
    ;; CL-callable bridge functions
    #:cl-make-usage-entry #:cl-make-entry-list
    #:cl-aggregate-entries #:cl-build-summary
-   #:cl-summary-total-tokens #:cl-summary-total-cost))
+   #:cl-summary-total-tokens #:cl-summary-total-cost
+   ;; Budget policy (2ya)
+   #:BudgetPeriod #:BPDaily #:BPWeekly #:BPMonthly
+   #:BudgetScope #:GlobalScope #:ModelScope #:SessionScope
+   #:BudgetLimit #:budgetlimit #:bl-scope #:bl-period #:bl-max-tokens #:bl-max-cost
+   #:ThresholdLevel #:TLOk #:TLWarning #:TLCritical #:TLExceeded
+   #:BudgetVerdict #:budgetverdict #:bv-scope #:bv-level #:bv-actual
+   #:bv-limit-tokens #:bv-utilization
+   #:classify-threshold #:evaluate-limit #:evaluate-policy-limits
+   #:worst-level #:verdict-hint
+   ;; Budget CL bridge
+   #:cl-make-budget-limit #:cl-evaluate-policy
+   #:cl-verdict-level-keyword #:cl-verdict-hint
+   #:cl-verdict-utilization #:cl-verdict-actual))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)

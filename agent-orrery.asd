@@ -18,7 +18,8 @@
       :serial t
       :components ((:file "core")
                    (:file "policy")
-                   (:file "usage-analytics")))))))
+                   (:file "usage-analytics")
+                   (:file "budget-policy")))))))
 
 (defsystem "agent-orrery"
   :description "Dashboard for OpenClaw-compatible agent systems"
@@ -137,5 +138,6 @@
                    (:file "capture-differ-tests")
                    (:file "decision-audit-tests")
                    (:file "usage-analytics-tests")
+                   (:file "budget-policy-tests")
                    (:file "action-intent-tests")
                    (:file "tui-provider-tests")))))))
