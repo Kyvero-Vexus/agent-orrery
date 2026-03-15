@@ -342,6 +342,16 @@
    #:compute-backoff #:reset-backoff
    #:probe-health #:classify-windows #:build-health-summary
    #:health-summary-to-json
+   ;; Capture differ (qph)
+   #:diff-classification
+   #:endpoint-delta #:endpoint-delta-p #:make-endpoint-delta
+   #:ed-endpoint #:ed-classification #:ed-status-before #:ed-status-after
+   #:ed-body-changed-p #:ed-latency-delta-ms #:ed-detail
+   #:capture-diff #:capture-diff-p #:make-capture-diff
+   #:cd-diff-id #:cd-deltas #:cd-endpoint-count
+   #:cd-identical-count #:cd-compatible-count #:cd-regressed-count
+   #:cd-improved-count #:cd-new-count #:cd-removed-count #:cd-regressions-p
+   #:diff-endpoint-samples #:diff-capture-results #:capture-diff-to-json
    ;; Snapshot drift diagnostic (3nk)
    #:diagnostic-disposition
    #:snapshot-drift-diagnostic #:snapshot-drift-diagnostic-p

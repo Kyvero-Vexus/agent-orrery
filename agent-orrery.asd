@@ -65,6 +65,7 @@
                    (:file "evidence-pack")
                    (:file "snapshot-drift")
                    (:file "health-monitor")
+                   (:file "capture-differ")
                    (:file "decision-audit")))
      (:module "pipeline"
       :components ((:file "events")
@@ -126,4 +127,5 @@
                    (:file "evidence-pack-tests")
                    (:file "snapshot-drift-tests")
                    (:file "health-monitor-tests")
+                   (:file "capture-differ-tests")
                    (:file "decision-audit-tests")))))))
