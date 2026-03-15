@@ -57,8 +57,8 @@
                    (:file "decision-core")
                    (:file "schema-compat")
                    (:file "replay-harness")
-                   (:file "gate-invariant-checker")
-                   (:file "schema-regression-generators")))
+                   (:file "gate-invariant")
+                   (:file "schema-gen")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -111,5 +111,5 @@
                    (:file "decision-core-tests")
                    (:file "schema-compat-tests")
                    (:file "replay-harness-tests")
-                   (:file "gate-invariant-checker-tests")
-                   (:file "schema-regression-generators-tests")))))))
+                   (:file "gate-invariant-tests")
+                   (:file "schema-gen-tests")))))))

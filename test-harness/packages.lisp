@@ -212,14 +212,13 @@
                 #:run-replay #:run-batch-replay
                 ;; Gate invariant checker (hrp)
                 #:invariant-violation #:invariant-violation-p #:make-invariant-violation
-                #:iv-invariant-class #:iv-severity #:iv-description
-                #:iv-artifact-ref #:iv-evidence
+                #:iv-category #:iv-severity #:iv-description #:iv-evidence
                 #:invariant-report #:invariant-report-p #:make-invariant-report
-                #:ir-pass-p #:ir-violation-count #:ir-violations
-                #:ir-checked-count #:ir-summary
-                #:check-ordering-invariant #:check-monotonicity-invariant
-                #:check-determinism-invariant #:check-schema-contract-invariant
-                #:has-fatal-violation-p #:run-invariant-suite
+                #:ir-pass-p #:ir-violations #:ir-checked-count
+                #:ir-pass-count #:ir-fail-count #:ir-timestamp
+                #:check-ordering-invariant #:check-determinism-invariant
+                #:check-schema-coverage-invariant #:check-decision-consistency-invariant
+                #:build-invariant-report #:run-invariant-suite
                 ;; Schema regression generators (9oy)
                 #:gen-state #:gen-state-p #:make-gen-state
                 #:gs-seed #:gs-counter
