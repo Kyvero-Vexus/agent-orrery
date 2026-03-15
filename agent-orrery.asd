@@ -63,7 +63,8 @@
                    (:file "runtime-transport")
                    (:file "capture-driver")
                    (:file "evidence-pack")
-                   (:file "snapshot-drift")))
+                   (:file "snapshot-drift")
+                   (:file "health-monitor")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -122,4 +123,5 @@
                    (:file "runtime-transport-tests")
                    (:file "capture-driver-tests")
                    (:file "evidence-pack-tests")
-                   (:file "snapshot-drift-tests")))))))
+                   (:file "snapshot-drift-tests")
+                   (:file "health-monitor-tests")))))))

@@ -277,4 +277,18 @@
                 #:build-parity-report #:build-replay-manifest
                 #:generate-repro-commands #:build-evidence-pack
                 #:parity-entry-to-json #:parity-report-to-json
-                #:replay-manifest-to-json #:evidence-pack-to-json))
+                #:replay-manifest-to-json #:evidence-pack-to-json
+                ;; Health monitor (a40)
+                #:health-sample #:health-sample-p #:make-health-sample
+                #:hs-endpoint #:hs-status #:hs-latency-ms #:hs-timestamp #:hs-error-detail
+                #:health-window #:health-window-p #:make-health-window
+                #:hw-start-time #:hw-end-time #:hw-status #:hw-sample-count
+                #:health-summary #:health-summary-p #:make-health-summary
+                #:hsum-total-probes #:hsum-up-count #:hsum-down-count #:hsum-degraded-count
+                #:hsum-uptime-ratio #:hsum-p50-latency-ms #:hsum-p95-latency-ms
+                #:hsum-windows #:hsum-first-probe-time #:hsum-last-probe-time
+                #:backoff-state #:backoff-state-p #:make-backoff-state
+                #:bs-base-ms #:bs-max-ms #:bs-multiplier #:bs-current-ms #:bs-attempt
+                #:compute-backoff #:reset-backoff
+                #:probe-health #:classify-windows #:build-health-summary
+                #:health-summary-to-json))
