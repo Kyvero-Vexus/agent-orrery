@@ -369,6 +369,9 @@
    #:compute-backoff #:reset-backoff
    #:probe-health #:classify-windows #:build-health-summary
    #:health-summary-to-json
+   ;; Usage analytics bridge (68i)
+   #:usage-record->coalton-entry #:usage-records->coalton-bucket
+   #:coalton-summary->json
    ;; Capture differ (qph)
    #:diff-classification
    #:endpoint-delta #:endpoint-delta-p #:make-endpoint-delta
@@ -523,7 +526,22 @@
    #:PolicyRule #:PolicySet
    #:rule-operation #:rule-decision
    #:combine-decisions #:evaluate-policy #:merge-policies
-   #:decision-permits-p #:make-policy))
+   #:decision-permits-p #:make-policy
+   ;; Usage analytics (68i)
+   #:UsageEntry #:usageentry
+   #:ue-model #:ue-prompt-tokens #:ue-completion-tokens #:ue-timestamp
+   #:ue-total-tokens #:ue-cost-cents
+   #:ModelRank #:modelrank #:mr-model #:mr-total-tokens #:mr-permille
+   #:UsageBucket #:usagebucket
+   #:bucket-period #:bucket-entries #:bucket-total-tokens #:bucket-total-cost
+   #:aggregate-entries #:sum-tokens #:sum-cost #:top-models
+   #:UsageSummary #:usagesummary
+   #:summary-buckets #:summary-top-models #:summary-total-tokens #:summary-total-cost
+   #:build-usage-summary
+   ;; CL-callable bridge functions
+   #:cl-make-usage-entry #:cl-make-entry-list
+   #:cl-aggregate-entries #:cl-build-summary
+   #:cl-summary-total-tokens #:cl-summary-total-cost))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)

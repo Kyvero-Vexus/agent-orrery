@@ -335,6 +335,9 @@
                 #:compute-backoff #:reset-backoff
                 #:probe-health #:classify-windows #:build-health-summary
                 #:health-summary-to-json
+                ;; Usage analytics bridge (68i)
+                #:usage-record->coalton-entry #:usage-records->coalton-bucket
+                #:coalton-summary->json
                 ;; Capture differ (qph)
                 #:endpoint-delta #:endpoint-delta-p #:make-endpoint-delta
                 #:ed-endpoint #:ed-classification #:ed-status-before #:ed-status-after

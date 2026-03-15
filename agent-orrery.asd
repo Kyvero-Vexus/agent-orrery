@@ -17,7 +17,8 @@
      (:module "coalton"
       :serial t
       :components ((:file "core")
-                   (:file "policy")))))))
+                   (:file "policy")
+                   (:file "usage-analytics")))))))
 
 (defsystem "agent-orrery"
   :description "Dashboard for OpenClaw-compatible agent systems"
@@ -68,7 +69,8 @@
                    (:file "health-monitor")
                    (:file "capture-differ")
                    (:file "decision-audit")
-                   (:file "action-intent")))
+                   (:file "action-intent")
+                   (:file "usage-analytics-bridge")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -134,5 +136,6 @@
                    (:file "health-monitor-tests")
                    (:file "capture-differ-tests")
                    (:file "decision-audit-tests")
+                   (:file "usage-analytics-tests")
                    (:file "action-intent-tests")
                    (:file "tui-provider-tests")))))))
