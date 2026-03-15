@@ -206,7 +206,21 @@
    #:negotiation-result #:negotiation-result-p #:make-negotiation-result
    #:nr-outcome #:nr-available-operations #:nr-denied-operations
    #:nr-requires-elevation #:nr-diagnostics
-   #:negotiate-capabilities))
+   #:negotiate-capabilities
+   ;; Decision core (eb0.2.7)
+   #:health-status #:probe-domain #:gate-verdict
+   #:probe-finding #:probe-finding-p #:make-probe-finding
+   #:pf-domain #:pf-status #:pf-severity #:pf-message #:pf-evidence-ref
+   #:severity-thresholds #:severity-thresholds-p #:make-severity-thresholds
+   #:st-pass-ceiling #:st-degraded-ceiling
+   #:replay-seed #:replay-seed-p #:make-replay-seed
+   #:rseed-timestamp #:rseed-version #:rseed-thresholds
+   #:decision-record #:decision-record-p #:make-decision-record
+   #:dec-verdict #:dec-aggregate-score #:dec-max-severity
+   #:dec-finding-count #:dec-findings #:dec-replay-seed #:dec-reasoning
+   #:classify-probe-status #:status-to-severity #:assess-probe
+   #:aggregate-severities #:compute-verdict #:generate-reasoning
+   #:run-decision-pipeline #:verify-replay))
 
 (defpackage #:orrery/adapter/openclaw
   (:use #:cl)

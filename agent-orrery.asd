@@ -53,7 +53,8 @@
                    (:file "evidence-bundle")
                    (:file "gate-decision")
                    (:file "gate-orchestrator")
-                   (:file "interface-matrix")))
+                   (:file "interface-matrix")
+                   (:file "decision-core")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -102,4 +103,5 @@
                    (:file "evidence-bundle-tests")
                    (:file "gate-decision-tests")
                    (:file "gate-orchestrator-tests")
-                   (:file "interface-matrix-tests")))))))
+                   (:file "interface-matrix-tests")
+                   (:file "decision-core-tests")))))))
