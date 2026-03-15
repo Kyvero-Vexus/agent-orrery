@@ -64,7 +64,8 @@
                    (:file "capture-driver")
                    (:file "evidence-pack")
                    (:file "snapshot-drift")
-                   (:file "health-monitor")))
+                   (:file "health-monitor")
+                   (:file "decision-audit")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -124,4 +125,5 @@
                    (:file "capture-driver-tests")
                    (:file "evidence-pack-tests")
                    (:file "snapshot-drift-tests")
-                   (:file "health-monitor-tests")))))))
+                   (:file "health-monitor-tests")
+                   (:file "decision-audit-tests")))))))

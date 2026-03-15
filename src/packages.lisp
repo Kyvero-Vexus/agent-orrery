@@ -309,6 +309,24 @@
    #:generate-repro-commands #:build-evidence-pack
    #:parity-entry-to-json #:parity-report-to-json
    #:replay-manifest-to-json #:evidence-pack-to-json
+   ;; Decision audit log (8x8)
+   #:audit-entry #:audit-entry-p #:make-audit-entry
+   #:aue-entry-id #:aue-verdict #:aue-aggregate-score #:aue-finding-count
+   #:aue-evidence-ref #:aue-gate-id #:aue-context #:aue-timestamp
+   #:audit-log #:audit-log-p #:make-audit-log
+   #:al-log-id #:al-entries #:al-entry-count
+   #:al-pass-count #:al-fail-count #:al-escalate-count
+   #:al-first-timestamp #:al-last-timestamp
+   #:diff-kind
+   #:audit-diff-entry #:audit-diff-entry-p #:make-audit-diff-entry
+   #:ade-entry-id #:ade-kind #:ade-old-verdict #:ade-new-verdict #:ade-detail
+   #:audit-diff #:audit-diff-p #:make-audit-diff
+   #:ad-diff-id #:ad-base-log-id #:ad-target-log-id
+   #:ad-entries #:ad-added-count #:ad-removed-count #:ad-changed-count
+   #:ad-regressions-p
+   #:make-audit-entry-from-decision #:append-to-audit-log
+   #:build-audit-log #:diff-audit-logs
+   #:audit-entry-to-json #:audit-log-to-json #:audit-diff-to-json
    ;; Health monitor (a40)
    #:monitor-status
    #:health-sample #:health-sample-p #:make-health-sample
