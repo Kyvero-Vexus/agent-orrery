@@ -220,7 +220,21 @@
    #:dec-finding-count #:dec-findings #:dec-replay-seed #:dec-reasoning
    #:classify-probe-status #:status-to-severity #:assess-probe
    #:aggregate-severities #:compute-verdict #:generate-reasoning
-   #:run-decision-pipeline #:verify-replay))
+   #:run-decision-pipeline #:verify-replay
+   ;; Schema compat checker (eb0.2.8)
+   #:field-kind #:field-sig #:field-sig-p #:make-field-sig
+   #:fs-name #:fs-field-type #:fs-required-p #:fs-path
+   #:schema-sig #:schema-sig-p #:make-schema-sig
+   #:ss-endpoint #:ss-version #:ss-fields #:ss-timestamp
+   #:compat-severity #:compat-category
+   #:compat-mismatch #:compat-mismatch-p #:make-compat-mismatch
+   #:cm-path #:cm-category #:cm-fixture-value #:cm-live-value
+   #:cm-severity #:cm-remediation
+   #:compat-report #:compat-report-p #:make-compat-report
+   #:cr-endpoint #:cr-compatible-p #:cr-mismatches #:cr-max-severity
+   #:cr-fixture-sig #:cr-live-sig #:cr-timestamp
+   #:compare-field #:compare-schemas #:max-mismatch-severity
+   #:check-schema-compatibility #:check-all-schemas))
 
 (defpackage #:orrery/adapter/openclaw
   (:use #:cl)

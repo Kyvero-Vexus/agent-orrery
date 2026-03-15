@@ -54,7 +54,8 @@
                    (:file "gate-decision")
                    (:file "gate-orchestrator")
                    (:file "interface-matrix")
-                   (:file "decision-core")))
+                   (:file "decision-core")
+                   (:file "schema-compat")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -104,4 +105,5 @@
                    (:file "gate-decision-tests")
                    (:file "gate-orchestrator-tests")
                    (:file "interface-matrix-tests")
-                   (:file "decision-core-tests")))))))
+                   (:file "decision-core-tests")
+                   (:file "schema-compat-tests")))))))

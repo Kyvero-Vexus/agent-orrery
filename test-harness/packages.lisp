@@ -184,4 +184,17 @@
                 #:rseed-timestamp #:rseed-version #:rseed-thresholds
                 #:decision-record #:decision-record-p #:make-decision-record
                 #:dec-verdict #:dec-aggregate-score #:dec-max-severity
-                #:dec-finding-count #:dec-findings #:dec-replay-seed #:dec-reasoning))
+                #:dec-finding-count #:dec-findings #:dec-replay-seed #:dec-reasoning
+                ;; Schema compat checker (eb0.2.8)
+                #:field-sig #:field-sig-p #:make-field-sig
+                #:fs-name #:fs-field-type #:fs-required-p #:fs-path
+                #:schema-sig #:schema-sig-p #:make-schema-sig
+                #:ss-endpoint #:ss-version #:ss-fields #:ss-timestamp
+                #:compat-mismatch #:compat-mismatch-p #:make-compat-mismatch
+                #:cm-path #:cm-category #:cm-fixture-value #:cm-live-value
+                #:cm-severity #:cm-remediation
+                #:compat-report #:compat-report-p #:make-compat-report
+                #:cr-endpoint #:cr-compatible-p #:cr-mismatches #:cr-max-severity
+                #:cr-fixture-sig #:cr-live-sig #:cr-timestamp
+                #:compare-field #:compare-schemas #:max-mismatch-severity
+                #:check-schema-compatibility #:check-all-schemas))
