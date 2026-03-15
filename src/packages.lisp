@@ -248,7 +248,16 @@
    #:rpt-stream-id #:rpt-decisions #:rpt-match-p #:rpt-diff-count #:rpt-diffs #:rpt-elapsed-ms
    #:validate-ordering #:event-to-finding
    #:replay-to-decision #:diff-decisions
-   #:run-replay #:run-batch-replay))
+   #:run-replay #:run-batch-replay
+   ;; Gate invariant checker (hrp)
+   #:invariant-class #:violation-severity
+   #:invariant-violation #:invariant-violation-p #:make-invariant-violation
+   #:iv-invariant-class #:iv-severity #:iv-description #:iv-artifact-ref #:iv-evidence
+   #:invariant-report #:invariant-report-p #:make-invariant-report
+   #:ir-pass-p #:ir-violation-count #:ir-violations #:ir-checked-count #:ir-summary
+   #:check-ordering-invariant #:check-monotonicity-invariant
+   #:check-determinism-invariant #:check-schema-contract-invariant
+   #:has-fatal-violation-p #:run-invariant-suite))
 
 (defpackage #:orrery/adapter/openclaw
   (:use #:cl)

@@ -56,7 +56,8 @@
                    (:file "interface-matrix")
                    (:file "decision-core")
                    (:file "schema-compat")
-                   (:file "replay-harness")))
+                   (:file "replay-harness")
+                   (:file "gate-invariant-checker")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -108,4 +109,5 @@
                    (:file "interface-matrix-tests")
                    (:file "decision-core-tests")
                    (:file "schema-compat-tests")
-                   (:file "replay-harness-tests")))))))
+                   (:file "replay-harness-tests")
+                   (:file "gate-invariant-checker-tests")))))))
