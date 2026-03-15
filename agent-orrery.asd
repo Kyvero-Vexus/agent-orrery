@@ -82,7 +82,14 @@
      (:module "store"
       :components ((:file "sync")))
      (:module "provider"
-      :components ((:file "tui")))))))
+      :components ((:file "tui")))
+     (:module "tui"
+      :serial t
+      :components ((:file "packages")
+                   (:file "layout")
+                   (:file "keys")
+                   (:file "state")
+                   (:file "render")))))))
 
 (defsystem "agent-orrery/test-harness"
   :description "Deterministic fixture runtime harness for Agent Orrery"
@@ -148,4 +155,5 @@
                    (:file "fixture-corpus-gen-tests")
                    (:file "gate-orchestration-runner-tests")
                    (:file "action-intent-tests")
-                   (:file "tui-provider-tests")))))))
+                   (:file "tui-provider-tests")
+                   (:file "tui-shell-tests")))))))
