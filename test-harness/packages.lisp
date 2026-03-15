@@ -197,4 +197,16 @@
                 #:cr-endpoint #:cr-compatible-p #:cr-mismatches #:cr-max-severity
                 #:cr-fixture-sig #:cr-live-sig #:cr-timestamp
                 #:compare-field #:compare-schemas #:max-mismatch-severity
-                #:check-schema-compatibility #:check-all-schemas))
+                #:check-schema-compatibility #:check-all-schemas
+                ;; Replay harness (ufa)
+                #:replay-event #:replay-event-p #:make-replay-event
+                #:re-sequence-id #:re-event-type #:re-payload #:re-timestamp
+                #:replay-stream #:replay-stream-p #:make-replay-stream
+                #:rstr-stream-id #:rstr-source #:rstr-events #:rstr-seed #:rstr-metadata
+                #:replay-diff #:replay-diff-p #:make-replay-diff
+                #:rd-event-id #:rd-diff-kind #:rd-original-value #:rd-replayed-value
+                #:replay-report #:replay-report-p #:make-replay-report
+                #:rpt-stream-id #:rpt-decisions #:rpt-match-p #:rpt-diff-count #:rpt-diffs
+                #:validate-ordering #:event-to-finding
+                #:replay-to-decision #:diff-decisions
+                #:run-replay #:run-batch-replay))

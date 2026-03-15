@@ -55,7 +55,8 @@
                    (:file "gate-orchestrator")
                    (:file "interface-matrix")
                    (:file "decision-core")
-                   (:file "schema-compat")))
+                   (:file "schema-compat")
+                   (:file "replay-harness")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -106,4 +107,5 @@
                    (:file "gate-orchestrator-tests")
                    (:file "interface-matrix-tests")
                    (:file "decision-core-tests")
-                   (:file "schema-compat-tests")))))))
+                   (:file "schema-compat-tests")
+                   (:file "replay-harness-tests")))))))
