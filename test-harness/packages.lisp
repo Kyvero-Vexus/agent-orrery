@@ -335,6 +335,17 @@
                 #:compute-backoff #:reset-backoff
                 #:probe-health #:classify-windows #:build-health-summary
                 #:health-summary-to-json
+                ;; Event trace canonicalization (v4o)
+                #:trace-event #:make-trace-event #:tev-seq-id #:tev-timestamp
+                #:tev-source-tag #:tev-event-kind #:tev-payload-hash
+                #:trace-stream #:make-trace-stream #:ts-events #:ts-count
+                #:trace-diff-result #:tdr-matched-count #:tdr-mismatched-count
+                #:tdr-missing-left #:tdr-missing-right #:tdr-details
+                #:compute-seq-id #:simple-payload-hash
+                #:canonicalize-event #:canonicalize-stream
+                #:trace-event< #:dedup-by-seq-id
+                #:trace-diff #:trace-parity-p
+                #:trace-event->json #:trace-diff->json
                 ;; Usage analytics bridge (68i)
                 #:usage-record->coalton-entry #:usage-records->coalton-bucket
                 #:coalton-summary->json

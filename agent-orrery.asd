@@ -71,6 +71,7 @@
                    (:file "capture-differ")
                    (:file "decision-audit")
                    (:file "action-intent")
+                   (:file "event-trace-canon")
                    (:file "usage-analytics-bridge")))
      (:module "pipeline"
       :components ((:file "events")
@@ -139,5 +140,6 @@
                    (:file "decision-audit-tests")
                    (:file "usage-analytics-tests")
                    (:file "budget-policy-tests")
+                   (:file "event-trace-canon-tests")
                    (:file "action-intent-tests")
                    (:file "tui-provider-tests")))))))
