@@ -259,6 +259,17 @@
    #:check-ordering-invariant #:check-determinism-invariant
    #:check-schema-coverage-invariant #:check-decision-consistency-invariant
    #:build-invariant-report #:run-invariant-suite
+   ;; Replay artifact schema (n4b)
+   #:artifact-kind #:validation-code #:error-severity
+   #:validation-error #:validation-error-p #:make-validation-error
+   #:ve-field #:ve-code #:ve-message #:ve-severity
+   #:artifact-envelope #:artifact-envelope-p #:make-artifact-envelope
+   #:ae-artifact-id #:ae-kind #:ae-version #:ae-created-at #:ae-source
+   #:ae-checksum #:ae-payload-size #:ae-valid-p #:ae-errors
+   #:validate-required-string #:validate-integer-range #:validate-version-format
+   #:validate-envelope #:validate-stream-artifact
+   #:validate-decision-artifact #:validate-corpus-artifact
+   #:summarize-validation #:run-artifact-validation
    ;; Schema regression generators (9oy)
    #:gen-state #:gen-state-p #:make-gen-state
    #:gs-seed #:gs-counter

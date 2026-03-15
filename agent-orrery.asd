@@ -58,7 +58,8 @@
                    (:file "schema-compat")
                    (:file "replay-harness")
                    (:file "gate-invariant")
-                   (:file "schema-gen")))
+                   (:file "schema-gen")
+                   (:file "replay-artifact")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -112,4 +113,5 @@
                    (:file "schema-compat-tests")
                    (:file "replay-harness-tests")
                    (:file "gate-invariant-tests")
-                   (:file "schema-gen-tests")))))))
+                   (:file "schema-gen-tests")
+                   (:file "replay-artifact-tests")))))))
