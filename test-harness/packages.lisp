@@ -219,4 +219,15 @@
                 #:ir-checked-count #:ir-summary
                 #:check-ordering-invariant #:check-monotonicity-invariant
                 #:check-determinism-invariant #:check-schema-contract-invariant
-                #:has-fatal-violation-p #:run-invariant-suite))
+                #:has-fatal-violation-p #:run-invariant-suite
+                ;; Schema regression generators (9oy)
+                #:gen-state #:gen-state-p #:make-gen-state
+                #:gs-seed #:gs-counter
+                #:gen-next-raw #:gen-integer #:gen-element #:gen-string
+                #:gen-replay-event #:gen-replay-stream
+                #:gen-snapshot-token #:gen-snapshot-sequence
+                #:gen-field-sig #:gen-schema-sig #:gen-schema-pair
+                #:regression-corpus #:regression-corpus-p #:make-regression-corpus
+                #:rc-corpus-id #:rc-seed #:rc-streams #:rc-snapshots
+                #:rc-fixture-sigs #:rc-live-sigs #:rc-metadata
+                #:gen-regression-corpus))
