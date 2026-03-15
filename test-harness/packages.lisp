@@ -362,6 +362,16 @@
                 #:make-default-tolerance #:filter-stream-by-sources #:count-by-kind
                 #:evaluate-kind-parity #:run-parity-assertion #:parity-report-pass-p
                 #:assertion-entry->json #:parity-assertion-report->json
+                ;; Gate orchestration runner (c52)
+                #:gate-run-config #:make-gate-run-config #:grc-profile
+                #:grc-endpoints #:grc-seed
+                #:gate-step-result #:make-gate-step-result #:gsr-step-name #:gsr-status
+                #:gsr-duration-ms #:gsr-artifact #:gsr-message
+                #:gate-run-report #:grr-config #:grr-steps #:grr-verdict
+                #:grr-total-duration-ms #:grr-step-count
+                #:make-default-config #:run-capture-step #:run-corpus-step
+                #:run-parity-step #:run-verdict-step #:execute-gate-run
+                #:gate-step->json #:gate-run->json
                 ;; Fixture corpus generator (vlm)
                 #:corpus-entry #:make-corpus-entry #:ce-endpoint-path #:ce-event-kind
                 #:ce-expected-hash #:ce-timestamp #:ce-payload

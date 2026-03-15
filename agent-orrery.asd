@@ -74,6 +74,7 @@
                    (:file "event-trace-canon")
                    (:file "parity-assertion")
                    (:file "fixture-corpus-gen")
+                   (:file "gate-orchestration-runner")
                    (:file "usage-analytics-bridge")))
      (:module "pipeline"
       :components ((:file "events")
@@ -145,5 +146,6 @@
                    (:file "event-trace-canon-tests")
                    (:file "parity-assertion-tests")
                    (:file "fixture-corpus-gen-tests")
+                   (:file "gate-orchestration-runner-tests")
                    (:file "action-intent-tests")
                    (:file "tui-provider-tests")))))))
