@@ -283,6 +283,32 @@
    #:normalize-sample-to-finding #:assemble-snapshot
    #:snapshot-to-artifact #:snapshot-to-replay-stream
    #:run-capture #:capture-to-decision
+   ;; Evidence pack (cto)
+   #:parity-verdict
+   #:parity-entry #:parity-entry-p #:make-parity-entry
+   #:pe-endpoint #:pe-fixture-status #:pe-live-status
+   #:pe-fixture-body-hash #:pe-live-body-hash #:pe-verdict #:pe-detail
+   #:parity-report #:parity-report-p #:make-parity-report
+   #:pr-report-id #:pr-fixture-snapshot-id #:pr-live-snapshot-id
+   #:pr-entries #:pr-overall-verdict #:pr-endpoint-count
+   #:pr-identical-count #:pr-compatible-count
+   #:pr-degraded-count #:pr-incompatible-count #:pr-timestamp
+   #:replay-manifest-entry #:replay-manifest-entry-p #:make-replay-manifest-entry
+   #:rme-stream-id #:rme-source #:rme-event-count #:rme-seed
+   #:rme-artifact-id #:rme-valid-p
+   #:replay-manifest #:replay-manifest-p #:make-replay-manifest
+   #:rm-manifest-id #:rm-entries #:rm-stream-count
+   #:rm-valid-count #:rm-invalid-count #:rm-timestamp
+   #:evidence-pack #:evidence-pack-p #:make-evidence-pack
+   #:ep-pack-id #:ep-parity-report #:ep-replay-manifest
+   #:ep-fixture-decision #:ep-live-decision
+   #:ep-fixture-artifact #:ep-live-artifact
+   #:ep-gate-ready-p #:ep-blockers #:ep-timestamp #:ep-repro-commands
+   #:simple-body-hash #:compare-endpoint-samples
+   #:build-parity-report #:build-replay-manifest
+   #:generate-repro-commands #:build-evidence-pack
+   #:parity-entry-to-json #:parity-report-to-json
+   #:replay-manifest-to-json #:evidence-pack-to-json
    ;; Schema regression generators (9oy)
    #:gen-state #:gen-state-p #:make-gen-state
    #:gs-seed #:gs-counter
