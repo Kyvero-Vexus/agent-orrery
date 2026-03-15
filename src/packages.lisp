@@ -270,6 +270,19 @@
    #:validate-envelope #:validate-stream-artifact
    #:validate-decision-artifact #:validate-corpus-artifact
    #:summarize-validation #:run-artifact-validation
+   ;; Capture driver (gzu)
+   #:capture-profile #:capture-target #:capture-target-p #:make-capture-target
+   #:ct-base-url #:ct-token #:ct-profile #:ct-timeout-ms
+   #:endpoint-sample #:endpoint-sample-p #:make-endpoint-sample
+   #:es-endpoint #:es-status-code #:es-body #:es-latency-ms #:es-timestamp #:es-error-p
+   #:capture-snapshot #:capture-snapshot-p #:make-capture-snapshot
+   #:cs-snapshot-id #:cs-target #:cs-samples #:cs-timestamp #:cs-duration-ms
+   #:capture-result #:capture-result-p #:make-capture-result
+   #:cres-snapshots #:cres-artifacts #:cres-diagnostics #:cres-success-p
+   #:sample-fixture-endpoint #:sample-endpoint
+   #:normalize-sample-to-finding #:assemble-snapshot
+   #:snapshot-to-artifact #:snapshot-to-replay-stream
+   #:run-capture #:capture-to-decision
    ;; Schema regression generators (9oy)
    #:gen-state #:gen-state-p #:make-gen-state
    #:gs-seed #:gs-counter

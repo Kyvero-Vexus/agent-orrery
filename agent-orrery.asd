@@ -59,7 +59,8 @@
                    (:file "replay-harness")
                    (:file "gate-invariant")
                    (:file "schema-gen")
-                   (:file "replay-artifact")))
+                   (:file "replay-artifact")
+                   (:file "capture-driver")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -114,4 +115,5 @@
                    (:file "replay-harness-tests")
                    (:file "gate-invariant-tests")
                    (:file "schema-gen-tests")
-                   (:file "replay-artifact-tests")))))))
+                   (:file "replay-artifact-tests")
+                   (:file "capture-driver-tests")))))))

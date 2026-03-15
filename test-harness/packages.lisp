@@ -240,4 +240,17 @@
                 #:regression-corpus #:regression-corpus-p #:make-regression-corpus
                 #:rc-corpus-id #:rc-seed #:rc-streams #:rc-snapshots
                 #:rc-fixture-sigs #:rc-live-sigs #:rc-metadata
-                #:gen-regression-corpus))
+                #:gen-regression-corpus
+                ;; Capture driver (gzu)
+                #:capture-target #:capture-target-p #:make-capture-target
+                #:ct-base-url #:ct-token #:ct-profile #:ct-timeout-ms
+                #:endpoint-sample #:endpoint-sample-p #:make-endpoint-sample
+                #:es-endpoint #:es-status-code #:es-body #:es-latency-ms #:es-timestamp #:es-error-p
+                #:capture-snapshot #:capture-snapshot-p #:make-capture-snapshot
+                #:cs-snapshot-id #:cs-target #:cs-samples #:cs-timestamp #:cs-duration-ms
+                #:capture-result #:capture-result-p #:make-capture-result
+                #:cres-snapshots #:cres-artifacts #:cres-diagnostics #:cres-success-p
+                #:sample-fixture-endpoint #:sample-endpoint
+                #:normalize-sample-to-finding #:assemble-snapshot
+                #:snapshot-to-artifact #:snapshot-to-replay-stream
+                #:run-capture #:capture-to-decision))
