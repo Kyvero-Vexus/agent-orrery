@@ -172,7 +172,8 @@
 
 ;;; ─── Outcome → Endpoint Sample ───
 
-(declaim (ftype (function (transport-outcome string (integer 0)) endpoint-sample)
+(declaim (ftype (function (transport-outcome string (integer 0))
+                          (values endpoint-sample &optional))
                 outcome-to-sample))
 (defun outcome-to-sample (outcome endpoint timestamp)
   "Convert a transport outcome to an endpoint-sample for capture-driver. Pure."
