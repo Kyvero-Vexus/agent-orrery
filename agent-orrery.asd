@@ -62,7 +62,8 @@
                    (:file "replay-artifact")
                    (:file "runtime-transport")
                    (:file "capture-driver")
-                   (:file "evidence-pack")))
+                   (:file "evidence-pack")
+                   (:file "snapshot-drift")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -120,4 +121,5 @@
                    (:file "replay-artifact-tests")
                    (:file "runtime-transport-tests")
                    (:file "capture-driver-tests")
-                   (:file "evidence-pack-tests")))))))
+                   (:file "evidence-pack-tests")
+                   (:file "snapshot-drift-tests")))))))

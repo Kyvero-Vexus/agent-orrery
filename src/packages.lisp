@@ -309,6 +309,22 @@
    #:generate-repro-commands #:build-evidence-pack
    #:parity-entry-to-json #:parity-report-to-json
    #:replay-manifest-to-json #:evidence-pack-to-json
+   ;; Snapshot drift diagnostic (3nk)
+   #:diagnostic-disposition
+   #:snapshot-drift-diagnostic #:snapshot-drift-diagnostic-p
+   #:make-snapshot-drift-diagnostic
+   #:sdd-snapshot-id #:sdd-profile #:sdd-endpoint-count
+   #:sdd-drift-reports #:sdd-breaking-count #:sdd-degrading-count
+   #:sdd-cosmetic-count #:sdd-info-count
+   #:sdd-disposition #:sdd-gate-evidence-ref #:sdd-timestamp
+   #:*snapshot-endpoint-schemas*
+   #:analyze-snapshot-drift
+   #:drift-comparison #:drift-comparison-p #:make-drift-comparison
+   #:dc-fixture-diagnostic #:dc-live-diagnostic
+   #:dc-regression-endpoints #:dc-new-drifts #:dc-resolved-drifts
+   #:dc-compatible-p #:dc-summary
+   #:compare-snapshot-drifts
+   #:snapshot-drift-diagnostic-to-json #:drift-comparison-to-json
    ;; Runtime transport (q8l)
    #:transport-method #:retry-strategy #:transport-outcome-status
    #:retry-policy #:retry-policy-p #:make-retry-policy
