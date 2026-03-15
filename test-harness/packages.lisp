@@ -346,6 +346,33 @@
                 #:trace-event< #:dedup-by-seq-id
                 #:trace-diff #:trace-parity-p
                 #:trace-event->json #:trace-diff->json
+                ;; Parity assertion engine (5nl)
+                #:tolerance-spec #:make-tolerance-spec
+                #:tol-max-mismatches #:tol-max-missing #:tol-required-kinds
+                #:assertion-profile #:make-assertion-profile
+                #:ap-name #:ap-target #:ap-tolerance #:ap-required-sources
+                #:assertion-entry #:make-assertion-entry
+                #:ae-kind-label #:ae-expected-count #:ae-actual-count
+                #:ae-verdict #:ae-detail
+                #:parity-assertion-report
+                #:par-report-id #:par-profile-name #:par-target #:par-entries
+                #:par-pass-count #:par-fail-count #:par-skip-count #:par-overall-verdict
+                #:par-diff-summary #:par-timestamp
+                #:*tui-parity-profile* #:*web-parity-profile* #:*mcclim-parity-profile*
+                #:make-default-tolerance #:filter-stream-by-sources #:count-by-kind
+                #:evaluate-kind-parity #:run-parity-assertion #:parity-report-pass-p
+                #:assertion-entry->json #:parity-assertion-report->json
+                ;; Fixture corpus generator (vlm)
+                #:corpus-entry #:make-corpus-entry #:ce-endpoint-path #:ce-event-kind
+                #:ce-expected-hash #:ce-timestamp #:ce-payload
+                #:corpus-manifest #:cman-entries #:cman-version #:cman-seed
+                #:cman-checksum #:cman-entry-count
+                #:corpus-diff #:cdiff-added #:cdiff-removed #:cdiff-changed
+                #:cdiff-unchanged #:cdiff-details
+                #:make-corpus-entry-from-sample #:corpus-entry<
+                #:compute-corpus-checksum #:build-corpus
+                #:diff-corpora #:corpus-stable-p
+                #:entry->fixture-json #:corpus->json #:corpus-diff->json
                 ;; Usage analytics bridge (68i)
                 #:usage-record->coalton-entry #:usage-records->coalton-bucket
                 #:coalton-summary->json

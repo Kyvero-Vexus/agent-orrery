@@ -72,6 +72,8 @@
                    (:file "decision-audit")
                    (:file "action-intent")
                    (:file "event-trace-canon")
+                   (:file "parity-assertion")
+                   (:file "fixture-corpus-gen")
                    (:file "usage-analytics-bridge")))
      (:module "pipeline"
       :components ((:file "events")
@@ -141,5 +143,7 @@
                    (:file "usage-analytics-tests")
                    (:file "budget-policy-tests")
                    (:file "event-trace-canon-tests")
+                   (:file "parity-assertion-tests")
+                   (:file "fixture-corpus-gen-tests")
                    (:file "action-intent-tests")
                    (:file "tui-provider-tests")))))))
