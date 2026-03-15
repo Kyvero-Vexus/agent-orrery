@@ -283,6 +283,13 @@
    #:normalize-sample-to-finding #:assemble-snapshot
    #:snapshot-to-artifact #:snapshot-to-replay-stream
    #:run-capture #:capture-to-decision
+   ;; Fixture replay compiler (qyn)
+   #:fixture-replay-bundle #:fixture-replay-bundle-p #:make-fixture-replay-bundle
+   #:frb-bundle-id #:frb-source #:frb-streams #:frb-artifacts
+   #:frb-fixture-corpus #:frb-event-count #:frb-snapshot-count #:frb-timestamp
+   #:normalize-event->replay-event #:snapshot->replay-events
+   #:replay-stream->artifact #:replay-stream->fixture-json
+   #:compile-fixture-replay-bundle
    ;; Evidence pack (cto)
    #:parity-verdict
    #:parity-entry #:parity-entry-p #:make-parity-entry
@@ -309,6 +316,13 @@
    #:generate-repro-commands #:build-evidence-pack
    #:parity-entry-to-json #:parity-report-to-json
    #:replay-manifest-to-json #:evidence-pack-to-json
+   ;; Fixture replay compiler (qyn)
+   #:fixture-replay-bundle #:fixture-replay-bundle-p #:make-fixture-replay-bundle
+   #:frb-bundle-id #:frb-source #:frb-streams #:frb-artifacts
+   #:frb-fixture-corpus #:frb-event-count #:frb-snapshot-count #:frb-timestamp
+   #:normalize-event->replay-event #:snapshot->replay-events
+   #:replay-stream->artifact #:replay-stream->fixture-json
+   #:compile-fixture-replay-bundle
    ;; Decision audit log (8x8)
    #:audit-entry #:audit-entry-p #:make-audit-entry
    #:aue-entry-id #:aue-verdict #:aue-aggregate-score #:aue-finding-count
