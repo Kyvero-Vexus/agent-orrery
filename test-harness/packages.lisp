@@ -220,6 +220,7 @@
                 #:check-schema-coverage-invariant #:check-decision-consistency-invariant
                 #:build-invariant-report #:run-invariant-suite
                 ;; Replay artifact schema (n4b)
+                #:artifact-kind #:validation-code #:error-severity
                 #:validation-error #:validation-error-p #:make-validation-error
                 #:ve-field #:ve-code #:ve-message #:ve-severity
                 #:artifact-envelope #:artifact-envelope-p #:make-artifact-envelope
