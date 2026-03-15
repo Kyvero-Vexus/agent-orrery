@@ -60,6 +60,7 @@
                    (:file "gate-invariant")
                    (:file "schema-gen")
                    (:file "replay-artifact")
+                   (:file "runtime-transport")
                    (:file "capture-driver")
                    (:file "evidence-pack")))
      (:module "pipeline"
@@ -117,5 +118,6 @@
                    (:file "gate-invariant-tests")
                    (:file "schema-gen-tests")
                    (:file "replay-artifact-tests")
+                   (:file "runtime-transport-tests")
                    (:file "capture-driver-tests")
                    (:file "evidence-pack-tests")))))))

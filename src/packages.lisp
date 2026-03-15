@@ -309,6 +309,27 @@
    #:generate-repro-commands #:build-evidence-pack
    #:parity-entry-to-json #:parity-report-to-json
    #:replay-manifest-to-json #:evidence-pack-to-json
+   ;; Runtime transport (q8l)
+   #:transport-method #:retry-strategy #:transport-outcome-status
+   #:retry-policy #:retry-policy-p #:make-retry-policy
+   #:rp-max-attempts #:rp-strategy #:rp-base-delay-ms #:rp-max-delay-ms
+   #:rp-retryable-codes
+   #:*default-retry-policy* #:*no-retry-policy*
+   #:transport-request #:transport-request-p #:make-transport-request
+   #:treq-method #:treq-url #:treq-headers #:treq-timeout-ms #:treq-body
+   #:transport-response #:transport-response-p #:make-transport-response
+   #:tresp-status-code #:tresp-body #:tresp-headers #:tresp-latency-ms
+   #:transport-attempt #:transport-attempt-p #:make-transport-attempt
+   #:ta-attempt-number #:ta-response #:ta-error-class #:ta-error-message
+   #:ta-delay-before-ms
+   #:transport-outcome #:transport-outcome-p #:make-transport-outcome
+   #:tout-status #:tout-response #:tout-attempts #:tout-total-ms #:tout-request
+   #:compute-delay #:retryable-status-p #:retryable-attempt-p
+   #:map-status-class #:outcome-status-to-error-class
+   #:outcome-to-sample
+   #:execute-transport
+   #:make-fixture-transport #:make-dexador-transport
+   #:target-endpoint-request
    ;; Schema regression generators (9oy)
    #:gen-state #:gen-state-p #:make-gen-state
    #:gs-seed #:gs-counter
