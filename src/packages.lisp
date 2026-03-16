@@ -1076,7 +1076,7 @@
    ;; Query functions — pure transforms
    #:query-sessions #:query-cron-jobs #:query-health
    #:query-events #:query-alerts #:query-usage
-   #:build-dashboard-summary
+   #:build-dashboard-summary #:dashboard-summary-ui-message
    ;; Display helpers
    #:format-tokens #:format-cost-cents #:format-age
    #:format-interval))

@@ -205,6 +205,7 @@
                    (:file "gate-orchestration-runner-tests")
                    (:file "action-intent-tests")
                    (:file "tui-provider-tests")
+                   (:file "web-api-protocol-tests")
                    (:file "tui-session-detail-tests")
                    (:file "tui-shell-tests")
                    (:file "session-lifecycle-tests")

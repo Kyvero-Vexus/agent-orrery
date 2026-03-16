@@ -390,7 +390,10 @@
 ;;; ============================================================
 
 (declaim (ftype (function (sync-store &key (:now fixnum)) dashboard-summary)
-                build-dashboard-summary))
+                build-dashboard-summary)
+         (ftype (function (dashboard-summary &key (:timestamp integer) (:sequence fixnum))
+                          (values orrery/adapter:ui-message &optional))
+                dashboard-summary-ui-message))
 (defun build-dashboard-summary (store &key (now (get-universal-time)))
   "Build an aggregate dashboard summary from STORE. Pure function."
   (let* ((sessions (ss-sessions store))
@@ -424,3 +427,26 @@
      :total-tokens total-tok
      :total-cost-cents total-cost
      :last-sync-at (ss-last-sync-at store))))
+
+(defun dashboard-summary-ui-message (summary &key (timestamp 0) (sequence 0))
+  "Project dashboard SUMMARY into typed UI message contract for TUI emitters."
+  (declare (type dashboard-summary summary)
+           (type integer timestamp)
+           (type fixnum sequence)
+           (optimize (safety 3)))
+  (let* ((payload (list (cons :session_count (ds-session-count summary))
+                        (cons :active_session_count (ds-active-session-count summary))
+                        (cons :cron_count (ds-cron-count summary))
+                        (cons :alert_count (ds-alert-count summary))
+                        (cons :total_tokens (ds-total-tokens summary))
+                        (cons :total_cost_cents (ds-total-cost-cents summary))))
+         (message (orrery/adapter:make-ui-message* :tui :status timestamp sequence payload))
+         (contract (orrery/adapter:make-ui-contract
+                    :surface :tui
+                    :kind :status
+                    :required-fields '(:session_count :active_session_count :cron_count :alert_count :total_tokens :total_cost_cents)
+                    :schema-version "1.0"))
+         (errors (orrery/adapter:validate-ui-message message contract)))
+    (when errors
+      (error "TUI protocol contract violation: ~{~A~^, ~}" errors))
+    message))

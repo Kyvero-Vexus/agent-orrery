@@ -313,6 +313,16 @@
     (is = 6500 (orrery/provider:ds-total-tokens ds))
     (is = 65 (orrery/provider:ds-total-cost-cents ds))))
 
+(define-test dashboard-summary-ui-message-test
+    :parent tui-provider-suite
+  (let* ((store (make-test-store))
+         (summary (orrery/provider:build-dashboard-summary store :now *test-now*))
+         (msg (orrery/provider:dashboard-summary-ui-message summary :timestamp 1234 :sequence 9)))
+    (is string= "tui-status-1234-9" (orrery/adapter:uim-id msg))
+    (is eq :tui (orrery/adapter:uim-surface msg))
+    (is eq :status (orrery/adapter:uim-kind msg))
+    (true (search "deterministic_key" (orrery/adapter:ui-message->json msg)))))
+
 ;;; ============================================================
 ;;; Edge cases
 ;;; ============================================================

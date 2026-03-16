@@ -4,17 +4,44 @@
 
 (in-package #:orrery/web)
 
+(declaim (ftype (function (keyword list list) (values null &optional)) %assert-web-ui-contract))
+(defun %assert-web-ui-contract (kind payload required-fields)
+  "Validate payload against typed UI protocol contract.
+Raises an error on contract mismatch." 
+  (declare (type keyword kind)
+           (type list payload required-fields)
+           (optimize (safety 3)))
+  (let* ((msg (orrery/adapter:make-ui-message* :web kind 0 0 payload))
+         (contract (orrery/adapter:make-ui-contract
+                    :surface :web
+                    :kind kind
+                    :required-fields required-fields
+                    :schema-version "1.0"))
+         (errors (orrery/adapter:validate-ui-message msg contract)))
+    (when errors
+      (error "Web UI protocol contract violation (~A): ~{~A~^, ~}" kind errors))))
+
 (defun dashboard-summary-json (sessions cron-jobs health alerts)
   "Dashboard summary as JSON. Pure."
-  (format nil "{\"session_count\":~D,\"active_count\":~D,\"cron_count\":~D,\"health_count\":~D,\"alert_count\":~D}"
-          (length sessions)
-          (count :active sessions :key #'sr-status)
-          (length cron-jobs)
-          (length health)
-          (length alerts)))
+  (let ((payload (list (cons :session_count (length sessions))
+                       (cons :active_count (count :active sessions :key #'sr-status))
+                       (cons :cron_count (length cron-jobs))
+                       (cons :health_count (length health))
+                       (cons :alert_count (length alerts)))))
+    (%assert-web-ui-contract :status payload '(:session_count :active_count :cron_count :health_count :alert_count))
+    (format nil "{\"session_count\":~D,\"active_count\":~D,\"cron_count\":~D,\"health_count\":~D,\"alert_count\":~D}"
+            (cdr (assoc :session_count payload))
+            (cdr (assoc :active_count payload))
+            (cdr (assoc :cron_count payload))
+            (cdr (assoc :health_count payload))
+            (cdr (assoc :alert_count payload)))))
 
 (defun sessions-list-json (sessions)
   "Session list as JSON array. Pure."
+  (%assert-web-ui-contract
+   :session
+   (list (cons :count (length sessions)))
+   '(:count))
   (format nil "[~{~A~^,~}]"
           (mapcar (lambda (s)
                     (format nil "{\"id\":\"~A\",\"agent\":\"~A\",\"model\":\"~A\",\"status\":\"~A\",\"tokens\":~D,\"cost_cents\":~D}"
@@ -24,6 +51,7 @@
 
 (defun health-json (health)
   "Health status as JSON array. Pure."
+  (%assert-web-ui-contract :health (list (cons :count (length health))) '(:count))
   (format nil "[~{~A~^,~}]"
           (mapcar (lambda (h)
                     (format nil "{\"component\":\"~A\",\"status\":\"~A\",\"latency_ms\":~D}"
@@ -36,6 +64,7 @@
 (declaim (ftype (function (list) (values string &optional)) audit-trail-json))
 (defun audit-trail-json (entries)
   "Audit trail entries as JSON array. Pure."
+  (%assert-web-ui-contract :audit (list (cons :count (length entries))) '(:count))
   (format nil "[~{~A~^,~}]"
           (mapcar (lambda (e)
                     (format nil "{\"seq\":~D,\"category\":\"~A\",\"severity\":\"~A\",~
@@ -50,6 +79,12 @@
 (declaim (ftype (function (t list list) (values string &optional)) analytics-json))
 (defun analytics-json (summary duration-buckets efficiency-records)
   "Session analytics as JSON object. Pure."
+  (%assert-web-ui-contract
+   :analytics
+   (list (cons :total_sessions (asm-total-sessions summary))
+         (cons :duration_bucket_count (length duration-buckets))
+         (cons :efficiency_count (length efficiency-records)))
+   '(:total_sessions :duration_bucket_count :efficiency_count))
   (format nil "{\"summary\":{\"total_sessions\":~D,\"avg_duration_s\":~D,~
 \"median_tokens\":~D,\"avg_tokens_per_msg\":~D,\"total_cost_cents\":~D},~
 \"duration_buckets\":[~{~A~^,~}],\"efficiency\":[~{~A~^,~}]}"
