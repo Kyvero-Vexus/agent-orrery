@@ -8,7 +8,7 @@
 
 SBCL ?= sbcl
 
-.PHONY: test check-types e2e-smoke ci clean
+.PHONY: test check-types e2e-smoke e2e-tui ci clean
 
 test:
 	@$(SBCL) --load ci/run-tests.lisp
@@ -18,6 +18,10 @@ check-types:
 
 e2e-smoke:
 	@$(SBCL) --load ci/e2e-smoke.lisp
+
+e2e-tui:
+	@echo "=== TUI E2E (mcp-tui-driver, scenarios T1-T6) ==="
+	@bash e2e-tui/run-tui-e2e.sh
 
 ci: check-types test e2e-smoke
 	@echo ""

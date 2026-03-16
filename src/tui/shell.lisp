@@ -136,17 +136,31 @@
 (declaim (ftype (function (t) (or null keyword character)) read-input))
 (defun read-input (screen)
   "Read a single input event from SCREEN with timeout.
-   Returns a character or keyword, or NIL on timeout. Impure."
+   Returns a character, keyword, or NIL on timeout. Impure.
+   Extracts the key from croatoan event objects; discards unrecognized events."
   (let ((event (croatoan:get-event screen)))
-    event))
+    (cond
+      ;; Direct character or keyword (shouldn't happen with get-event, but safe)
+      ((typep event '(or null keyword character))
+       event)
+      ;; Croatoan event object — extract the key slot
+      ((typep event 'croatoan:event)
+       (let ((key (croatoan:event-key event)))
+         (if (typep key '(or null keyword character))
+             key
+             nil)))
+      ;; Unknown event type — ignore
+      (t nil))))
 
-(declaim (ftype (function (tui-state (or null keyword character)) tui-state)
+(declaim (ftype (function (tui-state t) tui-state)
                 process-input))
 (defun process-input (state input)
   "Process a single INPUT event against STATE. Returns new tui-state.
-   Pure — delegates to lookup-action and dispatch-action."
-  (if (null input)
-      state  ; timeout, no change
+   Pure — delegates to lookup-action and dispatch-action.
+   Gracefully ignores unknown event types (e.g., croatoan event objects)."
+  (if (or (null input)
+          (not (typep input '(or keyword character))))
+      state  ; timeout or unrecognized event type — ignore
       (let ((action (lookup-action input)))
         (if action
             (dispatch-action state action)
@@ -217,8 +231,10 @@
                                 :input-blocking nil
                                 :enable-function-keys t
                                 :cursor-visible nil)
-    ;; Set input timeout for non-blocking reads
-    (setf (croatoan:input-blocking screen) nil)
+    ;; Use timeout-based blocking: wait up to input-timeout-ms for input,
+    ;; then return NIL. This avoids the busy-loop + sleep(0.05) pattern
+    ;; and ensures input from PTYs (e.g., mcp-tui-driver) is captured.
+    (setf (croatoan:input-blocking screen) *input-timeout-ms*)
     (let* ((rows (croatoan:height screen))
            (cols (croatoan:width screen))
            (layout (make-default-layout :rows rows :cols cols))
@@ -248,8 +264,8 @@
             (setq last-refresh-time now-ticks)))
         ;; Render
         (render-frame screen state)
-        ;; Small sleep to avoid burning CPU
-        (sleep 0.05))))
+        ;; No sleep needed — input-blocking timeout handles pacing
+        )))
   (values))
 
 ;;; ============================================================
