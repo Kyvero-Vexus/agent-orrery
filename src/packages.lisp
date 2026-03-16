@@ -663,6 +663,24 @@
    #:rule-operation #:rule-decision
    #:combine-decisions #:evaluate-policy #:merge-policies
    #:decision-permits-p #:make-policy
+   ;; Configuration schema/defaults (1oe)
+   #:ConnectionConfig #:connectionconfig #:cc-host #:cc-port #:cc-token
+   #:UiConfig #:uiconfig #:ui-theme #:ui-refresh-seconds #:ui-compact-mode
+   #:FeatureFlags #:featureflags #:ff-web-enabled #:ff-tui-enabled #:ff-mcclim-enabled
+   #:RuntimeConfig #:runtimeconfig
+   #:rc-connection #:rc-ui #:rc-polling-seconds
+   #:rc-budget-warning-cents #:rc-budget-critical-cents #:rc-flags
+   #:default-connection-config #:default-ui-config #:default-feature-flags #:default-runtime-config
+   #:pick-string #:pick-positive
+   #:merge-connection-config #:merge-ui-config #:merge-feature-flags #:merge-runtime-config
+   #:valid-theme-p #:validate-runtime-config
+   #:config-valid-p #:config-error-count #:config-first-error
+   ;; Configuration CL bridge
+   #:cl-default-runtime-config #:cl-make-runtime-config #:cl-merge-runtime-config
+   #:cl-config-valid-p #:cl-config-error-count #:cl-config-first-error
+   #:cl-config-host #:cl-config-port #:cl-config-theme #:cl-config-polling-seconds
+   #:cl-config-budget-warning-cents #:cl-config-budget-critical-cents
+   #:cl-config-web-enabled-p #:cl-config-tui-enabled-p #:cl-config-mcclim-enabled-p
    ;; Usage analytics (68i)
    #:UsageEntry #:usageentry
    #:ue-model #:ue-prompt-tokens #:ue-completion-tokens #:ue-timestamp

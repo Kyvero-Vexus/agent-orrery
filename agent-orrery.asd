@@ -18,6 +18,7 @@
       :serial t
       :components ((:file "core")
                    (:file "policy")
+                   (:file "configuration")
                    (:file "usage-analytics")
                    (:file "anomaly-detector")
                    (:file "budget-policy")
@@ -145,6 +146,7 @@
                    (:file "contract-probe-tests")
                    (:file "normalization-tests")
                    (:file "coalton-core-tests")
+                   (:file "configuration-tests")
                    (:file "html-fallback-tests")
                    (:file "capability-mapper-tests")
                    (:file "endpoint-classifier-tests")
