@@ -222,4 +222,5 @@
                    (:file "audit-trail-tests")
                    (:file "cost-optimizer-tests")
                    (:file "capacity-planner-tests")
-                   (:file "session-analytics-tests")))))))
+                   (:file "session-analytics-tests")
+                   (:file "tui-cost-capacity-cards-tests")))))))

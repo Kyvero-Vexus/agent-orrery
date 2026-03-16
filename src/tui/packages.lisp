@@ -85,6 +85,7 @@
    #:as-window #:as-cards #:as-selected-index
    #:build-token-usage-card #:build-cost-card
    #:build-model-distribution-card #:build-session-count-card
+   #:build-cost-optimizer-card #:build-capacity-planner-card
    #:build-analytics-state #:cycle-analytics-window
    #:render-analytics-lines
    ;; Cron operations (eb0.3.3)

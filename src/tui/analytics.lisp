@@ -126,6 +126,58 @@
                   (t :flat))
      :window window)))
 
+;;; ─── Cost Optimizer Card (30m) ───
+
+(declaim (ftype (function (list list keyword) (values analytics-card &optional))
+                build-cost-optimizer-card))
+(defun build-cost-optimizer-card (profiles entries window)
+  "Build cost optimizer recommendation card. Pure.
+PROFILES: list of Coalton ModelCostProfile, ENTRIES: list of Coalton UsageEntry."
+  (declare (type keyword window) (optimize (safety 3)))
+  (if (or (null profiles) (null entries))
+      (make-analytics-card
+       :title "Cost Optimizer"
+       :value "No data"
+       :unit "" :trend :flat :window window)
+      (let* ((rec (orrery/coalton/core:cl-recommend-model
+                   profiles entries (orrery/coalton/core:cl-opt-balanced)))
+             (model (orrery/coalton/core:cl-rr-model rec))
+             (confidence (orrery/coalton/core:cl-rr-confidence-label rec)))
+        (make-analytics-card
+         :title "Cost Optimizer"
+         :value (format nil "~A (~A)" model confidence)
+         :unit "recommended"
+         :trend (cond ((string= confidence "high") :up)
+                      ((string= confidence "low") :down)
+                      (t :flat))
+         :window window))))
+
+;;; ─── Capacity Planner Card (30m) ───
+
+(declaim (ftype (function (list list keyword) (values analytics-card &optional))
+                build-capacity-planner-card))
+(defun build-capacity-planner-card (thresholds values window)
+  "Build capacity planner card. Pure.
+THRESHOLDS: list of Coalton ThresholdSpec, VALUES: list of integers."
+  (declare (type keyword window) (optimize (safety 3)))
+  (if (or (null thresholds) (null values))
+      (make-analytics-card
+       :title "Capacity"
+       :value "No data"
+       :unit "" :trend :flat :window window)
+      (let* ((plan (orrery/coalton/core:cl-build-capacity-plan thresholds values))
+             (zone (orrery/coalton/core:cl-plan-worst-zone-label plan))
+             (headroom (orrery/coalton/core:cl-plan-headroom-pct plan)))
+        (make-analytics-card
+         :title "Capacity"
+         :value (format nil "~A (~D%)" zone headroom)
+         :unit "headroom"
+         :trend (cond ((string= zone "idle") :flat)
+                      ((string= zone "normal") :flat)
+                      ((string= zone "caution") :up)
+                      (t :down))
+         :window window))))
+
 ;;; ─── State Builders ───
 
 (declaim (ftype (function (list keyword) (values analytics-state &optional))
