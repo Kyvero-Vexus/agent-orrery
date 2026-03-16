@@ -103,7 +103,8 @@
      (:module "mcclim"
       :serial t
       :components ((:file "packages")
-                   (:file "frame")))))))
+                   (:file "frame")
+                   (:file "commands")))))))
 
 (defsystem "agent-orrery/test-harness"
   :description "Deterministic fixture runtime harness for Agent Orrery"
@@ -174,4 +175,5 @@
                    (:file "tui-shell-tests")
                    (:file "session-lifecycle-tests")
                    (:file "tui-cron-ops-tests")
-                   (:file "mcclim-frame-tests")))))))
+                   (:file "mcclim-frame-tests")
+                   (:file "mcclim-commands-tests")))))))

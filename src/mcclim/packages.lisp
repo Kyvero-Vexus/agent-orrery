@@ -33,4 +33,10 @@
    #:*fixture-alerts*
    ;; Presentation types
    #:session-presentation #:cron-presentation
-   #:health-presentation #:alert-presentation))
+   #:health-presentation #:alert-presentation
+   ;; Commands (eb0.5.2)
+   #:com-inspect-session #:com-list-sessions
+   #:com-inspect-cron #:com-trigger-cron #:com-pause-cron #:com-resume-cron
+   #:com-list-cron #:com-inspect-health
+   #:com-inspect-alert #:com-list-alerts
+   #:com-refresh #:com-status))
