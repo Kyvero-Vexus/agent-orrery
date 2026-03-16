@@ -94,6 +94,7 @@
                    (:file "render")
                    (:file "session-detail")
                    (:file "cron-ops")
+                   (:file "analytics")
                    (:file "shell")))
      (:module "web"
       :serial t
@@ -178,6 +179,7 @@
                    (:file "tui-shell-tests")
                    (:file "session-lifecycle-tests")
                    (:file "tui-cron-ops-tests")
+                   (:file "tui-analytics-tests")
                    (:file "mcclim-frame-tests")
                    (:file "mcclim-commands-tests")
                    (:file "mcclim-inspectors-tests")

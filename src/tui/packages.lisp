@@ -76,6 +76,17 @@
    #:match-filter-p #:apply-filter #:sort-sessions #:tail-history
    #:build-session-detail #:render-session-detail
    #:render-filter-bar
+   ;; Analytics cards (eb0.3.4)
+   #:time-window #:next-time-window #:time-window-label
+   #:analytics-card #:make-analytics-card
+   #:ac-title #:ac-value #:ac-unit #:ac-trend #:ac-window
+   #:trend-indicator #:render-card-line
+   #:analytics-state #:make-analytics-state
+   #:as-window #:as-cards #:as-selected-index
+   #:build-token-usage-card #:build-cost-card
+   #:build-model-distribution-card #:build-session-count-card
+   #:build-analytics-state #:cycle-analytics-window
+   #:render-analytics-lines
    ;; Cron operations (eb0.3.3)
    #:cron-transition-valid-p #:cron-next-status
    #:cron-op-result #:make-cron-op-result
