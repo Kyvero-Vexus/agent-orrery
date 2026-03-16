@@ -199,3 +199,90 @@
     (make-list EvInitialized
                EvFatalError
                EvRestart)))
+
+;;; ─── CL Bridge Functions ───
+;;; Expose Coalton types to plain CL for testing and interop.
+
+(cl:defun cl-session-state-from-keyword (kw)
+  "Convert a CL keyword to a Coalton SessionState."
+  (cl:ecase kw
+    (:creating  (coalton:coalton SessionCreating))
+    (:active    (coalton:coalton SessionActive))
+    (:idle      (coalton:coalton SessionIdle))
+    (:closing   (coalton:coalton SessionClosing))
+    (:closed    (coalton:coalton SessionClosed))
+    (:error     (coalton:coalton SessionError))))
+
+(cl:defun cl-transition-event-from-keyword (kw)
+  "Convert a CL keyword to a Coalton TransitionEvent."
+  (cl:ecase kw
+    (:initialized       (coalton:coalton EvInitialized))
+    (:message-received  (coalton:coalton EvMessageReceived))
+    (:idle-timeout      (coalton:coalton EvIdleTimeout))
+    (:shutdown-requested (coalton:coalton EvShutdownRequested))
+    (:shutdown-complete (coalton:coalton EvShutdownComplete))
+    (:fatal-error       (coalton:coalton EvFatalError))
+    (:restart           (coalton:coalton EvRestart))))
+
+(cl:defun cl-%transition-result-label (result)
+  "Extract label string from a TransitionResult."
+  (coalton:coalton
+   (match (lisp TransitionResult () result)
+     ((TransitionOk s) (session-state-label s))
+     ((TransitionDenied reason) reason))))
+
+(cl:defun cl-%transition-result-ok-p (result)
+  "Check if a TransitionResult is Ok."
+  (coalton:coalton
+   (match (lisp TransitionResult () result)
+     ((TransitionOk _) True)
+     ((TransitionDenied _) False))))
+
+(cl:defun cl-transition (state-kw event-kw)
+  "Run a state transition from CL keywords. Returns (VALUES ok-p label-string).
+   ok-p is T for TransitionOk, NIL for TransitionDenied.
+   label-string is the new state label or denial reason."
+  (cl:let* ((state (cl-session-state-from-keyword state-kw))
+            (event (cl-transition-event-from-keyword event-kw))
+            (result (coalton:coalton
+                     (transition (lisp SessionState () state)
+                                 (lisp TransitionEvent () event)))))
+    (cl:values (cl-%transition-result-ok-p result)
+               (cl-%transition-result-label result))))
+
+(cl:defun cl-session-state-terminal-p (state-kw)
+  "Check if a session state keyword is terminal."
+  (cl:let ((state (cl-session-state-from-keyword state-kw)))
+    (coalton:coalton (session-state-terminal-p (lisp SessionState () state)))))
+
+(cl:defun cl-session-state-alive-p (state-kw)
+  "Check if a session state keyword is alive."
+  (cl:let ((state (cl-session-state-from-keyword state-kw)))
+    (coalton:coalton (session-state-alive-p (lisp SessionState () state)))))
+
+(cl:defun cl-session-state-label (state-kw)
+  "Get the string label for a session state keyword."
+  (cl:let ((state (cl-session-state-from-keyword state-kw)))
+    (coalton:coalton (session-state-label (lisp SessionState () state)))))
+
+(cl:defun cl-validate-happy-path ()
+  "Validate the canonical happy path. Returns (VALUES ok-p label-string)."
+  (cl:let ((result (coalton:coalton
+                    (validate-transition-sequence
+                     SessionCreating
+                     (happy-path-events Unit)))))
+    (cl:values (cl-%transition-result-ok-p result)
+               (cl-%transition-result-label result))))
+
+(cl:defun cl-validate-error-path ()
+  "Validate the error path. Returns (VALUES ok-p label-string)."
+  (cl:let ((result (coalton:coalton
+                    (validate-transition-sequence
+                     SessionCreating
+                     (error-path-events Unit)))))
+    (cl:values (cl-%transition-result-ok-p result)
+               (cl-%transition-result-label result))))
+
+(cl:defun cl-count-happy-path-transitions ()
+  "Count valid transitions in the happy path."
+  (coalton:coalton (count-valid-transitions SessionCreating (happy-path-events Unit))))
