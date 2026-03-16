@@ -539,6 +539,18 @@
    #:normalize-artifact-path #:normalize-manifest-artifacts #:normalize-e2e-manifest
    #:validate-e2e-manifest #:validate-and-normalize-e2e-manifest
    #:report-manifest-validity #:ci-check-all-evidence #:discover-artifacts-in-dir
+   ;; UI protocol boundary (sdk)
+   #:ui-surface #:ui-message-kind #:ui-error-kind
+   #:ui-message #:ui-message-p #:make-ui-message
+   #:uim-id #:uim-surface #:uim-kind #:uim-payload #:uim-timestamp #:uim-sequence #:uim-deterministic-key
+   #:ui-contract #:ui-contract-p #:make-ui-contract
+   #:uic-surface #:uic-kind #:uic-required-fields #:uic-schema-version
+   #:ui-error-adt #:ui-error-adt-p #:make-ui-error-adt
+   #:uie-kind #:uie-code #:uie-message #:uie-recoverable-p #:uie-details
+   #:ui-replay-hook #:ui-replay-hook-p #:make-ui-replay-hook
+   #:urh-hook-id #:urh-surface #:urh-deterministic-command #:urh-artifact-dir #:urh-seed #:urh-enabled-p
+   #:make-ui-message-id #:make-ui-message* #:validate-ui-message #:project-ui-error
+   #:ui-message->json #:ui-contract->json #:ui-error->json #:ui-replay-hook->json
    ;; Scenario planning bridge (20d)
    #:scenario-projection #:scenario-projection-p #:make-scenario-projection
    #:sproj-scenario-name #:sproj-total-tokens #:sproj-total-cost
