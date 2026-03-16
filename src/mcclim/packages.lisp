@@ -39,4 +39,9 @@
    #:com-inspect-cron #:com-trigger-cron #:com-pause-cron #:com-resume-cron
    #:com-list-cron #:com-inspect-health
    #:com-inspect-alert #:com-list-alerts
-   #:com-refresh #:com-status))
+   #:com-refresh #:com-status
+   ;; Inspectors (eb0.5.3)
+   #:event-presentation
+   #:com-session-detail #:com-event-detail
+   #:com-alert-detail #:com-health-detail
+   #:com-summary))
