@@ -93,6 +93,7 @@
                    (:file "performance-soak")
                    (:file "resilience-suite")
                    (:file "scenario-planning-bridge")
+                   (:file "v2-projection-bridge")
                    (:file "evidence-manifest-validator")))
      (:module "pipeline"
       :components ((:file "events")
@@ -226,4 +227,5 @@
                    (:file "session-analytics-tests")
                    (:file "tui-cost-capacity-cards-tests")
                    (:file "mcclim-v2-panes-tests")
-                   (:file "plugin-lifecycle-hooks-tests")))))))
+                   (:file "plugin-lifecycle-hooks-tests")
+                   (:file "v2-projection-bridge-tests")))))))

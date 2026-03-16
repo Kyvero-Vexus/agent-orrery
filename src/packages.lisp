@@ -542,6 +542,24 @@
    #:sproj-scenario-name #:sproj-total-tokens #:sproj-total-cost
    #:sproj-sessions #:sproj-cron-invocations #:sproj-budget-util-pct #:sproj-signals
    #:coalton-projection->cl #:scenario-projection->json
+   ;; v2 projection bridge (4zp)
+   #:audit-entry-projection #:audit-entry-projection-p #:make-audit-entry-projection
+   #:aep-seq #:aep-timestamp #:aep-category #:aep-severity #:aep-actor
+   #:aep-summary #:aep-detail #:aep-hash
+   #:session-analytics-projection #:session-analytics-projection-p #:make-session-analytics-projection
+   #:sap-total-sessions #:sap-avg-duration-seconds #:sap-avg-tokens-per-msg
+   #:sap-median-tokens #:sap-total-cost-cents #:sap-duration-buckets #:sap-efficiency-summaries
+   #:duration-bucket-projection #:duration-bucket-projection-p #:make-duration-bucket-projection
+   #:dbp-label #:dbp-count
+   #:efficiency-projection #:efficiency-projection-p #:make-efficiency-projection
+   #:efp-session-id #:efp-tokens-per-message #:efp-tokens-per-minute #:efp-cost-per-1k
+   #:coalton-audit-entry->projection #:audit-entry-projection->json
+   #:coalton-analytics->projection #:session-analytics-projection->json
+   #:page-request #:page-request-p #:make-page-request
+   #:pr-offset #:pr-limit #:pr-sort-key #:pr-sort-order
+   #:page-response #:page-response-p #:make-page-response
+   #:pres-items #:pres-total #:pres-offset #:pres-limit #:pres-has-more-p
+   #:paginate-items
    ;; Gate orchestration runner (c52)
    #:run-profile #:step-status
    #:gate-run-config #:make-gate-run-config #:grc-profile #:grc-endpoints
