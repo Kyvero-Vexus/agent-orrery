@@ -95,6 +95,45 @@
   (snoozed-until   nil :type (or null fixnum)))
 
 ;;; ============================================================
+;;; Audit trail entry (CL-side mirror of Coalton AuditEntry)
+;;; ============================================================
+
+(defstruct (audit-trail-entry (:conc-name ate-))
+  "CL-side audit trail entry for web/TUI views."
+  (seq          0 :type fixnum)
+  (timestamp    0 :type fixnum)
+  (category    "" :type string)
+  (severity    "" :type string)
+  (actor       "" :type string)
+  (summary     "" :type string)
+  (detail      "" :type string)
+  (hash        "" :type string))
+
+;;; ============================================================
+;;; Session analytics summary (CL-side mirror of Coalton types)
+;;; ============================================================
+
+(defstruct (analytics-summary (:conc-name asm-))
+  "CL-side aggregate session analytics for web/TUI views."
+  (total-sessions    0 :type fixnum)
+  (avg-duration-s    0 :type fixnum)
+  (median-tokens     0 :type fixnum)
+  (avg-tokens-per-msg 0 :type fixnum)
+  (total-cost-cents  0 :type fixnum))
+
+(defstruct (duration-bucket-record (:conc-name dbr-))
+  "CL-side duration histogram bucket."
+  (label "" :type string)
+  (count  0 :type fixnum))
+
+(defstruct (efficiency-record (:conc-name efr-))
+  "CL-side per-session efficiency metrics."
+  (session-id          "" :type string)
+  (tokens-per-message   0 :type fixnum)
+  (tokens-per-minute    0 :type fixnum)
+  (cost-per-1k          0 :type fixnum))
+
+;;; ============================================================
 ;;; Sub-agent run
 ;;; ============================================================
 

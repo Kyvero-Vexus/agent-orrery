@@ -29,3 +29,40 @@
                     (format nil "{\"component\":\"~A\",\"status\":\"~A\",\"latency_ms\":~D}"
                             (hr-component h) (hr-status h) (hr-latency-ms h)))
                   health)))
+
+;;; ─── Audit Trail JSON ───
+;;; Bead: agent-orrery-3l4
+
+(declaim (ftype (function (list) (values string &optional)) audit-trail-json))
+(defun audit-trail-json (entries)
+  "Audit trail entries as JSON array. Pure."
+  (format nil "[~{~A~^,~}]"
+          (mapcar (lambda (e)
+                    (format nil "{\"seq\":~D,\"category\":\"~A\",\"severity\":\"~A\",~
+\"actor\":\"~A\",\"summary\":\"~A\",\"hash\":\"~A\"}"
+                            (ate-seq e) (ate-category e) (ate-severity e)
+                            (ate-actor e) (ate-summary e) (ate-hash e)))
+                  entries)))
+
+;;; ─── Session Analytics JSON ───
+;;; Bead: agent-orrery-3l4
+
+(declaim (ftype (function (t list list) (values string &optional)) analytics-json))
+(defun analytics-json (summary duration-buckets efficiency-records)
+  "Session analytics as JSON object. Pure."
+  (format nil "{\"summary\":{\"total_sessions\":~D,\"avg_duration_s\":~D,~
+\"median_tokens\":~D,\"avg_tokens_per_msg\":~D,\"total_cost_cents\":~D},~
+\"duration_buckets\":[~{~A~^,~}],\"efficiency\":[~{~A~^,~}]}"
+          (asm-total-sessions summary) (asm-avg-duration-s summary)
+          (asm-median-tokens summary) (asm-avg-tokens-per-msg summary)
+          (asm-total-cost-cents summary)
+          (mapcar (lambda (b)
+                    (format nil "{\"label\":\"~A\",\"count\":~D}"
+                            (dbr-label b) (dbr-count b)))
+                  duration-buckets)
+          (mapcar (lambda (e)
+                    (format nil "{\"session_id\":\"~A\",\"tokens_per_message\":~D,~
+\"tokens_per_minute\":~D,\"cost_per_1k\":~D}"
+                            (efr-session-id e) (efr-tokens-per-message e)
+                            (efr-tokens-per-minute e) (efr-cost-per-1k e)))
+                  efficiency-records)))

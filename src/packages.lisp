@@ -49,7 +49,26 @@
    ;; Capability descriptor
    #:adapter-capability #:adapter-capability-p #:copy-adapter-capability
    #:make-adapter-capability
-   #:cap-name #:cap-description #:cap-supported-p))
+   #:cap-name #:cap-description #:cap-supported-p
+   ;; Audit trail entry (CL-side)
+   #:audit-trail-entry #:audit-trail-entry-p #:copy-audit-trail-entry
+   #:make-audit-trail-entry
+   #:ate-seq #:ate-timestamp #:ate-category #:ate-severity
+   #:ate-actor #:ate-summary #:ate-detail #:ate-hash
+   ;; Analytics summary (CL-side)
+   #:analytics-summary #:analytics-summary-p #:copy-analytics-summary
+   #:make-analytics-summary
+   #:asm-total-sessions #:asm-avg-duration-s #:asm-median-tokens
+   #:asm-avg-tokens-per-msg #:asm-total-cost-cents
+   ;; Duration bucket record
+   #:duration-bucket-record #:duration-bucket-record-p
+   #:make-duration-bucket-record
+   #:dbr-label #:dbr-count
+   ;; Efficiency record
+   #:efficiency-record #:efficiency-record-p
+   #:make-efficiency-record
+   #:efr-session-id #:efr-tokens-per-message
+   #:efr-tokens-per-minute #:efr-cost-per-1k))
 
 (defpackage #:orrery/adapter
   (:use #:cl)

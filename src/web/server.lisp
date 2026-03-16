@@ -37,6 +37,62 @@
    (make-alert-record :id "alert-002" :severity :info :title "Sync completed"
                       :fired-at 2000)))
 
+;;; ─── Audit Trail Fixture Data (3l4) ───
+
+(defvar *fixture-audit-trail*
+  (list
+   (make-audit-trail-entry :seq 1 :timestamp 1000 :category "session-lifecycle"
+                           :severity "info" :actor "gensym"
+                           :summary "Session sess-001 started"
+                           :detail "Agent gensym connected via telegram"
+                           :hash "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2")
+   (make-audit-trail-entry :seq 2 :timestamp 1100 :category "model-routing"
+                           :severity "info" :actor "pipeline"
+                           :summary "Model selected: claude-opus-4"
+                           :detail "Cost-optimal routing for sess-001"
+                           :hash "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a1")
+   (make-audit-trail-entry :seq 3 :timestamp 1200 :category "cron-execution"
+                           :severity "trace" :actor "watchdog"
+                           :summary "Watchdog cron tick"
+                           :detail "All health checks passed"
+                           :hash "c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a1b2")
+   (make-audit-trail-entry :seq 4 :timestamp 1500 :category "alert-fired"
+                           :severity "warning" :actor "monitor"
+                           :summary "High token usage on gensym"
+                           :detail "Token rate 500/min exceeds threshold 300/min"
+                           :hash "d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a1b2c3")
+   (make-audit-trail-entry :seq 5 :timestamp 2000 :category "gate-decision"
+                           :severity "critical" :actor "gate-engine"
+                           :summary "Budget gate BLOCKED"
+                           :detail "Daily spend 450c exceeds budget 400c"
+                           :hash "e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a1b2c3d4")))
+
+;;; ─── Session Analytics Fixture Data (3l4) ───
+
+(defvar *fixture-analytics*
+  (make-analytics-summary :total-sessions 3
+                          :avg-duration-s 240
+                          :median-tokens 8000
+                          :avg-tokens-per-msg 750
+                          :total-cost-cents 780))
+
+(defvar *fixture-duration-buckets*
+  (list
+   (make-duration-bucket-record :label "<1min" :count 0)
+   (make-duration-bucket-record :label "1-5min" :count 2)
+   (make-duration-bucket-record :label "5-15min" :count 1)
+   (make-duration-bucket-record :label "15-60min" :count 0)
+   (make-duration-bucket-record :label ">60min" :count 0)))
+
+(defvar *fixture-efficiency*
+  (list
+   (make-efficiency-record :session-id "sess-001" :tokens-per-message 1500
+                           :tokens-per-minute 2500 :cost-per-1k 30)
+   (make-efficiency-record :session-id "sess-002" :tokens-per-message 800
+                           :tokens-per-minute 1333 :cost-per-1k 30)
+   (make-efficiency-record :session-id "sess-003" :tokens-per-message 600
+                           :tokens-per-minute 1000 :cost-per-1k 30)))
+
 ;;; ─── Server State ───
 
 (defvar *web-port* 7890)
@@ -46,7 +102,8 @@
 
 (defun handle-dashboard ()
   (setf (hunchentoot:content-type*) "text/html; charset=utf-8")
-  (render-dashboard-html *fixture-sessions* *fixture-cron* *fixture-health* *fixture-alerts*))
+  (render-dashboard-html *fixture-sessions* *fixture-cron* *fixture-health* *fixture-alerts*
+                         *fixture-audit-trail* *fixture-analytics*))
 
 (defun handle-sessions ()
   (setf (hunchentoot:content-type*) "text/html; charset=utf-8")
@@ -78,6 +135,24 @@
   (setf (hunchentoot:content-type*) "application/json")
   (health-json *fixture-health*))
 
+;;; ─── Audit Trail + Analytics Handlers (3l4) ───
+
+(defun handle-audit-trail ()
+  (setf (hunchentoot:content-type*) "text/html; charset=utf-8")
+  (render-audit-trail-html *fixture-audit-trail*))
+
+(defun handle-analytics ()
+  (setf (hunchentoot:content-type*) "text/html; charset=utf-8")
+  (render-analytics-html *fixture-analytics* *fixture-duration-buckets* *fixture-efficiency*))
+
+(defun handle-api-audit-trail ()
+  (setf (hunchentoot:content-type*) "application/json")
+  (audit-trail-json *fixture-audit-trail*))
+
+(defun handle-api-analytics ()
+  (setf (hunchentoot:content-type*) "application/json")
+  (analytics-json *fixture-analytics* *fixture-duration-buckets* *fixture-efficiency*))
+
 ;;; ─── Dispatcher ───
 
 (defun orrery-dispatch (request)
@@ -97,9 +172,13 @@
            (render-session-detail-html session))))
       ((string= uri "/cron") #'handle-cron)
       ((string= uri "/alerts") #'handle-alerts)
+      ((string= uri "/audit-trail") #'handle-audit-trail)
+      ((string= uri "/analytics") #'handle-analytics)
       ((string= uri "/api/dashboard") #'handle-api-dashboard)
       ((string= uri "/api/sessions") #'handle-api-sessions)
       ((string= uri "/api/health") #'handle-api-health)
+      ((string= uri "/api/audit-trail") #'handle-api-audit-trail)
+      ((string= uri "/api/analytics") #'handle-api-analytics)
       (t nil))))
 
 ;;; ─── Server Lifecycle ───
