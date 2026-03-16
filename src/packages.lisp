@@ -860,7 +860,27 @@
    #:cl-entry-seq #:cl-entry-timestamp #:cl-entry-category-label
    #:cl-entry-severity-label #:cl-entry-actor #:cl-entry-summary
    #:cl-entry-detail #:cl-entry-hash #:cl-entry-prev-hash
-   #:cl-filter-by-category #:cl-filter-by-severity-min #:cl-count-by-severity))
+   #:cl-filter-by-category #:cl-filter-by-severity-min #:cl-count-by-severity
+   ;; Cost optimizer (nhh)
+   #:ModelCostProfile #:mcp-name #:mcp-prompt-cost #:mcp-completion-cost
+   #:mcp-quality #:mcp-latency
+   #:OptimizationStrategy #:OptCost #:OptQuality #:OptBalanced #:OptLatency
+   #:strategy-label
+   #:RouteConfidence #:ConfHigh #:ConfMedium #:ConfLow
+   #:confidence-score #:confidence-label
+   #:RouteRecommendation #:rr-model #:rr-reason #:rr-savings-pct
+   #:rr-confidence #:rr-strategy
+   #:CostAnalysis #:ca-current-cost #:ca-optimal-cost #:ca-savings-pct
+   #:ca-recommendations #:ca-strategy
+   #:recommend-model #:analyze-cost
+   ;; Cost optimizer CL bridge
+   #:cl-make-model-cost-profile
+   #:cl-opt-cost #:cl-opt-quality #:cl-opt-balanced #:cl-opt-latency
+   #:cl-recommend-model #:cl-analyze-cost
+   #:cl-rr-model #:cl-rr-reason #:cl-rr-savings-pct
+   #:cl-rr-confidence-label #:cl-rr-strategy-label
+   #:cl-ca-current-cost #:cl-ca-optimal-cost #:cl-ca-savings-pct
+   #:cl-ca-strategy-label #:cl-ca-recommendations))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)
