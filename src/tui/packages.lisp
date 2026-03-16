@@ -62,4 +62,21 @@
    #:render-sessions-panel #:render-cron-panel #:render-health-panel
    #:render-events-panel #:render-alerts-panel #:render-usage-panel
    #:render-status-bar #:render-command-palette
-   #:render-dashboard))
+   #:render-dashboard
+   ;; Session detail (eb0.3.2)
+   #:filter-spec #:make-filter-spec #:fs-text-query #:fs-status-filter
+   #:fs-model-filter #:fs-sort-key
+   #:filter-result #:make-filter-result #:fr-matches #:fr-total-count
+   #:fr-match-count #:fr-applied-filters
+   #:history-entry #:make-history-entry #:he-timestamp #:he-event-kind #:he-summary
+   #:session-detail #:make-session-detail #:sd-view #:sd-history
+   #:sd-history-count #:sd-filter
+   #:match-filter-p #:apply-filter #:sort-sessions #:tail-history
+   #:build-session-detail #:render-session-detail
+   #:render-filter-bar
+   ;; Shell (impure — croatoan event loop)
+   #:*refresh-interval-ms* #:*input-timeout-ms*
+   #:paint-render-ops #:clear-screen
+   #:handle-resize #:refresh-store-data
+   #:read-input #:process-input #:render-frame
+   #:run-tui #:start-dashboard))

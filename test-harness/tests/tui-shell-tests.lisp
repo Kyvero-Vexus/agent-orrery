@@ -288,3 +288,159 @@
   (is string= "hello     " (orrery/tui::fit-string "hello" 10))
   (is string= "hello" (orrery/tui::fit-string "hello world" 5))
   (is string= "exact" (orrery/tui::fit-string "exact" 5)))
+
+;;; ============================================================
+;;; Phase 2: Shell integration tests (pure parts)
+;;; ============================================================
+
+(define-test shell-integration-suite
+  :parent tui-shell-suite)
+
+;;; --- process-input ---
+
+(define-test process-input-nil-is-noop
+    :parent shell-integration-suite
+  "NIL input (timeout) returns state unchanged."
+  (let* ((state (make-test-tui-state))
+         (new (orrery/tui:process-input state nil)))
+    (is eq :sessions
+        (orrery/tui:layout-active-panel (orrery/tui:ts-layout new)))
+    (is eq :normal (orrery/tui:ts-mode new))
+    (true (orrery/tui:ts-running-p new))))
+
+(define-test process-input-bound-key
+    :parent shell-integration-suite
+  "Bound key dispatches the corresponding action."
+  (let* ((state (make-test-tui-state))
+         (new (orrery/tui:process-input state #\q)))
+    (false (orrery/tui:ts-running-p new))))
+
+(define-test process-input-tab-cycles
+    :parent shell-integration-suite
+  (let* ((state (make-test-tui-state))
+         (new (orrery/tui:process-input state :tab)))
+    (is eq :cron
+        (orrery/tui:layout-active-panel (orrery/tui:ts-layout new)))))
+
+(define-test process-input-unbound-key-normal
+    :parent shell-integration-suite
+  "Unbound key in normal mode is silently ignored."
+  (let* ((state (make-test-tui-state))
+         (new (orrery/tui:process-input state #\z)))
+    ;; State essentially unchanged (running, normal mode)
+    (true (orrery/tui:ts-running-p new))
+    (is eq :normal (orrery/tui:ts-mode new))))
+
+;;; --- Command mode input accumulation ---
+
+(define-test process-input-command-accumulate
+    :parent shell-integration-suite
+  "Characters typed in command mode accumulate in command-input."
+  (let* ((state (make-test-tui-state))
+         (cmd-state (orrery/tui:dispatch-action state :command-mode))
+         (s1 (orrery/tui:process-input cmd-state #\h))
+         (s2 (orrery/tui:process-input s1 #\e))
+         (s3 (orrery/tui:process-input s2 #\l))
+         (s4 (orrery/tui:process-input s3 #\p)))
+    (is string= "help" (orrery/tui:ts-command-input s4))
+    (is eq :command (orrery/tui:ts-mode s4))))
+
+(define-test process-input-command-backspace
+    :parent shell-integration-suite
+  "Backspace in command mode removes last character."
+  (let* ((state (make-test-tui-state))
+         (cmd-state (orrery/tui:dispatch-action state :command-mode))
+         (s1 (orrery/tui:process-input cmd-state #\a))
+         (s2 (orrery/tui:process-input s1 #\b))
+         (s3 (orrery/tui:process-input s2 #\Rubout)))
+    (is string= "a" (orrery/tui:ts-command-input s3))))
+
+(define-test process-input-command-backspace-empty
+    :parent shell-integration-suite
+  "Backspace on empty command-input stays empty."
+  (let* ((state (make-test-tui-state))
+         (cmd-state (orrery/tui:dispatch-action state :command-mode))
+         (s1 (orrery/tui:process-input cmd-state #\Rubout)))
+    (is string= "" (orrery/tui:ts-command-input s1))))
+
+(define-test process-input-command-enter
+    :parent shell-integration-suite
+  "Enter in command mode executes and returns to normal."
+  (let* ((state (make-test-tui-state))
+         (cmd-state (orrery/tui:dispatch-action state :command-mode))
+         (s1 (orrery/tui:process-input cmd-state #\h))
+         (s2 (orrery/tui:process-input s1 #\i))
+         (s3 (orrery/tui:process-input s2 #\Return)))
+    (is eq :normal (orrery/tui:ts-mode s3))
+    (is string= "" (orrery/tui:ts-command-input s3))
+    (true (search "Command: hi" (orrery/tui:ts-message s3)))))
+
+(define-test process-input-escape-exits-command
+    :parent shell-integration-suite
+  "Escape in command mode returns to normal via keymap."
+  (let* ((state (make-test-tui-state))
+         (cmd-state (orrery/tui:dispatch-action state :command-mode))
+         (s1 (orrery/tui:process-input cmd-state #\Escape)))
+    (is eq :normal (orrery/tui:ts-mode s1))))
+
+;;; --- refresh-store-data (pure path) ---
+
+(define-test refresh-store-no-fn
+    :parent shell-integration-suite
+  "Without refresh-fn, only timestamp updates."
+  (let* ((state (make-test-tui-state))
+         (new (orrery/tui:refresh-store-data state)))
+    ;; Store unchanged (still same object)
+    (is eq (orrery/tui:ts-store state) (orrery/tui:ts-store new))
+    ;; now updated to current time
+    (true (> (orrery/tui:ts-now new) 0))))
+
+(define-test refresh-store-with-fn
+    :parent shell-integration-suite
+  "With refresh-fn, store gets replaced."
+  (let* ((state (make-test-tui-state))
+         (new-store (make-test-store))
+         (new (orrery/tui:refresh-store-data
+               state
+               :refresh-fn (lambda (old)
+                             (declare (ignore old))
+                             new-store))))
+    (is eq new-store (orrery/tui:ts-store new))
+    (true (search "refreshed" (orrery/tui:ts-message new)))))
+
+(define-test refresh-store-fn-returns-nil
+    :parent shell-integration-suite
+  "When refresh-fn returns NIL, store preserved."
+  (let* ((state (make-test-tui-state))
+         (original-store (orrery/tui:ts-store state))
+         (new (orrery/tui:refresh-store-data
+               state
+               :refresh-fn (lambda (old) (declare (ignore old)) nil))))
+    (is eq original-store (orrery/tui:ts-store new))))
+
+;;; --- Resize handling (pure parts) ---
+
+(define-test handle-resize-preserves-focus
+    :parent shell-integration-suite
+  "After simulated resize, active panel focus is preserved.
+   We test the pure relayout logic via make-default-layout directly."
+  (let* ((state (make-test-tui-state))
+         ;; Simulate focus on :health
+         (focused-state (orrery/tui:dispatch-action state :focus-health))
+         ;; Simulate a resize by creating a new layout at different dims
+         ;; and applying the same logic as handle-resize
+         (old-lay (orrery/tui:ts-layout focused-state))
+         (new-layout (orrery/tui:make-default-layout :rows 48 :cols 160)))
+    ;; Apply focus preservation logic
+    (setf (orrery/tui:layout-active-panel new-layout)
+          (orrery/tui:layout-active-panel old-lay))
+    (dolist (p (orrery/tui:layout-panels new-layout))
+      (setf (orrery/tui:panel-focused-p p)
+            (eq (orrery/tui:panel-id p) (orrery/tui:layout-active-panel new-layout))))
+    ;; Verify focus preserved
+    (is eq :health (orrery/tui:layout-active-panel new-layout))
+    (true (orrery/tui:panel-focused-p
+           (orrery/tui:find-panel :health new-layout)))
+    ;; And dimensions actually changed
+    (is = 48 (orrery/tui:layout-screen-rows new-layout))
+    (is = 160 (orrery/tui:layout-screen-cols new-layout))))
