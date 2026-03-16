@@ -38,6 +38,7 @@
       :components ((:file "types")))
      (:module "adapter"
       :components ((:file "protocol")
+                   (:file "generic-starter-kit")
                    (:file "openclaw")
                    (:file "contract-probe")
                    (:file "html-fallback")
@@ -138,6 +139,7 @@
      (:module "tests"
       :components ((:file "harness-tests")
                    (:file "openclaw-adapter-tests")
+                   (:file "generic-starter-kit-tests")
                    (:file "pipeline-store-tests")
                    (:file "conformance-tests")
                    (:file "contract-probe-tests")

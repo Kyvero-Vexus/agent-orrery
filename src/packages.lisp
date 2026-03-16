@@ -82,6 +82,15 @@
    #:adapter-not-supported
    #:adapter-not-found
    #:adapter-not-found-id
+   ;; Generic starter kit (eb0.6.2)
+   #:starter-endpoint-spec #:starter-endpoint-spec-p #:copy-starter-endpoint-spec
+   #:make-starter-endpoint-spec
+   #:ses-key #:ses-method #:ses-path #:ses-decode-fn #:ses-result-mode
+   #:ses-capability-name #:ses-description #:ses-supported-p
+   #:generic-runtime-adapter #:make-generic-runtime-adapter #:make-reference-starter-adapter
+   #:starter-adapter-name #:starter-base-url #:starter-request-fn #:starter-endpoint-table
+   #:make-default-starter-endpoint-specs
+   #:find-starter-endpoint #:register-starter-endpoint #:invoke-starter-endpoint
    ;; Preflight (cne)
    #:preflight-check #:preflight-check-p #:make-preflight-check
    #:pc-name #:pc-status #:pc-message #:pc-details
