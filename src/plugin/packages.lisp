@@ -25,6 +25,15 @@
    #:all-transformer-definitions
    ;; Validation
    #:validate-plugin #:plugin-validation-result
+   ;; v2 Lifecycle hooks (a3p)
+   #:hook-phase
+   #:lifecycle-hook #:lifecycle-hook-p #:make-lifecycle-hook
+   #:lh-name #:lh-module #:lh-phase #:lh-handler #:lh-priority
+   #:plugin-lifecycle-hooks
+   #:plugin-on-audit-event #:plugin-on-cost-recommendation
+   #:plugin-on-capacity-assessment #:plugin-on-session-analytics
+   #:plugin-on-scenario-projection
+   #:dispatch-lifecycle-hooks
    #:make-plugin-validation-result
    #:pvr-valid-p #:pvr-errors #:pvr-warnings
    ;; Conformance corpus + runner (bmc)

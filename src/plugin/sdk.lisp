@@ -121,6 +121,63 @@
   (errors nil :type list)
   (warnings nil :type list))
 
+;;; ─── v2 Lifecycle Hooks (a3p) ───
+
+(deftype hook-phase ()
+  '(member :before :after :error))
+
+(defstruct (lifecycle-hook (:conc-name lh-))
+  "A typed lifecycle hook for v2 Coalton module events."
+  (name     "" :type string)
+  (module   :core :type keyword)
+  (phase    :after :type hook-phase)
+  (handler  nil :type (or null function))
+  (priority 50 :type fixnum))
+
+(defgeneric plugin-lifecycle-hooks (plugin)
+  (:documentation "Return list of lifecycle-hook structs for v2 module events.
+Supported modules: :audit-trail, :cost-optimizer, :capacity-planner,
+:session-analytics, :scenario-planning.")
+  (:method ((p plugin)) nil))
+
+(defgeneric plugin-on-audit-event (plugin entry)
+  (:documentation "Called when a new audit trail entry is created.")
+  (:method ((p plugin) entry) (declare (ignore entry)) nil))
+
+(defgeneric plugin-on-cost-recommendation (plugin recommendation)
+  (:documentation "Called when cost optimizer produces a recommendation.")
+  (:method ((p plugin) recommendation) (declare (ignore recommendation)) nil))
+
+(defgeneric plugin-on-capacity-assessment (plugin plan)
+  (:documentation "Called when capacity planner produces an assessment.")
+  (:method ((p plugin) plan) (declare (ignore plan)) nil))
+
+(defgeneric plugin-on-session-analytics (plugin summary)
+  (:documentation "Called when session analytics summary is computed.")
+  (:method ((p plugin) summary) (declare (ignore summary)) nil))
+
+(defgeneric plugin-on-scenario-projection (plugin result)
+  (:documentation "Called when a scenario projection completes.")
+  (:method ((p plugin) result) (declare (ignore result)) nil))
+
+(defun dispatch-lifecycle-hooks (plugin module phase data)
+  "Dispatch lifecycle hooks for MODULE at PHASE with DATA.
+Returns list of (hook-name . result) pairs."
+  (declare (type plugin plugin) (type keyword module phase) (optimize (safety 3)))
+  (let ((results nil))
+    (dolist (hook (plugin-lifecycle-hooks plugin))
+      (when (and (eq (lh-module hook) module)
+                 (eq (lh-phase hook) phase)
+                 (lh-handler hook))
+        (handler-case
+            (let ((result (funcall (lh-handler hook) data)))
+              (push (cons (lh-name hook) result) results))
+          (error (c)
+            (push (cons (lh-name hook) (format nil "ERROR: ~A" c)) results)))))
+    (nreverse results)))
+
+;;; ─── Validation ───
+
 (declaim (ftype (function (plugin) (values plugin-validation-result &optional))
                 validate-plugin))
 (defun validate-plugin (plugin)

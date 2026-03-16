@@ -225,4 +225,5 @@
                    (:file "capacity-planner-tests")
                    (:file "session-analytics-tests")
                    (:file "tui-cost-capacity-cards-tests")
-                   (:file "mcclim-v2-panes-tests")))))))
+                   (:file "mcclim-v2-panes-tests")
+                   (:file "plugin-lifecycle-hooks-tests")))))))
