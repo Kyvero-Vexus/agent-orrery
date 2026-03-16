@@ -141,13 +141,14 @@
         (formatting-cell (pane) (write-string (ar-title a) pane))))))
 
 (defun display-status (frame pane)
-  "Display status bar content."
+  "Display status bar content + keyboard discoverability hints."
   (declare (ignore frame))
-  (format pane "Agent Orrery Dashboard | Sessions: ~D | Cron: ~D | Health: ~D | Alerts: ~D"
+  (format pane "Agent Orrery Dashboard | Sessions: ~D | Cron: ~D | Health: ~D | Alerts: ~D~%"
           (length *fixture-sessions*)
           (length *fixture-cron*)
           (length *fixture-health*)
-          (length *fixture-alerts*)))
+          (length *fixture-alerts*))
+  (format pane "Keys: ? help | C-n/C-p pane nav | C-r refresh | s status | q quit"))
 
 ;;; ─── Frame Definition ───
 

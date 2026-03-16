@@ -40,6 +40,10 @@
    #:com-list-cron #:com-inspect-health
    #:com-inspect-alert #:com-list-alerts
    #:com-refresh #:com-status
+   ;; Accessibility + keyboard parity (eb0.5.4)
+   #:*focus-order* #:*focus-index* #:*keyboard-shortcuts*
+   #:wrap-index #:focus-pane-by-name #:log-to-interactor
+   #:com-help #:com-next-pane #:com-prev-pane #:com-quick-status #:com-quit
    ;; Inspectors (eb0.5.3)
    #:event-presentation
    #:com-session-detail #:com-event-detail

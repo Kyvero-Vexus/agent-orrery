@@ -180,4 +180,5 @@
                    (:file "mcclim-frame-tests")
                    (:file "mcclim-commands-tests")
                    (:file "mcclim-inspectors-tests")
+                   (:file "mcclim-accessibility-tests")
                    (:file "observability-trace-contract-tests")))))))
