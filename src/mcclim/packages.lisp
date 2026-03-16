@@ -52,4 +52,7 @@
    ;; Epic-5 gate (eb0.5.5)
    #:scenario-result #:make-scenario-result
    #:s5r-id #:s5r-pass-p #:s5r-detail
-   #:command-exists-p #:run-epic5-scenarios #:epic5-results->json))
+   #:command-exists-p #:run-epic5-scenarios #:epic5-results->json
+   ;; v2 panes (4qy)
+   #:display-cost-optimizer #:display-capacity-planner
+   #:display-session-analytics #:display-audit-trail))

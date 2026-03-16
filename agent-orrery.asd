@@ -129,7 +129,8 @@
                    (:file "frame")
                    (:file "commands")
                    (:file "inspectors")
-                   (:file "e2e-gate")))))))
+                   (:file "e2e-gate")
+                   (:file "v2-panes")))))))
 
 (defsystem "agent-orrery/test-harness"
   :description "Deterministic fixture runtime harness for Agent Orrery"
@@ -223,4 +224,5 @@
                    (:file "cost-optimizer-tests")
                    (:file "capacity-planner-tests")
                    (:file "session-analytics-tests")
-                   (:file "tui-cost-capacity-cards-tests")))))))
+                   (:file "tui-cost-capacity-cards-tests")
+                   (:file "mcclim-v2-panes-tests")))))))
