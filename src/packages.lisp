@@ -539,6 +539,13 @@
    #:normalize-artifact-path #:normalize-manifest-artifacts #:normalize-e2e-manifest
    #:validate-e2e-manifest #:validate-and-normalize-e2e-manifest
    #:report-manifest-validity #:ci-check-all-evidence #:discover-artifacts-in-dir
+   ;; TUI scenario contracts (igw.1)
+   #:tui-scenario-id
+   #:tui-scenario-contract #:tui-scenario-contract-p #:make-tui-scenario-contract
+   #:tsc-id #:tsc-name #:tsc-deterministic-command #:tsc-fixture-assumptions
+   #:tsc-required-artifacts #:tsc-artifact-dir
+   #:tui-scenario-contracts #:tui-deterministic-contract-command
+   #:tui-contracts-cover-t1-t6-p #:missing-tui-contract-artifacts
    ;; UI protocol boundary (sdk)
    #:ui-surface #:ui-message-kind #:ui-error-kind
    #:ui-message #:ui-message-p #:make-ui-message

@@ -95,6 +95,7 @@
                    (:file "scenario-planning-bridge")
                    (:file "v2-projection-bridge")
                    (:file "evidence-manifest-validator")
+                   (:file "tui-scenario-contracts")
                    (:file "ui-protocol-boundary")))
      (:module "pipeline"
       :components ((:file "events")
@@ -223,6 +224,7 @@
                    (:file "resilience-suite-tests")
                    (:file "scenario-planning-tests")
                    (:file "evidence-manifest-validator-tests")
+                   (:file "tui-scenario-contracts-tests")
                    (:file "audit-trail-tests")
                    (:file "cost-optimizer-tests")
                    (:file "capacity-planner-tests")
