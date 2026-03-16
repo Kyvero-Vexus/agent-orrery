@@ -491,6 +491,22 @@
    #:srep-total-ms #:srep-peak-memory-kb #:srep-timestamp #:srep-seed
    #:make-soak-profile-config #:measure-operation #:run-soak-suite
    #:soak-timing->json #:soak-report->json
+   ;; Resilience suite (eb0.7.2)
+   #:fault-class #:recovery-action
+   #:fault-scenario #:fault-scenario-p #:make-fault-scenario
+   #:fs-scenario-id #:fs-fault-class #:fs-target-operation #:fs-description
+   #:fs-inject-fn #:fs-expected-recovery #:fs-expected-condition-type
+   #:resilience-result #:resilience-result-p #:make-resilience-result
+   #:rr-scenario-id #:rr-pass-p #:rr-fault-class #:rr-actual-recovery
+   #:rr-expected-recovery #:rr-condition-caught-p #:rr-condition-type-match-p
+   #:rr-elapsed-ms #:rr-detail
+   #:resilience-report #:resilience-report-p #:make-resilience-report
+   #:rrep-pass-p #:rrep-total #:rrep-passed #:rrep-failed #:rrep-results #:rrep-timestamp
+   #:fault-injecting-adapter #:make-fault-injecting-adapter
+   #:fia-delegate #:fia-fault-fn #:fia-target-op
+   #:attempt-with-recovery
+   #:make-default-resilience-scenarios #:run-resilience-scenario #:run-resilience-suite
+   #:resilience-result->json #:resilience-report->json
    ;; Gate orchestration runner (c52)
    #:run-profile #:step-status
    #:gate-run-config #:make-gate-run-config #:grc-profile #:grc-endpoints

@@ -85,7 +85,8 @@
                    (:file "observability-trace-contract")
                    (:file "cross-ui-evidence-verifier")
                    (:file "cross-ui-parity-suite")
-                   (:file "performance-soak")))
+                   (:file "performance-soak")
+                   (:file "resilience-suite")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -207,4 +208,5 @@
                    (:file "observability-trace-contract-tests")
                    (:file "cross-ui-evidence-verifier-tests")
                    (:file "cross-ui-parity-suite-tests")
-                   (:file "performance-soak-tests")))))))
+                   (:file "performance-soak-tests")
+                   (:file "resilience-suite-tests")))))))
