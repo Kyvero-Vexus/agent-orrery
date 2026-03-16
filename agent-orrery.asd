@@ -104,6 +104,10 @@
                    (:file "views")
                    (:file "api")
                    (:file "server")))
+     (:module "plugin"
+      :serial t
+      :components ((:file "packages")
+                   (:file "sdk")))
      (:module "mcclim"
       :serial t
       :components ((:file "packages")
@@ -171,6 +175,7 @@
                    (:file "decision-audit-tests")
                    (:file "usage-analytics-tests")
                    (:file "anomaly-detector-tests")
+                   (:file "plugin-sdk-tests")
                    (:file "budget-policy-tests")
                    (:file "event-trace-canon-tests")
                    (:file "parity-assertion-tests")
