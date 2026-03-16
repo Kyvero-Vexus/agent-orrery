@@ -880,7 +880,22 @@
    #:cl-rr-model #:cl-rr-reason #:cl-rr-savings-pct
    #:cl-rr-confidence-label #:cl-rr-strategy-label
    #:cl-ca-current-cost #:cl-ca-optimal-cost #:cl-ca-savings-pct
-   #:cl-ca-strategy-label #:cl-ca-recommendations))
+   #:cl-ca-strategy-label #:cl-ca-recommendations
+   ;; Capacity planner (j9c)
+   #:CapacityZone #:ZoneIdle #:ZoneNormal #:ZoneCaution #:ZoneCritical #:ZoneOverflow
+   #:zone-label #:zone-severity
+   #:ThresholdSpec #:ts-metric #:ts-warning #:ts-critical #:ts-maximum
+   #:CapacityAssessment #:assess-metric #:assess-value #:assess-zone
+   #:assess-headroom #:assess-util-pct #:assess-recommendation
+   #:CapacityPlan #:plan-assessments #:plan-worst-zone #:plan-headroom-pct
+   #:classify-zone #:evaluate-threshold #:build-capacity-plan
+   #:default-capacity-thresholds
+   ;; Capacity planner CL bridge
+   #:cl-make-threshold-spec #:cl-default-capacity-thresholds
+   #:cl-evaluate-threshold #:cl-build-capacity-plan
+   #:cl-assess-metric-name #:cl-assess-value #:cl-assess-zone-label
+   #:cl-assess-headroom #:cl-assess-util-pct #:cl-assess-recommendation
+   #:cl-plan-worst-zone-label #:cl-plan-headroom-pct #:cl-plan-assessments))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)

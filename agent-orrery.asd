@@ -26,7 +26,8 @@
                    (:file "session-lifecycle")
                    (:file "scenario-planning")
                    (:file "audit-trail")
-                   (:file "cost-optimizer")))))))
+                   (:file "cost-optimizer")
+                   (:file "capacity-planner")))))))
 
 (defsystem "agent-orrery"
   :description "Dashboard for OpenClaw-compatible agent systems"
@@ -218,4 +219,5 @@
                    (:file "scenario-planning-tests")
                    (:file "evidence-manifest-validator-tests")
                    (:file "audit-trail-tests")
-                   (:file "cost-optimizer-tests")))))))
+                   (:file "cost-optimizer-tests")
+                   (:file "capacity-planner-tests")))))))
