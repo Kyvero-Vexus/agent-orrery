@@ -422,6 +422,35 @@
    #:check-obligation #:verify-trace-contract
    #:verify-all-contracts #:cross-ui-parity-matrix
    #:obligation-result->json #:contract-verification->json
+   ;; Cross-UI evidence verifier (ai0)
+   #:evidence-runner-kind #:scenario-status
+   #:evidence-artifact-kind #:evidence-finding-severity #:cross-ui-parity-verdict
+   #:scenario-evidence #:scenario-evidence-p #:make-scenario-evidence
+   #:sce-scenario-id #:sce-status #:sce-detail
+   #:evidence-artifact #:evidence-artifact-p #:make-evidence-artifact
+   #:ea-scenario-id #:ea-artifact-kind #:ea-path #:ea-present-p #:ea-detail
+   #:runner-evidence-manifest #:runner-evidence-manifest-p #:make-runner-evidence-manifest
+   #:rem-runner-id #:rem-runner-kind #:rem-command #:rem-scenarios #:rem-artifacts #:rem-timestamp
+   #:evidence-finding #:evidence-finding-p #:make-evidence-finding
+   #:ef-severity #:ef-code #:ef-message
+   #:scenario-coverage-row #:scenario-coverage-row-p #:make-scenario-coverage-row
+   #:scr-scenario-id #:scr-passed-p #:scr-status #:scr-artifact-ok-p #:scr-missing-artifacts
+   #:evidence-compliance-report #:evidence-compliance-report-p #:make-evidence-compliance-report
+   #:ecr-runner-id #:ecr-runner-kind #:ecr-pass-p #:ecr-findings #:ecr-coverage
+   #:ecr-required-scenarios-covered #:ecr-required-scenarios-total #:ecr-timestamp
+   #:parity-row #:parity-row-p #:make-parity-row
+   #:pry-web-scenario #:pry-tui-scenario #:pry-web-pass-p #:pry-tui-pass-p #:pry-verdict #:pry-detail
+   #:evidence-parity-report #:evidence-parity-report-p #:make-evidence-parity-report
+   #:epr-pass-p #:epr-rows #:epr-match-count #:epr-mismatch-count #:epr-missing-count
+   #:cross-ui-evidence-report #:cross-ui-evidence-report-p #:make-cross-ui-evidence-report
+   #:cuer-pass-p #:cuer-web-report #:cuer-tui-report #:cuer-parity-report #:cuer-timestamp
+   #:*default-web-scenarios* #:*default-tui-scenarios* #:*default-scenario-mapping*
+   #:*web-required-artifacts* #:*tui-required-artifacts*
+   #:*expected-web-command* #:*expected-tui-command*
+   #:normalize-scenario-id #:find-scenario #:artifact-present-p
+   #:verify-runner-evidence #:build-evidence-parity-report #:verify-cross-ui-evidence
+   #:evidence-compliance-report->json #:evidence-parity-report->json
+   #:cross-ui-evidence-report->json
    ;; Gate orchestration runner (c52)
    #:run-profile #:step-status
    #:gate-run-config #:make-gate-run-config #:grc-profile #:grc-endpoints

@@ -79,7 +79,8 @@
                    (:file "gate-orchestration-runner")
                    (:file "usage-analytics-bridge")
                    (:file "anomaly-detector")
-                   (:file "observability-trace-contract")))
+                   (:file "observability-trace-contract")
+                   (:file "cross-ui-evidence-verifier")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -195,4 +196,5 @@
                    (:file "mcclim-inspectors-tests")
                    (:file "mcclim-accessibility-tests")
                    (:file "mcclim-e2e-gate-tests")
-                   (:file "observability-trace-contract-tests")))))))
+                   (:file "observability-trace-contract-tests")
+                   (:file "cross-ui-evidence-verifier-tests")))))))
