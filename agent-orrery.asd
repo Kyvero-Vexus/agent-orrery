@@ -19,7 +19,8 @@
       :components ((:file "core")
                    (:file "policy")
                    (:file "usage-analytics")
-                   (:file "budget-policy")))))))
+                   (:file "budget-policy")
+                   (:file "session-lifecycle")))))))
 
 (defsystem "agent-orrery"
   :description "Dashboard for OpenClaw-compatible agent systems"
@@ -165,4 +166,5 @@
                    (:file "action-intent-tests")
                    (:file "tui-provider-tests")
                    (:file "tui-session-detail-tests")
-                   (:file "tui-shell-tests")))))))
+                   (:file "tui-shell-tests")
+                   (:file "session-lifecycle-tests")))))))

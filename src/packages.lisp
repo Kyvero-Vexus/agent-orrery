@@ -608,7 +608,18 @@
    ;; Budget CL bridge
    #:cl-make-budget-limit #:cl-evaluate-policy
    #:cl-verdict-level-keyword #:cl-verdict-hint
-   #:cl-verdict-utilization #:cl-verdict-actual))
+   #:cl-verdict-utilization #:cl-verdict-actual
+   ;; Session lifecycle (q8r)
+   #:SessionState #:SessionCreating #:SessionActive #:SessionIdle
+   #:SessionClosing #:SessionClosed #:SessionError
+   #:TransitionEvent #:EvInitialized #:EvMessageReceived #:EvIdleTimeout
+   #:EvShutdownRequested #:EvShutdownComplete #:EvFatalError #:EvRestart
+   #:TransitionResult #:TransitionOk #:TransitionDenied
+   #:session-state-terminal-p #:session-state-alive-p
+   #:session-state-label #:transition-event-label
+   #:transition #:validate-transition-sequence
+   #:count-valid-transitions
+   #:happy-path-events #:error-path-events))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)
