@@ -24,15 +24,34 @@ const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const TUI_LAUNCH_CMD = 'sbcl';
 const TUI_LAUNCH_ARGS = ['--load', path.join(PROJECT_ROOT, 'e2e-tui/start-tui.lisp')];
 const RECORDING_DIR = path.resolve(PROJECT_ROOT, 'test-results/tui-artifacts');
+const SCENARIO_FILTER = process.env.SCENARIO_FILTER || 'ALL';
 
 // Assertion helper
 function assert(condition, msg) {
   if (!condition) throw new Error(`Assertion failed: ${msg}`);
 }
 
+function parseScenarioFilter() {
+  if (SCENARIO_FILTER.toUpperCase() === 'ALL') return null;
+  return new Set(
+    SCENARIO_FILTER.split(',')
+      .map((s) => s.trim().toUpperCase())
+      .filter(Boolean)
+  );
+}
+
 async function main() {
   const client = new McpTuiClient();
   const runner = new TestRunner();
+  const selected = parseScenarioFilter();
+  const shouldRun = (id) => !selected || selected.has(id.toUpperCase());
+  const runScenario = async (id, name, fn) => {
+    if (!shouldRun(id)) {
+      console.log(`  - SKIP ${id}: filtered`);
+      return;
+    }
+    await runner.run(name, fn);
+  };
   let sessionId = null;
 
   console.log('\n=== Agent Orrery TUI E2E (mcp-tui-driver) ===\n');
@@ -66,7 +85,7 @@ async function main() {
     // ================================================================
     // T1: Dashboard loads, all 6 panels visible
     // ================================================================
-    await runner.run('T1: dashboard loads with 6 panels', async () => {
+    await runScenario('T1', 'T1: dashboard loads with 6 panels', async () => {
       const screen = await client.text(sessionId);
       const screenText = typeof screen === 'object' ? screen.text : screen;
 
@@ -88,7 +107,7 @@ async function main() {
     // ================================================================
     // T2: Panel navigation via number keys (1-6)
     // ================================================================
-    await runner.run('T2: panel navigation via number keys', async () => {
+    await runScenario('T2', 'T2: panel navigation via number keys', async () => {
       // Press '2' to focus Cron panel
       await client.pressKey(sessionId, '2');
       await client.waitForIdle(sessionId, 300, 3000);
@@ -120,7 +139,7 @@ async function main() {
     // ================================================================
     // T3: Tab cycling through panels
     // ================================================================
-    await runner.run('T3: tab cycling through panels', async () => {
+    await runScenario('T3', 'T3: tab cycling through panels', async () => {
       // Start from known state
       await client.pressKey(sessionId, '1');
       await client.waitForIdle(sessionId, 200, 2000);
@@ -151,7 +170,7 @@ async function main() {
     // ================================================================
     // T4: Help mode toggle
     // ================================================================
-    await runner.run('T4: help mode toggle', async () => {
+    await runScenario('T4', 'T4: help mode toggle', async () => {
       // Press '?' to enter help mode
       await client.pressKey(sessionId, '?');
       // Give TUI time to process input and re-render
@@ -186,7 +205,7 @@ async function main() {
     // ================================================================
     // T5: Resize handling
     // ================================================================
-    await runner.run('T5: resize handling', async () => {
+    await runScenario('T5', 'T5: resize handling', async () => {
       // Resize to smaller terminal
       await client.resize(sessionId, 80, 24);
       // Give croatoan time to process SIGWINCH and re-render
@@ -223,7 +242,7 @@ async function main() {
     // ================================================================
     // T6: Fixture data content verification
     // ================================================================
-    await runner.run('T6: fixture data content verification', async () => {
+    await runScenario('T6', 'T6: fixture data content verification', async () => {
       // Focus Sessions panel and check for fixture session data
       await client.pressKey(sessionId, '1');
       await client.waitForIdle(sessionId, 300, 3000);
@@ -251,7 +270,7 @@ async function main() {
     // ================================================================
     // T7: Analytics expansion flow remains stable in Usage pane
     // ================================================================
-    await runner.run('T7: analytics expansion flow stable', async () => {
+    await runScenario('T7', 'T7: analytics expansion flow stable', async () => {
       // Focus Usage panel and exercise rapid re-focus to stress analytics rendering
       await client.pressKey(sessionId, '6');
       await client.waitForIdle(sessionId, 300, 3000);
@@ -275,7 +294,7 @@ async function main() {
     // ================================================================
     // T8: Audit/capacity flow remains stable under rapid pane switching
     // ================================================================
-    await runner.run('T8: rapid pane switching stability', async () => {
+    await runScenario('T8', 'T8: rapid pane switching stability', async () => {
       const sequence = ['1', '6', '2', '5', '6', '1', '3', '4'];
       for (const key of sequence) {
         await client.pressKey(sessionId, key);
