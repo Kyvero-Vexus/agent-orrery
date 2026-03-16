@@ -25,7 +25,7 @@
   :description "Dashboard for OpenClaw-compatible agent systems"
   :version "0.1.0"
   :license "MIT"
-  :depends-on ("agent-orrery/coalton" "dexador" "com.inuoe.jzon" "croatoan")
+  :depends-on ("agent-orrery/coalton" "dexador" "com.inuoe.jzon" "croatoan" "hunchentoot")
   :serial t
   :components
   ((:module "src"
@@ -91,7 +91,13 @@
                    (:file "state")
                    (:file "render")
                    (:file "session-detail")
-                   (:file "shell")))))))
+                   (:file "shell")))
+     (:module "web"
+      :serial t
+      :components ((:file "packages")
+                   (:file "views")
+                   (:file "api")
+                   (:file "server")))))))
 
 (defsystem "agent-orrery/test-harness"
   :description "Deterministic fixture runtime harness for Agent Orrery"

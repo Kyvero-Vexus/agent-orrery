@@ -2,3 +2,7 @@
 # Dolt database files (added by bd init)
 .dolt/
 *.db
+
+# Playwright / E2E
+e2e/node_modules/
+test-results/
