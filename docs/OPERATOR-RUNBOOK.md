@@ -230,6 +230,73 @@ lsof -i :7890
 kill <PID>  # or change ORRERY_PORT
 ```
 
+### v2 Module Troubleshooting (Epic 10)
+
+#### Cost optimizer returns unexpected model
+
+**Symptom:** Recommendation appears counterintuitive.
+
+**Checks:**
+1. Verify strategy (`cost|quality|balanced|latency`) used by caller
+2. Verify model cost profile rates (prompt/completion per 1k)
+3. Verify entry volume (confidence low under sparse history)
+
+**REPL diagnosis:**
+```lisp
+(let* ((profiles (list ...))
+       (entries (list ...))
+       (rec (orrery/coalton/core:cl-recommend-model profiles entries
+               (orrery/coalton/core:cl-opt-balanced))))
+  (list (orrery/coalton/core:cl-rr-model rec)
+        (orrery/coalton/core:cl-rr-confidence-label rec)
+        (orrery/coalton/core:cl-rr-strategy-label rec)))
+```
+
+#### Capacity planner reports `overflow`
+
+**Symptom:** Capacity zone is critical/overflow unexpectedly.
+
+**Checks:**
+1. Validate threshold specs (warning/critical/max values)
+2. Confirm metric inputs are per-hour normalized
+3. Ensure cost/tokens units match expected scale
+
+**REPL diagnosis:**
+```lisp
+(let* ((thresholds (orrery/coalton/core:cl-default-capacity-thresholds))
+       (values (list sessions tokens-per-hour cost-per-hour cron-per-hour))
+       (plan (orrery/coalton/core:cl-build-capacity-plan thresholds values)))
+  (list (orrery/coalton/core:cl-plan-worst-zone-label plan)
+        (orrery/coalton/core:cl-plan-headroom-pct plan)))
+```
+
+#### Session analytics bucket counts look wrong
+
+**Symptom:** Duration histogram seems inconsistent.
+
+**Checks:**
+1. Durations must be seconds (not milliseconds)
+2. Bucket boundaries are: `<1m`, `1-5m`, `5-15m`, `15-60m`, `>60m`
+3. Verify session metric construction before analysis
+
+#### Audit trail hash chain mismatch
+
+**Symptom:** Audit entry hash/prev-hash continuity breaks.
+
+**Checks:**
+1. Use a deterministic hash function in test/staging
+2. Ensure entries are appended in sequence order
+3. Verify previous trail state is passed into entry creation
+
+#### Projection bridge pagination inconsistency
+
+**Symptom:** UI pages skip/duplicate rows.
+
+**Checks:**
+1. Confirm `offset` and `limit` are deterministic and stable
+2. Use typed `page-request` + `paginate-items` from `v2-projection-bridge`
+3. Ensure sort key/order are fixed per endpoint
+
 ## Observability
 
 ### Anomaly Detection
