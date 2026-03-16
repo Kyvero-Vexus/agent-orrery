@@ -488,6 +488,7 @@
    #:conformance-target
    #:target-conformance-row #:target-conformance-row-p #:make-target-conformance-row
    #:tcr-target #:tcr-contract-pass-p #:tcr-contract-violations #:tcr-parity-pass-p
+   #:tcr-v2-module-pass-p #:tcr-v2-missing-count
    #:tcr-evidence-required-p #:tcr-evidence-pass-p #:tcr-overall-pass-p #:tcr-detail
    #:cross-ui-conformance-report #:cross-ui-conformance-report-p #:make-cross-ui-conformance-report
    #:cuc-pass-p #:cuc-target-rows #:cuc-contract-results #:cuc-pairwise-parity-results

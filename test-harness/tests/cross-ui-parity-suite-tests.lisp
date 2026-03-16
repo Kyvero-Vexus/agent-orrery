@@ -71,11 +71,11 @@
      :timestamp 2000)))
 
 (defun %mk-tui-manifest (&key (command "make e2e-tui"))
-  (let ((scenarios (loop for id in '("T1" "T2" "T3" "T4" "T5" "T6") collect (%mk-scenario id :pass)))
+  (let ((scenarios (loop for id in '("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8") collect (%mk-scenario id :pass)))
         (artifacts (append
                     (list (%mk-artifact :machine-report :path "tui-report.json")
                           (%mk-artifact :asciicast :path "tui.cast"))
-                    (loop for id in '("T1" "T2" "T3" "T4" "T5" "T6")
+                    (loop for id in '("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8")
                           append (list (%mk-artifact :screenshot :scenario-id id)
                                        (%mk-artifact :transcript :scenario-id id))))))
     (orrery/adapter:make-runner-evidence-manifest
@@ -94,7 +94,10 @@
                  :timestamp 3000)))
     (true (orrery/adapter:cuc-pass-p report))
     (is = 3 (orrery/adapter:cuc-required-target-count report))
-    (is = 3 (orrery/adapter:cuc-passing-target-count report))))
+    (is = 3 (orrery/adapter:cuc-passing-target-count report))
+    (dolist (row (orrery/adapter:cuc-target-rows report))
+      (true (orrery/adapter:tcr-v2-module-pass-p row))
+      (is = 0 (orrery/adapter:tcr-v2-missing-count row)))))
 
 (define-test (cross-ui-parity-suite-tests missing-mcclim-fails)
   (let* ((report (orrery/adapter:run-cross-ui-parity-suite
@@ -130,4 +133,5 @@
     (true (search "\"pass\":true" json))
     (true (search "\"required_targets\":3" json))
     (true (search "\"commands\"" json))
-    (true (search "\"target\":\"web\"" json))))
+    (true (search "\"target\":\"web\"" json))
+    (true (search "\"v2_pass\":true" json))))

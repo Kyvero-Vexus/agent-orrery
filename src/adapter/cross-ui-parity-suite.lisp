@@ -15,6 +15,8 @@
   (contract-pass-p nil :type boolean)
   (contract-violations 0 :type fixnum)
   (parity-pass-p nil :type boolean)
+  (v2-module-pass-p nil :type boolean)
+  (v2-missing-count 0 :type fixnum)
   (evidence-required-p nil :type boolean)
   (evidence-pass-p nil :type boolean)
   (overall-pass-p nil :type boolean)
@@ -90,38 +92,77 @@
    "make e2e-tui"
    "export LD_LIBRARY_PATH=\"/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH\" && sbcl --eval '(load \"/home/slime/quicklisp/setup.lisp\")' --script ci/run-tests.lisp"))
 
+(defun %target-v2-symbol-contract (target)
+  "Required v2 symbols for each UI surface.
+Returns list of (package-name . symbol-name)."
+  (declare (type conformance-target target) (optimize (safety 3)))
+  (ecase target
+    (:tui '(("ORRERY/TUI" . "BUILD-COST-OPTIMIZER-CARD")
+            ("ORRERY/TUI" . "BUILD-CAPACITY-PLANNER-CARD")))
+    (:web '(("ORRERY/WEB" . "RENDER-AUDIT-TRAIL-HTML")
+            ("ORRERY/WEB" . "RENDER-ANALYTICS-HTML")
+            ("ORRERY/WEB" . "AUDIT-TRAIL-JSON")
+            ("ORRERY/WEB" . "ANALYTICS-JSON")))
+    (:mcclim '(("ORRERY/MCCLIM" . "DISPLAY-COST-OPTIMIZER")
+               ("ORRERY/MCCLIM" . "DISPLAY-CAPACITY-PLANNER")
+               ("ORRERY/MCCLIM" . "DISPLAY-SESSION-ANALYTICS")
+               ("ORRERY/MCCLIM" . "DISPLAY-AUDIT-TRAIL")))))
+
+(defun %v2-symbol-fboundp (pkg-name sym-name)
+  (declare (type string pkg-name sym-name) (optimize (safety 3)))
+  (let ((pkg (find-package pkg-name)))
+    (when pkg
+      (multiple-value-bind (sym present-p) (find-symbol sym-name pkg)
+        (and present-p (fboundp sym))))))
+
+(defun %v2-module-check (target)
+  "Return (values pass-p missing-symbols)."
+  (declare (type conformance-target target) (optimize (safety 3)))
+  (let* ((required (%target-v2-symbol-contract target))
+         (missing (remove-if (lambda (pair)
+                               (%v2-symbol-fboundp (car pair) (cdr pair)))
+                             required)))
+    (values (null missing) missing)))
+
 (defun %target-row (target contract-results parity-results evidence-report)
   (declare (type conformance-target target)
            (type list contract-results parity-results)
            (type (or null cross-ui-evidence-report) evidence-report)
            (optimize (safety 3)))
-  (let* ((contract (find-contract-verification contract-results target))
-         (contract-pass (and contract (cv-overall-pass-p contract)))
-         (contract-violations (if contract (cv-violated-count contract) 999))
-         (target-parity (parity-reports-for-target parity-results target))
-         ;; For cross-target parity we accept kind-level parity (fail-count=0)
-         ;; even when raw trace diff hash/seq identities differ between UIs.
-         (parity-pass (every (lambda (report)
-                               (zerop (par-fail-count report)))
-                             target-parity))
-         (evidence-required (not (null (member target '(:web :tui) :test #'eq))))
-         (evidence-pass (target-evidence-pass-p evidence-report target))
-         (overall (and contract-pass
-                       parity-pass
-                       (if evidence-required evidence-pass t))))
-    (make-target-conformance-row
-     :target target
-     :contract-pass-p contract-pass
-     :contract-violations contract-violations
-     :parity-pass-p parity-pass
-     :evidence-required-p evidence-required
-     :evidence-pass-p evidence-pass
-     :overall-pass-p overall
-     :detail (format nil "target=~A contract=~A parity=~A evidence=~A"
-                     target
-                     (if contract-pass "pass" "fail")
-                     (if parity-pass "pass" "fail")
-                     (if evidence-pass "pass" "fail")))))
+  (multiple-value-bind (v2-pass missing-v2)
+      (%v2-module-check target)
+    (let* ((contract (find-contract-verification contract-results target))
+           (contract-pass (and contract (cv-overall-pass-p contract)))
+           (contract-violations (if contract (cv-violated-count contract) 999))
+           (target-parity (parity-reports-for-target parity-results target))
+           ;; For cross-target parity we accept kind-level parity (fail-count=0)
+           ;; even when raw trace diff hash/seq identities differ between UIs.
+           (parity-pass (every (lambda (report)
+                                 (zerop (par-fail-count report)))
+                               target-parity))
+           (evidence-required (not (null (member target '(:web :tui) :test #'eq))))
+           (evidence-pass (target-evidence-pass-p evidence-report target))
+           (overall (and contract-pass
+                         parity-pass
+                         v2-pass
+                         (if evidence-required evidence-pass t))))
+      (make-target-conformance-row
+       :target target
+       :contract-pass-p contract-pass
+       :contract-violations contract-violations
+       :parity-pass-p parity-pass
+       :v2-module-pass-p v2-pass
+       :v2-missing-count (length missing-v2)
+       :evidence-required-p evidence-required
+       :evidence-pass-p evidence-pass
+       :overall-pass-p overall
+       :detail (format nil "target=~A contract=~A parity=~A v2=~A missing=~D evidence=~A"
+                       target
+                       (if contract-pass "pass" "fail")
+                       (if parity-pass "pass" "fail")
+                       (if v2-pass "pass" "fail")
+                       (length missing-v2)
+                       (if evidence-pass "pass" "fail"))))))
 
 (defun run-cross-ui-parity-suite (collector
                                   &key (timestamp 0)
@@ -165,11 +206,13 @@ Combines:
   (declare (type target-conformance-row row)
            (optimize (safety 3)))
   (format nil
-          "{\"target\":\"~A\",\"contract_pass\":~A,\"contract_violations\":~D,\"parity_pass\":~A,\"evidence_required\":~A,\"evidence_pass\":~A,\"overall_pass\":~A,\"detail\":\"~A\"}"
+          "{\"target\":\"~A\",\"contract_pass\":~A,\"contract_violations\":~D,\"parity_pass\":~A,\"v2_pass\":~A,\"v2_missing\":~D,\"evidence_required\":~A,\"evidence_pass\":~A,\"overall_pass\":~A,\"detail\":\"~A\"}"
           (string-downcase (symbol-name (tcr-target row)))
           (if (tcr-contract-pass-p row) "true" "false")
           (tcr-contract-violations row)
           (if (tcr-parity-pass-p row) "true" "false")
+          (if (tcr-v2-module-pass-p row) "true" "false")
+          (tcr-v2-missing-count row)
           (if (tcr-evidence-required-p row) "true" "false")
           (if (tcr-evidence-pass-p row) "true" "false")
           (if (tcr-overall-pass-p row) "true" "false")
