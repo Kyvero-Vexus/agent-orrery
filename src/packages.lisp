@@ -895,7 +895,22 @@
    #:cl-evaluate-threshold #:cl-build-capacity-plan
    #:cl-assess-metric-name #:cl-assess-value #:cl-assess-zone-label
    #:cl-assess-headroom #:cl-assess-util-pct #:cl-assess-recommendation
-   #:cl-plan-worst-zone-label #:cl-plan-headroom-pct #:cl-plan-assessments))
+   #:cl-plan-worst-zone-label #:cl-plan-headroom-pct #:cl-plan-assessments
+   ;; Session analytics (3jv)
+   #:SessionMetric #:sm-id #:sm-duration #:sm-tokens #:sm-messages #:sm-cost #:sm-model
+   #:EfficiencyMetrics #:em-id #:em-tokens-per-message #:em-tokens-per-minute
+   #:em-cost-per-1k #:em-messages-per-min-x100
+   #:DurationBucket #:db-label #:db-lower #:db-upper #:db-count
+   #:SessionAnalyticsSummary #:sas-total #:sas-avg-duration #:sas-median-tokens
+   #:sas-avg-tokens-per-msg #:sas-total-cost #:sas-duration-buckets #:sas-efficiency
+   #:compute-efficiency #:build-duration-distribution #:analyze-sessions
+   ;; Session analytics CL bridge
+   #:cl-make-session-metric #:cl-compute-efficiency #:cl-analyze-sessions
+   #:cl-em-id #:cl-em-tokens-per-message #:cl-em-tokens-per-minute #:cl-em-cost-per-1k
+   #:cl-sas-total #:cl-sas-avg-duration #:cl-sas-median-tokens
+   #:cl-sas-avg-tokens-per-msg #:cl-sas-total-cost
+   #:cl-sas-duration-buckets #:cl-sas-efficiency
+   #:cl-db-label #:cl-db-count))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)
