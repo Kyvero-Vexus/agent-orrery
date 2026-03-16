@@ -451,6 +451,19 @@
    #:verify-runner-evidence #:build-evidence-parity-report #:verify-cross-ui-evidence
    #:evidence-compliance-report->json #:evidence-parity-report->json
    #:cross-ui-evidence-report->json
+   ;; Cross-UI parity suite + conformance report (eb0.6.3)
+   #:conformance-target
+   #:target-conformance-row #:target-conformance-row-p #:make-target-conformance-row
+   #:tcr-target #:tcr-contract-pass-p #:tcr-contract-violations #:tcr-parity-pass-p
+   #:tcr-evidence-required-p #:tcr-evidence-pass-p #:tcr-overall-pass-p #:tcr-detail
+   #:cross-ui-conformance-report #:cross-ui-conformance-report-p #:make-cross-ui-conformance-report
+   #:cuc-pass-p #:cuc-target-rows #:cuc-contract-results #:cuc-pairwise-parity-results
+   #:cuc-evidence-report #:cuc-required-target-count #:cuc-passing-target-count
+   #:cuc-timestamp #:cuc-deterministic-commands
+   #:find-contract-verification #:parity-reports-for-target #:target-evidence-pass-p
+   #:cross-ui-deterministic-commands
+   #:run-cross-ui-parity-suite
+   #:target-conformance-row->json #:cross-ui-conformance-report->json
    ;; Gate orchestration runner (c52)
    #:run-profile #:step-status
    #:gate-run-config #:make-gate-run-config #:grc-profile #:grc-endpoints
