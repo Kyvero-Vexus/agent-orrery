@@ -11,8 +11,10 @@
                 #:usage-record #:event-record #:alert-record
                 #:sr-id #:sr-agent-name #:sr-channel #:sr-status #:sr-model
                 #:sr-total-tokens #:sr-estimated-cost-cents
+                #:make-cron-record
                 #:cr-name #:cr-kind #:cr-interval-s #:cr-status
-                #:cr-last-error
+                #:cr-last-run-at #:cr-next-run-at #:cr-run-count
+                #:cr-last-error #:cr-description
                 #:hr-component #:hr-status #:hr-latency-ms
                 #:er-id #:er-kind #:er-source #:er-timestamp
                 #:ar-id #:ar-severity #:ar-title #:ar-fired-at
@@ -74,6 +76,18 @@
    #:match-filter-p #:apply-filter #:sort-sessions #:tail-history
    #:build-session-detail #:render-session-detail
    #:render-filter-bar
+   ;; Cron operations (eb0.3.3)
+   #:cron-transition-valid-p #:cron-next-status
+   #:cron-op-result #:make-cron-op-result
+   #:cor-success-p #:cor-action #:cor-job-name
+   #:cor-old-status #:cor-new-status #:cor-message
+   #:apply-cron-action #:cron-record-with-new-status
+   #:cron-ops-state #:make-cron-ops-state
+   #:cos-selected-index #:cos-jobs #:cos-last-result #:cos-confirm-pending
+   #:cos-selected-job #:cos-move-selection
+   #:cos-request-action #:cos-cancel-action #:cos-confirm-action
+   #:cron-status-display #:render-cron-job-line
+   #:render-cron-ops-lines #:available-cron-actions
    ;; Shell (impure — croatoan event loop)
    #:*refresh-interval-ms* #:*input-timeout-ms*
    #:paint-render-ops #:clear-screen

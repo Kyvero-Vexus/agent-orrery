@@ -92,6 +92,7 @@
                    (:file "state")
                    (:file "render")
                    (:file "session-detail")
+                   (:file "cron-ops")
                    (:file "shell")))
      (:module "web"
       :serial t
@@ -167,4 +168,5 @@
                    (:file "tui-provider-tests")
                    (:file "tui-session-detail-tests")
                    (:file "tui-shell-tests")
-                   (:file "session-lifecycle-tests")))))))
+                   (:file "session-lifecycle-tests")
+                   (:file "tui-cron-ops-tests")))))))
