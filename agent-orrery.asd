@@ -106,7 +106,8 @@
       :components ((:file "packages")
                    (:file "frame")
                    (:file "commands")
-                   (:file "inspectors")))))))
+                   (:file "inspectors")
+                   (:file "e2e-gate")))))))
 
 (defsystem "agent-orrery/test-harness"
   :description "Deterministic fixture runtime harness for Agent Orrery"
@@ -181,4 +182,5 @@
                    (:file "mcclim-commands-tests")
                    (:file "mcclim-inspectors-tests")
                    (:file "mcclim-accessibility-tests")
+                   (:file "mcclim-e2e-gate-tests")
                    (:file "observability-trace-contract-tests")))))))

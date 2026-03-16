@@ -140,6 +140,11 @@
         (formatting-cell (pane) (format pane "~A" (ar-severity a)))
         (formatting-cell (pane) (write-string (ar-title a) pane))))))
 
+(declaim (ftype (function () (values string &optional)) status-key-hint-line))
+(defun status-key-hint-line ()
+  "Canonical key hint line for status pane and E2E assertions."
+  "Keys: ? help | C-n/C-p pane nav | C-r refresh | s status | q quit")
+
 (defun display-status (frame pane)
   "Display status bar content + keyboard discoverability hints."
   (declare (ignore frame))
@@ -148,7 +153,7 @@
           (length *fixture-cron*)
           (length *fixture-health*)
           (length *fixture-alerts*))
-  (format pane "Keys: ? help | C-n/C-p pane nav | C-r refresh | s status | q quit"))
+  (format pane "~A" (status-key-hint-line)))
 
 ;;; ─── Frame Definition ───
 

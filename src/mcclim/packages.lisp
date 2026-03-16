@@ -26,7 +26,7 @@
    ;; Display functions (pure rendering)
    #:display-sessions #:display-cron
    #:display-health #:display-events
-   #:display-alerts #:display-status
+   #:display-alerts #:display-status #:status-key-hint-line
    ;; Fixture data
    #:*fixture-sessions* #:*fixture-cron*
    #:*fixture-health* #:*fixture-events*
@@ -48,4 +48,8 @@
    #:event-presentation
    #:com-session-detail #:com-event-detail
    #:com-alert-detail #:com-health-detail
-   #:com-summary))
+   #:com-summary
+   ;; Epic-5 gate (eb0.5.5)
+   #:scenario-result #:make-scenario-result
+   #:s5r-id #:s5r-pass-p #:s5r-detail
+   #:command-exists-p #:run-epic5-scenarios #:epic5-results->json))
