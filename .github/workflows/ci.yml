@@ -1,10 +1,20 @@
-name: CI — Type Policy & Tests
+# Agent Orrery — CI Pipeline
+# Bead: agent-orrery-vbc
+#
+# Runs on every push/PR to master: type checks, unit tests, E2E smoke.
+# Produces machine-readable JUnit XML reports.
+
+name: CI
 
 on:
   push:
     branches: [master]
   pull_request:
     branches: [master]
+
+env:
+  SBCL_VERSION: "2.5.8"
+  LD_LIBRARY_PATH: /lib/x86_64-linux-gnu
 
 jobs:
   type-check:
@@ -13,44 +23,155 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install SBCL + Quicklisp
+      - name: Install SBCL
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq sbcl
-          # Install Quicklisp
-          curl -sO https://beta.quicklisp.org/quicklisp.lisp
-          sbcl --load quicklisp.lisp \
-               --eval '(quicklisp-quickstart:install)' \
-               --eval '(ql-util:without-prompting (ql:add-to-init-file))' \
-               --eval '(sb-ext:exit)'
+          sudo apt-get update
+          sudo apt-get install -y sbcl
 
-      - name: Run type policy check
-        run: sbcl --load ci/check-types.lisp
+      - name: Install Quicklisp
+        run: |
+          curl -fsSL https://beta.quicklisp.org/quicklisp.lisp -o /tmp/ql.lisp
+          sbcl --noinform --non-interactive \
+            --load /tmp/ql.lisp \
+            --eval '(quicklisp-quickstart:install :path "~/quicklisp/")' \
+            --eval '(ql-dist:install-dist "http://beta.quicklisp.org/dist/quicklisp.txt" :prompt nil)'
+
+      - name: Run type checks
+        run: |
+          sbcl --noinform --non-interactive \
+            --eval '(load "~/quicklisp/setup.lisp")' \
+            --load ci/check-types.lisp
 
   test:
-    name: Test Suite
+    name: Unit Tests
     runs-on: ubuntu-latest
+    needs: type-check
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install SBCL + Quicklisp
+      - name: Install SBCL
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq sbcl
-          curl -sO https://beta.quicklisp.org/quicklisp.lisp
-          sbcl --load quicklisp.lisp \
-               --eval '(quicklisp-quickstart:install)' \
-               --eval '(ql-util:without-prompting (ql:add-to-init-file))' \
-               --eval '(sb-ext:exit)'
+          sudo apt-get update
+          sudo apt-get install -y sbcl libssl-dev
 
-      - name: Run test suite
-        run: sbcl --load ci/run-tests.lisp
+      - name: Install Quicklisp
+        run: |
+          curl -fsSL https://beta.quicklisp.org/quicklisp.lisp -o /tmp/ql.lisp
+          sbcl --noinform --non-interactive \
+            --load /tmp/ql.lisp \
+            --eval '(quicklisp-quickstart:install :path "~/quicklisp/")' \
+            --eval '(ql-dist:install-dist "http://beta.quicklisp.org/dist/quicklisp.txt" :prompt nil)'
 
-      - name: Run E2E smoke (fixture runtime)
-        run: sbcl --load ci/e2e-smoke.lisp | tee e2e-smoke-output.txt
+      - name: Run tests
+        run: |
+          sbcl --noinform --non-interactive \
+            --eval '(load "~/quicklisp/setup.lisp")' \
+            --script ci/run-tests.lisp
 
-      - name: Upload E2E smoke artifact
+      - name: Upload test results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-smoke-output
-          path: e2e-smoke-output.txt
+          name: test-results
+          path: test-results/
+
+  e2e-smoke:
+    name: E2E Smoke Tests
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SBCL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sbcl libssl-dev
+
+      - name: Install Quicklisp
+        run: |
+          curl -fsSL https://beta.quicklisp.org/quicklisp.lisp -o /tmp/ql.lisp
+          sbcl --noinform --non-interactive \
+            --load /tmp/ql.lisp \
+            --eval '(quicklisp-quickstart:install :path "~/quicklisp/")' \
+            --eval '(ql-dist:install-dist "http://beta.quicklisp.org/dist/quicklisp.txt" :prompt nil)'
+
+      - name: Run E2E smoke
+        run: |
+          sbcl --noinform --non-interactive \
+            --eval '(load "~/quicklisp/setup.lisp")' \
+            --load ci/e2e-smoke.lisp
+
+  web-e2e:
+    name: Web E2E (Playwright)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SBCL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sbcl libssl-dev
+
+      - name: Install Quicklisp
+        run: |
+          curl -fsSL https://beta.quicklisp.org/quicklisp.lisp -o /tmp/ql.lisp
+          sbcl --noinform --non-interactive \
+            --load /tmp/ql.lisp \
+            --eval '(quicklisp-quickstart:install :path "~/quicklisp/")' \
+            --eval '(ql-dist:install-dist "http://beta.quicklisp.org/dist/quicklisp.txt" :prompt nil)'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright
+        working-directory: e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run web E2E
+        working-directory: e2e
+        run: bash run-e2e.sh
+
+      - name: Upload E2E artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-e2e-report
+          path: test-results/e2e-report/
+
+  build:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    needs: [type-check, test]
+    strategy:
+      matrix:
+        target: [cli, tui, web]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SBCL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sbcl libssl-dev
+
+      - name: Install Quicklisp
+        run: |
+          curl -fsSL https://beta.quicklisp.org/quicklisp.lisp -o /tmp/ql.lisp
+          sbcl --noinform --non-interactive \
+            --load /tmp/ql.lisp \
+            --eval '(quicklisp-quickstart:install :path "~/quicklisp/")' \
+            --eval '(ql-dist:install-dist "http://beta.quicklisp.org/dist/quicklisp.txt" :prompt nil)'
+
+      - name: Build ${{ matrix.target }}
+        working-directory: packaging
+        run: make ${{ matrix.target }} QL_SETUP=~/quicklisp/setup.lisp
+
+      - name: Upload build manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.target }}
+          path: dist/
