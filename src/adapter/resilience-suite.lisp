@@ -46,8 +46,8 @@
 
 (declaim
  (ftype (function () (values list &optional)) make-default-resilience-scenarios)
- (ftype (function (fault-scenario) (values resilience-result &optional)) run-resilience-scenario)
- (ftype (function (list &key (:timestamp integer)) (values resilience-report &optional)) run-resilience-suite)
+ (ftype (function (fault-scenario &key (:delegate t)) (values resilience-result &optional)) run-resilience-scenario)
+ (ftype (function (list &key (:timestamp integer) (:delegate t)) (values resilience-report &optional)) run-resilience-suite)
  (ftype (function (resilience-result) (values string &optional)) resilience-result->json)
  (ftype (function (resilience-report) (values string &optional)) resilience-report->json))
 
