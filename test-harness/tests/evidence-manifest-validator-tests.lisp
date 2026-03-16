@@ -21,9 +21,9 @@
     (true (member s orrery/adapter::*web-required-scenarios* :test #'string=))))
 
 (define-test (e2e-manifest-tests tui-required-scenarios)
-  "TUI policy requires exactly T1-T6."
-  (is = 6 (length orrery/adapter::*tui-required-scenarios*))
-  (dolist (s '("T1" "T2" "T3" "T4" "T5" "T6"))
+  "TUI policy requires exactly T1-T8."
+  (is = 8 (length orrery/adapter::*tui-required-scenarios*))
+  (dolist (s '("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8"))
     (true (member s orrery/adapter::*tui-required-scenarios* :test #'string=))))
 
 (define-test (e2e-manifest-tests web-deterministic-command)
@@ -81,8 +81,8 @@
   (let ((m (orrery/adapter:validate-e2e-manifest
             :tui-mcp-driver "/tmp/nonexistent-evidence-dir-xyz/")))
     (false (orrery/adapter:e2e-manifest-valid-p m))
-    ;; Should have 12 missing entries (6 scenarios × 2 required kinds)
-    (is = 12 (length (orrery/adapter:e2e-manifest-missing m)))))
+    ;; Should have 16 missing entries (8 scenarios × 2 required kinds)
+    (is = 16 (length (orrery/adapter:e2e-manifest-missing m)))))
 
 ;;; --- Validation with populated temp directory ---
 
@@ -130,7 +130,7 @@ ARTIFACT-SPECS is list of (scenario-suffix . extension) pairs."
   "Complete TUI evidence set → valid manifest."
   (let ((dir (%create-temp-evidence-dir
               "tui"
-              '("T1" "T2" "T3" "T4" "T5" "T6")
+              '("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8")
               '(("screenshot" . "png") ("transcript" . "txt")))))
     (unwind-protect
          (let ((m (orrery/adapter:validate-e2e-manifest :tui-mcp-driver dir)))

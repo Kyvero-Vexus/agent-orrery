@@ -76,7 +76,7 @@ All artifacts are written to `test-results/tui-artifacts/`:
 ## Relation to Web Dashboard E2E
 
 The web dashboard E2E suite (Playwright, `e2e/`) covers scenarios S1-S6
-for the HTTP/HTML dashboard. This suite covers analogous scenarios T1-T6
+for the HTTP/HTML dashboard. This suite covers analogous scenarios T1-T8
 for the terminal-based ncurses dashboard, using mcp-tui-driver instead
 of Playwright.
 

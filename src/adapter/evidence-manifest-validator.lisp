@@ -53,7 +53,7 @@
   "Required Playwright web E2E scenarios.")
 
 (defparameter *tui-required-scenarios*
-  '("T1" "T2" "T3" "T4" "T5" "T6")
+  '("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8")
   "Required mcp-tui-driver TUI E2E scenarios.")
 
 (defparameter *web-deterministic-command*

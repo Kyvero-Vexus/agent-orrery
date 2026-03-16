@@ -2,7 +2,7 @@
 # Deterministic TUI E2E runner for Agent Orrery (mcp-tui-driver)
 #
 # Usage:
-#   ./e2e-tui/run-tui-e2e.sh              # run all T1-T6 scenarios
+#   ./e2e-tui/run-tui-e2e.sh              # run all T1-T8 scenarios
 #   MCP_TUI_DRIVER=/path/to/bin ./e2e-tui/run-tui-e2e.sh
 #
 # Prerequisites:

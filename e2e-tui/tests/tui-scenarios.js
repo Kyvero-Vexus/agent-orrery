@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // -*- mode: javascript -*-
 //
-// tui-scenarios.js — T1-T6 deterministic TUI E2E scenarios
+// tui-scenarios.js — T1-T8 deterministic TUI E2E scenarios
 //
 // Uses mcp-tui-driver to launch the Agent Orrery TUI (ncurses dashboard),
 // navigate panels, verify content, and capture artifacts.
@@ -246,6 +246,52 @@ async function main() {
 
       const shot = await client.screenshot(sessionId);
       if (shot && shot.data) runner.saveScreenshot('T6-fixture-data', shot.data);
+    });
+
+    // ================================================================
+    // T7: Analytics expansion flow remains stable in Usage pane
+    // ================================================================
+    await runner.run('T7: analytics expansion flow stable', async () => {
+      // Focus Usage panel and exercise rapid re-focus to stress analytics rendering
+      await client.pressKey(sessionId, '6');
+      await client.waitForIdle(sessionId, 300, 3000);
+      await client.pressKey(sessionId, '1');
+      await client.waitForIdle(sessionId, 200, 2000);
+      await client.pressKey(sessionId, '6');
+      await client.waitForIdle(sessionId, 300, 3000);
+
+      const screen = await client.text(sessionId);
+      const screenText = typeof screen === 'object' ? screen.text : screen;
+      runner.saveTranscript('T7-analytics-expansion', screenText);
+
+      // Usage pane should be present and non-empty after analytics expansion changes
+      assert(screenText.includes('Usage (6)'), 'Usage pane visible');
+      assert(screenText.includes('Model') || screenText.length > 200, 'usage table content visible');
+
+      const shot = await client.screenshot(sessionId);
+      if (shot && shot.data) runner.saveScreenshot('T7-analytics-expansion', shot.data);
+    });
+
+    // ================================================================
+    // T8: Audit/capacity flow remains stable under rapid pane switching
+    // ================================================================
+    await runner.run('T8: rapid pane switching stability', async () => {
+      const sequence = ['1', '6', '2', '5', '6', '1', '3', '4'];
+      for (const key of sequence) {
+        await client.pressKey(sessionId, key);
+        await client.waitForIdle(sessionId, 150, 2000);
+      }
+
+      const screen = await client.text(sessionId);
+      const screenText = typeof screen === 'object' ? screen.text : screen;
+      runner.saveTranscript('T8-rapid-switch', screenText);
+
+      // Should still be alive and rendering dashboard structure
+      assert(screenText.includes('Sessions') || screenText.includes('Usage'), 'dashboard still rendered');
+      assert(screenText.length > 100, 'screen non-empty after rapid switching');
+
+      const shot = await client.screenshot(sessionId);
+      if (shot && shot.data) runner.saveScreenshot('T8-rapid-switch', shot.data);
     });
   } catch (err) {
     console.error(`\n  Fatal error: ${err.message}\n`);

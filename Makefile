@@ -20,7 +20,7 @@ e2e-smoke:
 	@$(SBCL) --load ci/e2e-smoke.lisp
 
 e2e-tui:
-	@echo "=== TUI E2E (mcp-tui-driver, scenarios T1-T6) ==="
+	@echo "=== TUI E2E (mcp-tui-driver, scenarios T1-T8) ==="
 	@bash e2e-tui/run-tui-e2e.sh
 
 ci: check-types test e2e-smoke

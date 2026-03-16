@@ -64,13 +64,13 @@
 
   ;; ─── State ───
 
-  (define-test build-analytics-state-4-cards
+  (define-test build-analytics-state-6-cards
     (let* ((sessions (list (orrery/domain:make-session-record :total-tokens 1000
                                                               :estimated-cost-cents 30
                                                               :model "claude"
                                                               :status :active)))
            (state (orrery/tui:build-analytics-state sessions :hour)))
-      (is = 4 (length (orrery/tui:as-cards state)))
+      (is = 6 (length (orrery/tui:as-cards state)))
       (is eq :hour (orrery/tui:as-window state))))
 
   (define-test cycle-window-updates-all-cards

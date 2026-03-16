@@ -184,13 +184,32 @@ THRESHOLDS: list of Coalton ThresholdSpec, VALUES: list of integers."
                 build-analytics-state))
 (defun build-analytics-state (sessions window)
   "Build analytics state from session data. Pure."
-  (make-analytics-state
-   :window window
-   :cards (list (build-token-usage-card sessions window)
-                (build-cost-card sessions window)
-                (build-model-distribution-card sessions window)
-                (build-session-count-card sessions window))
-   :selected-index 0))
+  (let* ((profiles (list
+                    (orrery/coalton/core:cl-make-model-cost-profile "gpt-4" 30 60 900 300)
+                    (orrery/coalton/core:cl-make-model-cost-profile "claude-3" 20 40 850 220)
+                    (orrery/coalton/core:cl-make-model-cost-profile "llama-70b" 5 10 700 400)))
+         (entries (loop for s in sessions
+                        for i from 1
+                        collect (orrery/coalton/core:cl-make-usage-entry
+                                 (or (sr-model s) "unknown")
+                                 (truncate (or (sr-total-tokens s) 0) 2)
+                                 (- (or (sr-total-tokens s) 0)
+                                    (truncate (or (sr-total-tokens s) 0) 2))
+                                 i)))
+         (thresholds (orrery/coalton/core:cl-default-capacity-thresholds))
+         (values (list (length sessions)
+                       (reduce #'+ sessions :key #'sr-total-tokens :initial-value 0)
+                       (reduce #'+ sessions :key #'sr-estimated-cost-cents :initial-value 0)
+                       10)))
+    (make-analytics-state
+     :window window
+     :cards (list (build-token-usage-card sessions window)
+                  (build-cost-card sessions window)
+                  (build-model-distribution-card sessions window)
+                  (build-session-count-card sessions window)
+                  (build-cost-optimizer-card profiles entries window)
+                  (build-capacity-planner-card thresholds values window))
+     :selected-index 0)))
 
 (declaim (ftype (function (analytics-state) (values analytics-state &optional))
                 cycle-analytics-window))
