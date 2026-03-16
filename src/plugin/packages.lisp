@@ -26,4 +26,22 @@
    ;; Validation
    #:validate-plugin #:plugin-validation-result
    #:make-plugin-validation-result
-   #:pvr-valid-p #:pvr-errors #:pvr-warnings))
+   #:pvr-valid-p #:pvr-errors #:pvr-warnings
+   ;; Conformance corpus + runner (bmc)
+   #:conformance-verdict
+   #:plugin-conformance-case #:make-plugin-conformance-case
+   #:pcc-case-id #:pcc-plugin-name #:pcc-plugin-version #:pcc-description
+   #:pcc-cards #:pcc-commands #:pcc-transformers
+   #:pcc-expected-valid-p #:pcc-expected-error-fragments #:pcc-expected-warning-fragments
+   #:pcc-compat-tags
+   #:plugin-conformance-result #:make-plugin-conformance-result
+   #:pcr-case-id #:pcr-verdict #:pcr-actual-valid-p #:pcr-errors #:pcr-warnings
+   #:pcr-compat-findings #:pcr-summary
+   #:plugin-conformance-report #:make-plugin-conformance-report
+   #:pcrep-suite-id #:pcrep-seed #:pcrep-generated-at #:pcrep-total #:pcrep-passed
+   #:pcrep-failed #:pcrep-results
+   #:strict-schema-checks #:compatibility-checks
+   #:run-plugin-contract #:run-conformance-case
+   #:make-default-plugin-conformance-corpus #:run-plugin-conformance-corpus
+   #:deterministic-conformance-command
+   #:conformance-result->json #:conformance-report->json))
