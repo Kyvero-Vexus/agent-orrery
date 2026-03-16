@@ -191,6 +191,43 @@ ARTIFACT-SPECS is list of (scenario-suffix . extension) pairs."
   (true (typep :asciicast 'orrery/adapter::evidence-kind))
   (false (typep :invalid 'orrery/adapter::evidence-kind)))
 
+(define-test (e2e-manifest-tests normalize-artifact-path)
+  "Artifact path normalization is deterministic."
+  (is string= "s1-trace.zip"
+      (orrery/adapter:normalize-artifact-path "/tmp/ABC/S1-TRACE.ZIP"))
+  (is string= "t3-screenshot.png"
+      (orrery/adapter:normalize-artifact-path "T3-SCREENSHOT.PNG")))
+
+(define-test (e2e-manifest-tests normalize-manifest-artifacts-dedup-and-sort)
+  "Normalizer deduplicates by (scenario,kind) and keeps largest artifact."
+  (let* ((artifacts (list
+                     (orrery/adapter:make-manifest-artifact
+                      :scenario-id "s2" :kind :trace :path "/tmp/S2-trace.zip" :exists-p t :size-bytes 10)
+                     (orrery/adapter:make-manifest-artifact
+                      :scenario-id "S1" :kind :screenshot :path "S1-shot.png" :exists-p t :size-bytes 30)
+                     (orrery/adapter:make-manifest-artifact
+                      :scenario-id "S2" :kind :trace :path "S2-trace-better.zip" :exists-p t :size-bytes 20)))
+         (normalized (orrery/adapter:normalize-manifest-artifacts artifacts)))
+    (is = 2 (length normalized))
+    ;; Sorted by scenario then kind; S1 screenshot first.
+    (is string= "S1" (orrery/adapter:manifest-artifact-scenario-id (first normalized)))
+    ;; S2 trace should be the larger one (20 bytes) after dedup.
+    (is = 20 (orrery/adapter:manifest-artifact-size-bytes (second normalized)))))
+
+(define-test (e2e-manifest-tests validate-and-normalize)
+  "Validation+normalization returns sorted scenarios and deterministic artifacts."
+  (let ((dir (%create-temp-evidence-dir
+              "normalize"
+              '("S1" "S2" "S3" "S4" "S5" "S6")
+              '(("screenshot" . "png") ("trace" . "zip")))))
+    (unwind-protect
+         (let ((m (orrery/adapter:validate-and-normalize-e2e-manifest
+                   :web-playwright dir)))
+           (true (orrery/adapter:e2e-manifest-valid-p m))
+           (is = 12 (length (orrery/adapter:e2e-manifest-artifacts m)))
+           (is string= "S1" (first (orrery/adapter:e2e-manifest-scenarios-required m))))
+      (%cleanup-temp-dir dir))))
+
 (define-test (e2e-manifest-tests evidence-suite-type)
   "evidence-suite type check."
   (true (typep :web-playwright 'orrery/adapter::evidence-suite))

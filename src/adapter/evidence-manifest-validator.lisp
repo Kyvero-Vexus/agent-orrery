@@ -76,7 +76,12 @@
 ;;; Artifact Discovery
 ;;; ============================================================
 
-(declaim (ftype (function (string string) list) discover-artifacts-in-dir))
+(declaim (ftype (function (string string) list) discover-artifacts-in-dir)
+         (ftype (function (string) string) normalize-artifact-path)
+         (ftype (function (list) list) normalize-manifest-artifacts)
+         (ftype (function (e2e-manifest) e2e-manifest) normalize-e2e-manifest)
+         (ftype (function (evidence-suite string) e2e-manifest) validate-and-normalize-e2e-manifest))
+
 (defun discover-artifacts-in-dir (directory scenario-id)
   "Scan DIRECTORY for artifacts matching SCENARIO-ID. Returns list of manifest-artifact."
   (declare (type string directory scenario-id))
@@ -118,6 +123,78 @@
                                        0))
                       artifacts)))))))
     (nreverse artifacts)))
+
+;;; ============================================================
+;;; Manifest Normalization
+;;; ============================================================
+
+(defun normalize-artifact-path (path)
+  "Normalize artifact PATH for deterministic manifest output."
+  (declare (type string path))
+  (let* ((pn (pathname path))
+         (name (or (pathname-name pn) ""))
+         (type (or (pathname-type pn) "")))
+    (string-downcase
+     (if (plusp (length type))
+         (format nil "~A.~A" name type)
+         name))))
+
+(defun %artifact-kind-rank (kind)
+  (declare (type evidence-kind kind))
+  (position kind '(:screenshot :trace :report :transcript :asciicast) :test #'eq))
+
+(defun normalize-manifest-artifacts (artifacts)
+  "Normalize, deduplicate, and sort manifest artifacts.
+Dedup key: (scenario-id, kind), keep the largest existing artifact."
+  (declare (type list artifacts))
+  (let ((table (make-hash-table :test #'equal)))
+    (dolist (a artifacts)
+      (let* ((sid (string-upcase (manifest-artifact-scenario-id a)))
+             (kind (manifest-artifact-kind a))
+             (key (format nil "~A|~A" sid kind))
+             (normalized (make-manifest-artifact
+                          :scenario-id sid
+                          :kind kind
+                          :path (normalize-artifact-path (manifest-artifact-path a))
+                          :exists-p (manifest-artifact-exists-p a)
+                          :size-bytes (manifest-artifact-size-bytes a)))
+             (current (gethash key table)))
+        (when (or (null current)
+                  (< (manifest-artifact-size-bytes current)
+                     (manifest-artifact-size-bytes normalized)))
+          (setf (gethash key table) normalized))))
+    (labels ((artifact< (a b)
+               (let* ((sa (manifest-artifact-scenario-id a))
+                      (sb (manifest-artifact-scenario-id b))
+                      (ka (or (%artifact-kind-rank (manifest-artifact-kind a)) 99))
+                      (kb (or (%artifact-kind-rank (manifest-artifact-kind b)) 99)))
+                 (cond
+                   ((string< sa sb) t)
+                   ((string> sa sb) nil)
+                   ((< ka kb) t)
+                   ((> ka kb) nil)
+                   (t (string< (manifest-artifact-path a)
+                               (manifest-artifact-path b)))))))
+      (sort (loop for v being the hash-values of table collect v)
+            #'artifact<))))
+
+(defun normalize-e2e-manifest (manifest)
+  "Normalize manifest for deterministic machine-checkable output."
+  (declare (type e2e-manifest manifest))
+  (let* ((artifacts (normalize-manifest-artifacts (e2e-manifest-artifacts manifest)))
+         (missing (sort (remove-duplicates (copy-list (e2e-manifest-missing manifest)) :test #'string=)
+                        #'string<))
+         (errors (sort (remove-duplicates (copy-list (e2e-manifest-errors manifest)) :test #'string=)
+                       #'string<))
+         (scenarios (sort (copy-list (e2e-manifest-scenarios-required manifest)) #'string<)))
+    (make-e2e-manifest
+     :suite (e2e-manifest-suite manifest)
+     :artifacts artifacts
+     :scenarios-required scenarios
+     :deterministic-command (e2e-manifest-deterministic-command manifest)
+     :valid-p (and (null missing) (null errors))
+     :missing missing
+     :errors errors)))
 
 ;;; ============================================================
 ;;; Manifest Validation
@@ -168,6 +245,13 @@ Returns an e2e-manifest struct with valid-p set."
      :missing (nreverse missing)
      :errors (nreverse errors))))
 
+(defun validate-and-normalize-e2e-manifest (suite artifacts-directory)
+  "Validate SUITE manifest from ARTIFACTS-DIRECTORY and normalize deterministically."
+  (declare (type evidence-suite suite)
+           (type string artifacts-directory))
+  (normalize-e2e-manifest
+   (validate-e2e-manifest suite artifacts-directory)))
+
 ;;; ============================================================
 ;;; CI Hook
 ;;; ============================================================
@@ -200,10 +284,10 @@ Returns an e2e-manifest struct with valid-p set."
 (defun ci-check-all-evidence ()
   "CI entrypoint: validate both web and TUI evidence.
 Returns (VALUES web-ok tui-ok)."
-  (let* ((web-manifest (validate-e2e-manifest
+  (let* ((web-manifest (validate-and-normalize-e2e-manifest
                         :web-playwright
                         "test-results/e2e-artifacts/"))
-         (tui-manifest (validate-e2e-manifest
+         (tui-manifest (validate-and-normalize-e2e-manifest
                         :tui-mcp-driver
                         "test-results/tui-artifacts/"))
          (web-ok (report-manifest-validity web-manifest))

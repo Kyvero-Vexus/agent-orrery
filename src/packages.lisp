@@ -536,8 +536,9 @@
    #:e2e-manifest-suite #:e2e-manifest-artifacts
    #:e2e-manifest-scenarios-required #:e2e-manifest-deterministic-command
    #:e2e-manifest-valid-p #:e2e-manifest-missing #:e2e-manifest-errors
-   #:validate-e2e-manifest #:report-manifest-validity
-   #:ci-check-all-evidence #:discover-artifacts-in-dir
+   #:normalize-artifact-path #:normalize-manifest-artifacts #:normalize-e2e-manifest
+   #:validate-e2e-manifest #:validate-and-normalize-e2e-manifest
+   #:report-manifest-validity #:ci-check-all-evidence #:discover-artifacts-in-dir
    ;; Scenario planning bridge (20d)
    #:scenario-projection #:scenario-projection-p #:make-scenario-projection
    #:sproj-scenario-name #:sproj-total-tokens #:sproj-total-cost
