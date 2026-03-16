@@ -84,7 +84,8 @@
                    (:file "anomaly-detector")
                    (:file "observability-trace-contract")
                    (:file "cross-ui-evidence-verifier")
-                   (:file "cross-ui-parity-suite")))
+                   (:file "cross-ui-parity-suite")
+                   (:file "performance-soak")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -205,4 +206,5 @@
                    (:file "mcclim-e2e-gate-tests")
                    (:file "observability-trace-contract-tests")
                    (:file "cross-ui-evidence-verifier-tests")
-                   (:file "cross-ui-parity-suite-tests")))))))
+                   (:file "cross-ui-parity-suite-tests")
+                   (:file "performance-soak-tests")))))))

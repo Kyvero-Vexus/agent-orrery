@@ -56,7 +56,12 @@
   (:import-from #:orrery/domain
                 #:session-record #:cron-record #:health-record
                 #:usage-record #:event-record #:alert-record
-                #:subagent-record #:history-entry #:adapter-capability)
+                #:subagent-record #:history-entry #:adapter-capability
+                ;; Accessors needed by performance-soak (eb0.7.1)
+                #:sr-id #:er-kind
+                #:ur-model #:ur-prompt-tokens #:ur-completion-tokens
+                #:ur-total-tokens #:ur-estimated-cost-cents #:ur-timestamp
+                #:ar-id #:ar-severity #:ar-title #:ar-source #:ar-fired-at)
   (:export
    ;; Core query protocol
    #:adapter-list-sessions
@@ -473,6 +478,19 @@
    #:cross-ui-deterministic-commands
    #:run-cross-ui-parity-suite
    #:target-conformance-row->json #:cross-ui-conformance-report->json
+   ;; Performance/soak suite (eb0.7.1)
+   #:soak-profile
+   #:soak-config #:soak-config-p #:make-soak-config
+   #:sc-profile #:sc-session-count #:sc-event-count #:sc-usage-hours
+   #:sc-alert-count #:sc-iterations #:sc-seed
+   #:soak-timing #:soak-timing-p #:make-soak-timing
+   #:st-operation #:st-iterations #:st-total-ms #:st-min-ms #:st-max-ms
+   #:st-mean-ms #:st-items-processed #:st-throughput-per-sec
+   #:soak-report #:soak-report-p #:make-soak-report
+   #:srep-profile #:srep-pass-p #:srep-timings #:srep-total-items
+   #:srep-total-ms #:srep-peak-memory-kb #:srep-timestamp #:srep-seed
+   #:make-soak-profile-config #:measure-operation #:run-soak-suite
+   #:soak-timing->json #:soak-report->json
    ;; Gate orchestration runner (c52)
    #:run-profile #:step-status
    #:gate-run-config #:make-gate-run-config #:grc-profile #:grc-endpoints
