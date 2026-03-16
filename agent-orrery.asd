@@ -24,7 +24,8 @@
                    (:file "budget-policy")
                    (:file "notification-routing")
                    (:file "session-lifecycle")
-                   (:file "scenario-planning")))))))
+                   (:file "scenario-planning")
+                   (:file "audit-trail")))))))
 
 (defsystem "agent-orrery"
   :description "Dashboard for OpenClaw-compatible agent systems"
@@ -131,7 +132,7 @@
   :description "Deterministic fixture runtime harness for Agent Orrery"
   :version "0.1.0"
   :license "MIT"
-  :depends-on ("agent-orrery" "parachute")
+  :depends-on ("agent-orrery" "parachute" "ironclad" "babel")
   :serial t
   :components
   ((:module "test-harness"
@@ -214,4 +215,5 @@
                    (:file "performance-soak-tests")
                    (:file "resilience-suite-tests")
                    (:file "scenario-planning-tests")
-                   (:file "evidence-manifest-validator-tests")))))))
+                   (:file "evidence-manifest-validator-tests")
+                   (:file "audit-trail-tests")))))))

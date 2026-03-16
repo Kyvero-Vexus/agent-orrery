@@ -831,7 +831,36 @@
    #:cl-projection-scenario-name #:cl-projection-total-tokens
    #:cl-projection-total-cost #:cl-projection-sessions
    #:cl-projection-cron-invocations #:cl-projection-budget-util-pct
-   #:cl-projection-signal-labels))
+   #:cl-projection-signal-labels
+   ;; Audit trail (8cn)
+   #:AuditCategory #:AuditSessionLifecycle #:AuditCronExecution
+   #:AuditPolicyChange #:AuditConfigChange #:AuditAlertFired
+   #:AuditGateDecision #:AuditModelRouting #:AuditAdapterEvent
+   #:AuditManualAction #:audit-category-label
+   #:AuditSeverity #:AuditTrace #:AuditInfo #:AuditWarning #:AuditCritical
+   #:audit-severity-label #:audit-severity-score
+   #:AuditHash #:audit-hash-value #:genesis-hash
+   #:AuditEntry #:ae-seq #:ae-timestamp #:ae-category #:ae-severity
+   #:ae-actor #:ae-summary #:ae-detail #:ae-hash #:ae-prev-hash
+   #:AuditTrail #:trail-count #:trail-entries #:trail-tip-hash
+   #:empty-trail #:hash-input #:make-audit-entry #:append-entry
+   #:verify-chain-link #:verify-trail
+   #:filter-by-category #:filter-by-severity-min #:filter-by-time-range
+   #:trail-latest #:count-by-severity
+   ;; Audit trail CL bridge
+   #:cl-empty-trail #:cl-append-entry #:cl-verify-trail
+   #:cl-trail-count #:cl-trail-tip-hash
+   #:cl-audit-session-lifecycle #:cl-audit-cron-execution
+   #:cl-audit-policy-change #:cl-audit-config-change
+   #:cl-audit-alert-fired #:cl-audit-gate-decision
+   #:cl-audit-model-routing #:cl-audit-adapter-event
+   #:cl-audit-manual-action
+   #:cl-audit-trace #:cl-audit-info #:cl-audit-warning #:cl-audit-critical
+   #:cl-make-single-entry
+   #:cl-entry-seq #:cl-entry-timestamp #:cl-entry-category-label
+   #:cl-entry-severity-label #:cl-entry-actor #:cl-entry-summary
+   #:cl-entry-detail #:cl-entry-hash #:cl-entry-prev-hash
+   #:cl-filter-by-category #:cl-filter-by-severity-min #:cl-count-by-severity))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)
