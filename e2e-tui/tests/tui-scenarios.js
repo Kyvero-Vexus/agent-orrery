@@ -58,9 +58,10 @@ async function main() {
     assert(sessionId, 'got session_id from launch');
 
     // Wait for TUI to initialize (look for panel titles)
-    await client.waitForText(sessionId, 'Sessions (1)', 15000);
+    // System load time grows with module count; 60s accommodates cold Coalton compile
+    await client.waitForText(sessionId, 'Sessions (1)', 60000);
     // Extra settle time for full render
-    await client.waitForIdle(sessionId, 500, 5000);
+    await client.waitForIdle(sessionId, 1000, 10000);
 
     // ================================================================
     // T1: Dashboard loads, all 6 panels visible
