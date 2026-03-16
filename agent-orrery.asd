@@ -22,6 +22,7 @@
                    (:file "usage-analytics")
                    (:file "anomaly-detector")
                    (:file "budget-policy")
+                   (:file "notification-routing")
                    (:file "session-lifecycle")))))))
 
 (defsystem "agent-orrery"
@@ -185,6 +186,7 @@
                    (:file "plugin-sdk-tests")
                    (:file "plugin-conformance-tests")
                    (:file "budget-policy-tests")
+                   (:file "notification-routing-tests")
                    (:file "event-trace-canon-tests")
                    (:file "parity-assertion-tests")
                    (:file "fixture-corpus-gen-tests")

@@ -730,6 +730,26 @@
    #:cl-make-budget-limit #:cl-evaluate-policy
    #:cl-verdict-level-keyword #:cl-verdict-hint
    #:cl-verdict-utilization #:cl-verdict-actual
+   ;; Notification routing (78i)
+   #:AlertSeverity #:SeverityInfo #:SeverityWarning #:SeverityCritical
+   #:AckLifecycle #:AckNone #:AckPending #:AckAcknowledged #:AckSnoozed
+   #:DeliveryChannel #:ChannelTuiOverlay #:ChannelWebToast #:ChannelMcclimPane
+   #:NotificationEvent #:notificationevent
+   #:ne-id #:ne-severity #:ne-title #:ne-source #:ne-fired-at #:ne-ack-state
+   #:DispatcherConfig #:dispatcherconfig
+   #:dc-tui-enabled #:dc-web-enabled #:dc-mcclim-enabled #:dc-dedupe-enabled #:dc-ack-threshold
+   #:RouteDecision #:routedecision
+   #:rd-dedup-key #:rd-channels #:rd-suppressed-duplicate-p #:rd-requires-ack-p #:rd-reason
+   #:default-dispatcher-config
+   #:severity-score #:classify-severity #:severity-label #:ack-label #:channel-label
+   #:event-dedup-key #:string-member-p #:append-if #:choose-channels
+   #:dispatch-notification #:dispatch-batch
+   ;; Notification routing CL bridge
+   #:cl-severity-from-keyword #:cl-ack-from-keyword
+   #:cl-default-dispatcher-config #:cl-make-dispatcher-config
+   #:cl-make-notification-event #:cl-dispatch-notification
+   #:cl-route-dedup-key #:cl-route-suppressed-p #:cl-route-requires-ack-p
+   #:cl-route-reason #:cl-route-channel-keywords
    ;; Session lifecycle (q8r)
    #:SessionState #:SessionCreating #:SessionActive #:SessionIdle
    #:SessionClosing #:SessionClosed #:SessionError
