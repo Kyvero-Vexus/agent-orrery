@@ -286,7 +286,7 @@ Returns an e2e-manifest struct with valid-p set."
 Returns (VALUES web-ok tui-ok)."
   (let* ((web-manifest (validate-and-normalize-e2e-manifest
                         :web-playwright
-                        "test-results/e2e-artifacts/"))
+                        "test-results/e2e-report/"))
          (tui-manifest (validate-and-normalize-e2e-manifest
                         :tui-mcp-driver
                         "test-results/tui-artifacts/"))

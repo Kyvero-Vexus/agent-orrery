@@ -180,10 +180,48 @@ jobs:
           name: tui-e2e-artifacts
           path: test-results/tui-artifacts/
 
+  evidence-gate:
+    name: E2E Evidence Gate (Playwright + mcp-tui-driver)
+    runs-on: ubuntu-latest
+    needs: [web-e2e, tui-e2e]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SBCL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sbcl libssl-dev
+
+      - name: Install Quicklisp
+        run: |
+          curl -fsSL https://beta.quicklisp.org/quicklisp.lisp -o /tmp/ql.lisp
+          sbcl --noinform --non-interactive \
+            --load /tmp/ql.lisp \
+            --eval '(quicklisp-quickstart:install :path "~/quicklisp/")' \
+            --eval '(ql-dist:install-dist "http://beta.quicklisp.org/dist/quicklisp.txt" :prompt nil)'
+
+      - name: Download web E2E artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-e2e-report
+          path: test-results/e2e-report/
+
+      - name: Download TUI E2E artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: tui-e2e-artifacts
+          path: test-results/tui-artifacts/
+
+      - name: Validate deterministic evidence manifests
+        run: |
+          sbcl --noinform --non-interactive \
+            --eval '(load "~/quicklisp/setup.lisp")' \
+            --script ci/check-evidence.lisp
+
   build:
     name: Build Verification
     runs-on: ubuntu-latest
-    needs: [type-check, test]
+    needs: [type-check, test, evidence-gate]
     strategy:
       matrix:
         target: [cli, tui, web]
