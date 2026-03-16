@@ -6,3 +6,5 @@
 # Playwright / E2E
 e2e/node_modules/
 test-results/
+e2e-tui/node_modules/
+e2e-tui/test-results/

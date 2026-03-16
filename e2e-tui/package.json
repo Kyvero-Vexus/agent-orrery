@@ -1,0 +1,11 @@
+{
+  "name": "agent-orrery-tui-e2e",
+  "private": true,
+  "description": "TUI E2E tests using mcp-tui-driver protocol (node-pty bridge)",
+  "scripts": {
+    "test": "node tests/tui-scenarios.mjs"
+  },
+  "dependencies": {
+    "node-pty": "^1.0.0"
+  }
+}
