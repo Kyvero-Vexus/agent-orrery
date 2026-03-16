@@ -250,3 +250,10 @@
   "CL-callable: get top model ranks from UsageSummary."
   (coalton:coalton
    (summary-top-models (lisp UsageSummary () summary))))
+
+(cl:defun cl-make-model-rank (model total-tokens permille)
+  "CL-callable: construct a ModelRank."
+  (coalton:coalton
+   (ModelRank (lisp String () model)
+              (lisp Integer () total-tokens)
+              (lisp Integer () permille))))

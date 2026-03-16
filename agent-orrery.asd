@@ -23,7 +23,8 @@
                    (:file "anomaly-detector")
                    (:file "budget-policy")
                    (:file "notification-routing")
-                   (:file "session-lifecycle")))))))
+                   (:file "session-lifecycle")
+                   (:file "scenario-planning")))))))
 
 (defsystem "agent-orrery"
   :description "Dashboard for OpenClaw-compatible agent systems"
@@ -86,7 +87,9 @@
                    (:file "cross-ui-evidence-verifier")
                    (:file "cross-ui-parity-suite")
                    (:file "performance-soak")
-                   (:file "resilience-suite")))
+                   (:file "resilience-suite")
+                   (:file "scenario-planning-bridge")
+                   (:file "evidence-manifest-validator")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -209,4 +212,6 @@
                    (:file "cross-ui-evidence-verifier-tests")
                    (:file "cross-ui-parity-suite-tests")
                    (:file "performance-soak-tests")
-                   (:file "resilience-suite-tests")))))))
+                   (:file "resilience-suite-tests")
+                   (:file "scenario-planning-tests")
+                   (:file "evidence-manifest-validator-tests")))))))

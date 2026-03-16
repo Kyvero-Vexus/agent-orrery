@@ -507,6 +507,22 @@
    #:attempt-with-recovery
    #:make-default-resilience-scenarios #:run-resilience-scenario #:run-resilience-suite
    #:resilience-result->json #:resilience-report->json
+   ;; Evidence manifest validator (qo5, oo1)
+   #:manifest-artifact #:manifest-artifact-p #:make-manifest-artifact
+   #:manifest-artifact-scenario-id #:manifest-artifact-kind
+   #:manifest-artifact-path #:manifest-artifact-exists-p
+   #:manifest-artifact-size-bytes
+   #:e2e-manifest #:e2e-manifest-p #:make-e2e-manifest
+   #:e2e-manifest-suite #:e2e-manifest-artifacts
+   #:e2e-manifest-scenarios-required #:e2e-manifest-deterministic-command
+   #:e2e-manifest-valid-p #:e2e-manifest-missing #:e2e-manifest-errors
+   #:validate-e2e-manifest #:report-manifest-validity
+   #:ci-check-all-evidence #:discover-artifacts-in-dir
+   ;; Scenario planning bridge (20d)
+   #:scenario-projection #:scenario-projection-p #:make-scenario-projection
+   #:sproj-scenario-name #:sproj-total-tokens #:sproj-total-cost
+   #:sproj-sessions #:sproj-cron-invocations #:sproj-budget-util-pct #:sproj-signals
+   #:coalton-projection->cl #:scenario-projection->json
    ;; Gate orchestration runner (c52)
    #:run-profile #:step-status
    #:gate-run-config #:make-gate-run-config #:grc-profile #:grc-endpoints
@@ -730,6 +746,7 @@
    #:cl-make-usage-entry #:cl-make-entry-list
    #:cl-aggregate-entries #:cl-build-summary
    #:cl-summary-total-tokens #:cl-summary-total-cost #:cl-summary-top-models
+   #:cl-make-model-rank
    ;; Anomaly detector (mhg)
    #:AnomalySeverity #:AnomalyNone #:AnomalyWarning #:AnomalyCritical
    #:AnomalyKind #:SessionCountDrift #:CostRunaway #:TokenSpikeDetected
@@ -794,7 +811,27 @@
    #:session-state-label #:transition-event-label
    #:transition #:validate-transition-sequence
    #:count-valid-transitions
-   #:happy-path-events #:error-path-events))
+   #:happy-path-events #:error-path-events
+   ;; Scenario planning (20d)
+   #:ScenarioParam #:SPSessionVolume #:SPModelMix #:SPCronCadence
+   #:SPBudgetCap #:SPTokenCeiling #:sp-tag
+   #:Scenario #:scenario-name #:scenario-params #:scenario-horizon
+   #:BaselineSnapshot #:bs-sessions #:bs-tokens-per-hour #:bs-cost-per-hour
+   #:bs-cron-per-hour #:bs-model-mix #:bs-budget-cap
+   #:ProjectionSignal #:SignalOk #:SignalCaution #:SignalOverBudget
+   #:SignalOverCapacity #:SignalMixImbalance #:signal-label
+   #:ProjectionResult #:pr-scenario-name #:pr-total-tokens #:pr-total-cost
+   #:pr-sessions #:pr-cron-invocations #:pr-budget-util-pct #:pr-signals
+   #:run-scenario #:run-scenarios
+   ;; Scenario planning CL bridge
+   #:cl-make-baseline-snapshot #:cl-make-scenario
+   #:cl-sp-session-volume #:cl-sp-budget-cap #:cl-sp-token-ceiling
+   #:cl-sp-cron-cadence #:cl-sp-model-mix
+   #:cl-run-scenario #:cl-run-scenarios
+   #:cl-projection-scenario-name #:cl-projection-total-tokens
+   #:cl-projection-total-cost #:cl-projection-sessions
+   #:cl-projection-cron-invocations #:cl-projection-budget-util-pct
+   #:cl-projection-signal-labels))
 
 (defpackage #:orrery/pipeline
   (:use #:cl)
