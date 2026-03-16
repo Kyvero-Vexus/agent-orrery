@@ -1,8 +1,9 @@
 # Agent Orrery — CI Pipeline
 # Bead: agent-orrery-vbc
 #
-# Runs on every push/PR to master: type checks, unit tests, E2E smoke.
-# Produces machine-readable JUnit XML reports.
+# Runs on every push/PR to master: type checks, unit tests, E2E gates.
+# Includes Web Playwright (S1-S8) and TUI mcp-tui-driver (T1-T8).
+# Produces machine-readable artifacts for evidence verification.
 
 name: CI
 
@@ -142,6 +143,42 @@ jobs:
         with:
           name: web-e2e-report
           path: test-results/e2e-report/
+
+  tui-e2e:
+    name: TUI E2E (mcp-tui-driver)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies (SBCL + Rust + Node)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sbcl libssl-dev cargo nodejs npm
+
+      - name: Install Quicklisp
+        run: |
+          curl -fsSL https://beta.quicklisp.org/quicklisp.lisp -o /tmp/ql.lisp
+          sbcl --noinform --non-interactive \
+            --load /tmp/ql.lisp \
+            --eval '(quicklisp-quickstart:install :path "~/quicklisp/")' \
+            --eval '(ql-dist:install-dist "http://beta.quicklisp.org/dist/quicklisp.txt" :prompt nil)'
+
+      - name: Install mcp-tui-driver
+        run: |
+          cargo install --git https://github.com/michaellee8/mcp-tui-driver
+
+      - name: Run TUI E2E
+        run: |
+          export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
+          make e2e-tui
+
+      - name: Upload TUI E2E artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tui-e2e-artifacts
+          path: test-results/tui-artifacts/
 
   build:
     name: Build Verification
