@@ -1,0 +1,25 @@
+# Agent Orrery — Docker Compose deployment
+# Bead: agent-orrery-eb0.7.3
+#
+# Usage:
+#   docker compose -f packaging/docker-compose.yml up
+
+services:
+  orrery-web:
+    build:
+      context: ..
+      dockerfile: packaging/Dockerfile
+      args:
+        TARGET: web
+    ports:
+      - "7890:7890"
+    environment:
+      - ORRERY_PORT=7890
+      - ORRERY_HOST=0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7890/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

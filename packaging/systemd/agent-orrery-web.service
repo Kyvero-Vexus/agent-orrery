@@ -1,0 +1,34 @@
+[Unit]
+Description=Agent Orrery Web Dashboard
+Documentation=https://github.com/Kyvero-Vexus/agent-orrery
+After=network.target
+
+[Service]
+Type=simple
+User=orrery
+Group=orrery
+WorkingDirectory=/opt/agent-orrery
+Environment=ORRERY_PORT=7890
+Environment=ORRERY_HOST=127.0.0.1
+Environment=LD_LIBRARY_PATH=/lib/x86_64-linux-gnu
+
+ExecStart=/usr/local/bin/sbcl \
+    --noinform --non-interactive \
+    --load /opt/agent-orrery/quicklisp/setup.lisp \
+    --eval '(push #p"/opt/agent-orrery/" asdf:*central-registry*)' \
+    --eval '(asdf:load-system "agent-orrery")' \
+    --eval '(orrery/web:main)'
+
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+# Hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/agent-orrery/data
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target
