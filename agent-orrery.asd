@@ -19,6 +19,7 @@
       :components ((:file "core")
                    (:file "policy")
                    (:file "usage-analytics")
+                   (:file "anomaly-detector")
                    (:file "budget-policy")
                    (:file "session-lifecycle")))))))
 
@@ -77,6 +78,7 @@
                    (:file "fixture-corpus-gen")
                    (:file "gate-orchestration-runner")
                    (:file "usage-analytics-bridge")
+                   (:file "anomaly-detector")
                    (:file "observability-trace-contract")))
      (:module "pipeline"
       :components ((:file "events")
@@ -168,6 +170,7 @@
                    (:file "capture-differ-tests")
                    (:file "decision-audit-tests")
                    (:file "usage-analytics-tests")
+                   (:file "anomaly-detector-tests")
                    (:file "budget-policy-tests")
                    (:file "event-trace-canon-tests")
                    (:file "parity-assertion-tests")

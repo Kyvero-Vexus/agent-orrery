@@ -245,3 +245,8 @@
   "CL-callable: get total cost from UsageSummary."
   (coalton:coalton
    (summary-total-cost (lisp UsageSummary () summary))))
+
+(cl:defun cl-summary-top-models (summary)
+  "CL-callable: get top model ranks from UsageSummary."
+  (coalton:coalton
+   (summary-top-models (lisp UsageSummary () summary))))

@@ -447,6 +447,16 @@
    ;; Usage analytics bridge (68i)
    #:usage-record->coalton-entry #:usage-records->coalton-bucket
    #:coalton-summary->json
+   ;; Adapter anomaly detector (mhg)
+   #:adapter-anomaly-snapshot #:adapter-anomaly-snapshot-p #:make-adapter-anomaly-snapshot
+   #:adapter-anomaly-snapshot-adapter-id #:adapter-anomaly-snapshot-session-count
+   #:adapter-anomaly-snapshot-usage-records
+   #:adapter-anomaly-result #:adapter-anomaly-result-p #:make-adapter-anomaly-result
+   #:adapter-anomaly-result-primary-adapter #:adapter-anomaly-result-secondary-adapter
+   #:adapter-anomaly-result-report #:adapter-anomaly-result-divergence-findings
+   #:adapter-anomaly-result-anomaly-count #:adapter-anomaly-result-risk-score
+   #:adapter-anomaly-result-severity-label
+   #:detect-adapter-anomalies #:snapshot->json #:anomaly-result->json
    ;; Capture differ (qph)
    #:diff-classification
    #:endpoint-delta #:endpoint-delta-p #:make-endpoint-delta
@@ -616,7 +626,28 @@
    ;; CL-callable bridge functions
    #:cl-make-usage-entry #:cl-make-entry-list
    #:cl-aggregate-entries #:cl-build-summary
-   #:cl-summary-total-tokens #:cl-summary-total-cost
+   #:cl-summary-total-tokens #:cl-summary-total-cost #:cl-summary-top-models
+   ;; Anomaly detector (mhg)
+   #:AnomalySeverity #:AnomalyNone #:AnomalyWarning #:AnomalyCritical
+   #:AnomalyKind #:SessionCountDrift #:CostRunaway #:TokenSpikeDetected
+   #:ModelRoutingShift #:AdapterDivergence
+   #:AnomalyFinding #:anomalyfinding
+   #:af-kind #:af-severity #:af-description #:af-observed #:af-baseline #:af-score
+   #:AnomalyReport #:anomalyreport
+   #:ar-findings #:ar-worst-severity #:ar-anomaly-count #:ar-risk-score
+   #:AnomalyThresholds #:anomalythresholds
+   #:at-session-warn #:at-session-crit #:at-cost-warn #:at-cost-crit
+   #:at-token-warn #:at-token-crit #:at-model-warn #:at-model-crit
+   #:default-thresholds #:deviation-permille #:classify-deviation
+   #:detect-session-drift #:detect-cost-runaway #:detect-token-spike
+   #:detect-model-shift #:detect-adapter-divergence
+   #:compute-risk-score #:build-anomaly-report #:run-anomaly-pipeline
+   #:cl-default-thresholds #:cl-deviation-permille
+   #:cl-detect-session-drift #:cl-detect-cost-runaway #:cl-detect-token-spike
+   #:cl-detect-adapter-divergence #:cl-run-anomaly-pipeline
+   #:cl-anomaly-report-count #:cl-anomaly-report-risk-score #:cl-anomaly-report-findings
+   #:cl-finding-list-count #:cl-anomaly-report-worst-severity-label
+   #:cl-anomaly-severity-label #:cl-anomaly-kind-label
    ;; Budget policy (2ya)
    #:BudgetPeriod #:BPDaily #:BPWeekly #:BPMonthly
    #:BudgetScope #:GlobalScope #:ModelScope #:SessionScope
