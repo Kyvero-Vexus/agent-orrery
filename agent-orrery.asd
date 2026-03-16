@@ -76,7 +76,8 @@
                    (:file "parity-assertion")
                    (:file "fixture-corpus-gen")
                    (:file "gate-orchestration-runner")
-                   (:file "usage-analytics-bridge")))
+                   (:file "usage-analytics-bridge")
+                   (:file "observability-trace-contract")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -178,4 +179,5 @@
                    (:file "tui-cron-ops-tests")
                    (:file "mcclim-frame-tests")
                    (:file "mcclim-commands-tests")
-                   (:file "mcclim-inspectors-tests")))))))
+                   (:file "mcclim-inspectors-tests")
+                   (:file "observability-trace-contract-tests")))))))

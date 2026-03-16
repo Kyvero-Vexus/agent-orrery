@@ -401,6 +401,27 @@
    #:evaluate-kind-parity #:compute-report-id
    #:run-parity-assertion #:parity-report-pass-p
    #:assertion-entry->json #:parity-assertion-report->json
+   ;; Observability trace contract (eb0.6.6)
+   #:trace-obligation #:trace-obligation-p #:make-trace-obligation
+   #:tobl-event-kind #:tobl-source-tag #:tobl-min-count #:tobl-description
+   #:trace-contract #:trace-contract-p #:make-trace-contract
+   #:tc-name #:tc-target #:tc-obligations #:tc-version
+   #:obligation-verdict
+   #:obligation-result #:obligation-result-p #:make-obligation-result
+   #:obr-obligation #:obr-actual-count #:obr-verdict #:obr-detail
+   #:contract-verification #:contract-verification-p #:make-contract-verification
+   #:cv-contract-name #:cv-target #:cv-results
+   #:cv-satisfied-count #:cv-violated-count #:cv-exceeded-count
+   #:cv-overall-pass-p #:cv-timestamp
+   #:trace-collector #:trace-collector-p #:make-trace-collector
+   #:tcol-streams #:tcol-count
+   #:make-empty-collector #:collector-register-stream #:collector-get-stream
+   #:make-core-obligations
+   #:make-tui-contract #:make-web-contract #:make-mcclim-contract
+   #:*standard-trace-contracts*
+   #:check-obligation #:verify-trace-contract
+   #:verify-all-contracts #:cross-ui-parity-matrix
+   #:obligation-result->json #:contract-verification->json
    ;; Gate orchestration runner (c52)
    #:run-profile #:step-status
    #:gate-run-config #:make-gate-run-config #:grc-profile #:grc-endpoints
