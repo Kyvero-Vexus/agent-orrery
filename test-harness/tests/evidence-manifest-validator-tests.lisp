@@ -82,7 +82,7 @@
             :tui-mcp-driver "/tmp/nonexistent-evidence-dir-xyz/")))
     (false (orrery/adapter:e2e-manifest-valid-p m))
     ;; Should have 16 missing entries (8 scenarios × 2 required kinds)
-    (is = 16 (length (orrery/adapter:e2e-manifest-missing m)))))
+    (is = 18 (length (orrery/adapter:e2e-manifest-missing m)))))
 
 ;;; --- Validation with populated temp directory ---
 
@@ -132,11 +132,33 @@ ARTIFACT-SPECS is list of (scenario-suffix . extension) pairs."
               "tui"
               '("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8")
               '(("screenshot" . "png") ("transcript" . "txt")))))
+    ;; Suite-level artifacts required for TUI
+    (with-open-file (s (merge-pathnames "tui-e2e-report.json" dir)
+                       :direction :output :if-exists :supersede)
+      (write-string "report" s))
+    (with-open-file (s (merge-pathnames "tui-e2e-session.cast" dir)
+                       :direction :output :if-exists :supersede)
+      (write-string "cast" s))
     (unwind-protect
          (let ((m (orrery/adapter:validate-e2e-manifest :tui-mcp-driver dir)))
            (true (orrery/adapter:e2e-manifest-valid-p m))
            (is = 0 (length (orrery/adapter:e2e-manifest-missing m)))
            (is = 0 (length (orrery/adapter:e2e-manifest-errors m))))
+      (%cleanup-temp-dir dir))))
+
+(define-test (e2e-manifest-tests tui-missing-suite-artifacts-fails)
+  "TUI manifest without suite-level report/cast should fail."
+  (let ((dir (%create-temp-evidence-dir
+              "tui-nosuite"
+              '("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8")
+              '(("screenshot" . "png") ("transcript" . "txt")))))
+    (unwind-protect
+         (let ((m (orrery/adapter:validate-e2e-manifest :tui-mcp-driver dir)))
+           (false (orrery/adapter:e2e-manifest-valid-p m))
+           (true (find "SUITE: missing REPORT artifact" (orrery/adapter:e2e-manifest-missing m)
+                       :test #'string=))
+           (true (find "SUITE: missing ASCIICAST artifact" (orrery/adapter:e2e-manifest-missing m)
+                       :test #'string=)))
       (%cleanup-temp-dir dir))))
 
 (define-test (e2e-manifest-tests partial-web-evidence)

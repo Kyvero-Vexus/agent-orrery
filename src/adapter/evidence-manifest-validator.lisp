@@ -72,15 +72,40 @@
   '(:screenshot :transcript)
   "Each TUI scenario must produce at least these artifact kinds.")
 
+(defparameter *suite-required-artifacts*
+  '((:web-playwright . nil)
+    (:tui-mcp-driver . (:report :asciicast)))
+  "Suite-level artifact requirements independent of per-scenario files.")
+
 ;;; ============================================================
 ;;; Artifact Discovery
 ;;; ============================================================
 
 (declaim (ftype (function (string string) list) discover-artifacts-in-dir)
+         (ftype (function (evidence-suite string) list) discover-suite-artifacts)
          (ftype (function (string) string) normalize-artifact-path)
          (ftype (function (list) list) normalize-manifest-artifacts)
          (ftype (function (e2e-manifest) e2e-manifest) normalize-e2e-manifest)
          (ftype (function (evidence-suite string) e2e-manifest) validate-and-normalize-e2e-manifest))
+
+(defun %infer-evidence-kind (lower-name)
+  (cond
+    ((or (search ".png" lower-name)
+         (search ".jpg" lower-name)
+         (search ".jpeg" lower-name))
+     :screenshot)
+    ((or (search ".zip" lower-name)
+         (search ".trace" lower-name))
+     :trace)
+    ((or (search ".json" lower-name)
+         (search "report" lower-name))
+     :report)
+    ((or (search ".txt" lower-name)
+         (search "transcript" lower-name))
+     :transcript)
+    ((search ".cast" lower-name)
+     :asciicast)
+    (t nil)))
 
 (defun discover-artifacts-in-dir (directory scenario-id)
   "Scan DIRECTORY for artifacts matching SCENARIO-ID. Returns list of manifest-artifact."
@@ -94,23 +119,7 @@
         (let* ((name (namestring path))
                (lower-name (string-downcase (file-namestring path))))
           (when (search pattern lower-name)
-            (let ((kind (cond
-                          ((or (search ".png" lower-name)
-                               (search ".jpg" lower-name)
-                               (search ".jpeg" lower-name))
-                           :screenshot)
-                          ((or (search ".zip" lower-name)
-                               (search ".trace" lower-name))
-                           :trace)
-                          ((or (search ".json" lower-name)
-                               (search "report" lower-name))
-                           :report)
-                          ((or (search ".txt" lower-name)
-                               (search "transcript" lower-name))
-                           :transcript)
-                          ((search ".cast" lower-name)
-                           :asciicast)
-                          (t nil))))
+            (let ((kind (%infer-evidence-kind lower-name)))
               (when kind
                 (push (make-manifest-artifact
                        :scenario-id scenario-id
@@ -122,6 +131,32 @@
                                            (file-length s)))
                                        0))
                       artifacts)))))))
+    (nreverse artifacts)))
+
+(defun discover-suite-artifacts (suite directory)
+  "Discover suite-level artifacts not tied to a specific scenario id."
+  (declare (type evidence-suite suite)
+           (type string directory))
+  (let ((required-kinds (or (cdr (assoc suite *suite-required-artifacts*)) '()))
+        (artifacts nil))
+    (when (probe-file directory)
+      (dolist (path (directory (merge-pathnames
+                                (make-pathname :name :wild :type :wild)
+                                (pathname directory))))
+        (let* ((name (namestring path))
+               (lower-name (string-downcase (file-namestring path)))
+               (kind (%infer-evidence-kind lower-name)))
+          (when (and kind (member kind required-kinds :test #'eq))
+            (push (make-manifest-artifact
+                   :scenario-id "SUITE"
+                   :kind kind
+                   :path name
+                   :exists-p (not (null (probe-file path)))
+                   :size-bytes (or (ignore-errors
+                                     (with-open-file (s path :element-type '(unsigned-byte 8))
+                                       (file-length s)))
+                                   0))
+                  artifacts)))))
     (nreverse artifacts)))
 
 ;;; ============================================================
@@ -215,6 +250,7 @@ Returns an e2e-manifest struct with valid-p set."
          (required-kinds (ecase suite
                            (:web-playwright *web-required-artifacts-per-scenario*)
                            (:tui-mcp-driver *tui-required-artifacts-per-scenario*)))
+         (suite-required-kinds (or (cdr (assoc suite *suite-required-artifacts*)) '()))
          (all-artifacts nil)
          (missing nil)
          (errors nil))
@@ -226,6 +262,13 @@ Returns an e2e-manifest struct with valid-p set."
         (dolist (kind required-kinds)
           (unless (find kind found :key #'manifest-artifact-kind)
             (push (format nil "~A: missing ~A artifact" scenario kind) missing)))))
+    ;; Suite-level required artifacts (e.g., report + asciicast for TUI)
+    (let ((suite-artifacts (discover-suite-artifacts suite artifacts-directory)))
+      (setf all-artifacts (append all-artifacts suite-artifacts))
+      (dolist (kind suite-required-kinds)
+        (unless (find kind suite-artifacts :key #'manifest-artifact-kind)
+          (push (format nil "SUITE: missing ~A artifact" kind) missing))))
+
     ;; Check for zero-byte artifacts
     (dolist (art all-artifacts)
       (when (and (manifest-artifact-exists-p art)
