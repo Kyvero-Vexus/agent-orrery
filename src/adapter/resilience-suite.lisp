@@ -186,7 +186,9 @@ DELEGATE is a pre-built adapter instance. If nil, a minimal stub is used."
              (:alerts (adapter-list-alerts faulty))
              (:subagents (adapter-list-subagents faulty))
              (:trigger-cron (adapter-trigger-cron faulty "cron-001"))
-             (:not-found (adapter-trigger-cron faulty "nonexistent")))))
+             (:not-found (adapter-trigger-cron faulty "nonexistent"))
+             (:audit-projection (funcall (fs-inject-fn scenario)))
+             (:session-analytics-projection (funcall (fs-inject-fn scenario))))))
       (declare (ignore result))
       (let* ((expected (fs-expected-recovery scenario))
              (cond-match (if (fs-expected-condition-type scenario)
@@ -209,7 +211,8 @@ DELEGATE is a pre-built adapter instance. If nil, a minimal stub is used."
 ;;; ─── Default scenarios ───
 
 (defun make-default-resilience-scenarios ()
-  "Deterministic resilience corpus."
+  "Deterministic resilience corpus.
+Includes v2 adapter projection bridge fault scenarios."
   (declare (optimize (safety 3)))
   (list
    ;; Timeout: sessions operation hangs (simulated via sleep-free error)
@@ -284,7 +287,29 @@ DELEGATE is a pre-built adapter instance. If nil, a minimal stub is used."
     :description "Adapter cron returns malformed data (string instead of list)"
     :inject-fn (lambda () "not-a-list")
     :expected-recovery :retry
-    :expected-condition-type nil)))
+    :expected-condition-type nil)
+
+   ;; Projection bridge: malformed audit entry object
+   (make-fault-scenario
+    :scenario-id "R8-malformed-audit-projection"
+    :fault-class :malformed
+    :target-operation :audit-projection
+    :description "Audit projection bridge receives non-audit entry payload"
+    :inject-fn (lambda ()
+                 (coalton-audit-entry->projection 42))
+    :expected-recovery :degrade
+    :expected-condition-type 'error)
+
+   ;; Projection bridge: malformed analytics summary object
+   (make-fault-scenario
+    :scenario-id "R9-malformed-analytics-projection"
+    :fault-class :malformed
+    :target-operation :session-analytics-projection
+    :description "Analytics projection bridge receives non-summary payload"
+    :inject-fn (lambda ()
+                 (coalton-analytics->projection 42))
+    :expected-recovery :degrade
+    :expected-condition-type 'error)))
 
 ;;; ─── Suite runner ───
 

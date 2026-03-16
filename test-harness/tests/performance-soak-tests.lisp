@@ -36,7 +36,15 @@
            (report (orrery/adapter:run-soak-suite cfg :timestamp 1000)))
       (true (orrery/adapter:srep-pass-p report))
       (is eq :light (orrery/adapter:srep-profile report))
-      (is = 6 (length (orrery/adapter:srep-timings report)))
+      (is = 10 (length (orrery/adapter:srep-timings report)))
+      (true (find "audit-trail-append-verify" (orrery/adapter:srep-timings report)
+                  :key #'orrery/adapter:st-operation :test #'string=))
+      (true (find "cost-optimizer-recommend" (orrery/adapter:srep-timings report)
+                  :key #'orrery/adapter:st-operation :test #'string=))
+      (true (find "capacity-planner-assess" (orrery/adapter:srep-timings report)
+                  :key #'orrery/adapter:st-operation :test #'string=))
+      (true (find "session-analytics-summary" (orrery/adapter:srep-timings report)
+                  :key #'orrery/adapter:st-operation :test #'string=))
       (true (> (orrery/adapter:srep-total-ms report) 0))
       (true (> (orrery/adapter:srep-peak-memory-kb report) 0))))
 
@@ -44,7 +52,7 @@
     (let* ((cfg (orrery/adapter:make-soak-profile-config :medium))
            (report (orrery/adapter:run-soak-suite cfg :timestamp 2000)))
       (true (orrery/adapter:srep-pass-p report))
-      (is = 6 (length (orrery/adapter:srep-timings report)))))
+      (is = 10 (length (orrery/adapter:srep-timings report)))))
 
   (define-test soak-report-json-shape
     (let* ((cfg (orrery/adapter:make-soak-profile-config :light))

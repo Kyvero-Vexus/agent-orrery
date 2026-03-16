@@ -145,6 +145,39 @@
                  :acknowledged-p (evenp i)
                  :snoozed-until nil)))
 
+(defun %soak-hash-fn (input)
+  (declare (type string input) (optimize (safety 3)))
+  (format nil "~64,'0X" (abs (sxhash input))))
+
+(defun %mk-cost-profiles ()
+  (declare (optimize (safety 3)))
+  (list (orrery/coalton/core:cl-make-model-cost-profile "gpt-4" 30 60 95 40)
+        (orrery/coalton/core:cl-make-model-cost-profile "claude-3" 22 44 90 45)
+        (orrery/coalton/core:cl-make-model-cost-profile "llama-70b" 10 16 78 70)))
+
+(defun %mk-cost-entries (usage)
+  (declare (type list usage) (optimize (safety 3)))
+  (mapcar (lambda (u)
+            (orrery/coalton/core:cl-make-usage-entry
+             (ur-model u)
+             (ur-prompt-tokens u)
+             (ur-completion-tokens u)
+             (ur-timestamp u)))
+          usage))
+
+(defun %mk-session-metrics (sessions usage)
+  (declare (type list sessions usage) (optimize (safety 3)))
+  (loop for s in (subseq sessions 0 (min 120 (length sessions)))
+        for idx from 0
+        for u = (nth (mod idx (max 1 (length usage))) usage)
+        collect (orrery/coalton/core:cl-make-session-metric
+                 (sr-id s)
+                 (+ 30 (* 5 (mod idx 90)))
+                 (ur-total-tokens u)
+                 (max 1 (truncate (ur-total-tokens u) 120))
+                 (max 1 (ur-estimated-cost-cents u))
+                 (orrery/domain:sr-model s))))
+
 (defun run-soak-suite (config &key (timestamp 0))
   "Run the complete soak suite under CONFIG."
   (declare (type soak-config config) (type integer timestamp) (optimize (safety 3)))
@@ -154,72 +187,98 @@
          (events (%gen-events (sc-event-count config) seed))
          (usage (%gen-usage (sc-usage-hours config) seed))
          (alerts (%gen-alerts (sc-alert-count config) seed))
-         (timings nil)
-         ;; Measure session list traversal
-         (t1 (measure-operation "session-list-traversal" iters
-               (lambda () (mapcar #'sr-id sessions))))
-         ;; Measure event filtering
-         (t2 (measure-operation "event-filter-by-kind" iters
-               (lambda () (remove-if-not (lambda (e) (eq :warning (er-kind e))) events))))
-         ;; Measure usage aggregation via Coalton
-         (t3 (measure-operation "usage-coalton-aggregate" iters
-               (lambda ()
-                 (let ((entries (mapcar (lambda (u)
-                                          (orrery/coalton/core:cl-make-usage-entry
-                                           (ur-model u)
-                                           (ur-prompt-tokens u)
-                                           (ur-completion-tokens u)
-                                           (ur-timestamp u)))
-                                        (subseq usage 0 (min 200 (length usage))))))
-                   (orrery/coalton/core:cl-aggregate-entries "soak" entries)))))
-         ;; Measure anomaly detection pipeline (session/cost/token drift only)
-         (t4 (measure-operation "anomaly-pipeline" iters
-               (lambda ()
-                 (let ((thresholds (orrery/coalton/core:cl-default-thresholds)))
-                   (list
-                    (orrery/coalton/core:cl-detect-session-drift
-                     thresholds (length sessions) 50)
-                    (orrery/coalton/core:cl-detect-cost-runaway
-                     thresholds
-                     (reduce #'+ usage :key #'ur-estimated-cost-cents) 100)
-                    (orrery/coalton/core:cl-detect-token-spike
-                     thresholds
-                     (reduce #'+ usage :key #'ur-total-tokens) 50000))))))
-         ;; Measure alert sort
-         (t5 (measure-operation "alert-sort-by-severity" iters
-               (lambda ()
-                 (sort (copy-list alerts)
-                       (lambda (a b)
-                         (let ((sa (position (ar-severity a) '(:critical :warning :info)))
-                               (sb (position (ar-severity b) '(:critical :warning :info))))
-                           (< (or sa 99) (or sb 99))))))))
-         ;; Measure notification dispatch batch
-         (t6 (measure-operation "notification-dispatch-batch" iters
-               (lambda ()
-                 (let ((cfg (orrery/coalton/core:cl-default-dispatcher-config))
-                       (nevents (loop for a in (subseq alerts 0 (min 20 (length alerts)))
-                                      collect (orrery/coalton/core:cl-make-notification-event
-                                               (ar-id a)
-                                               (ar-severity a)
-                                               (ar-title a)
-                                               (ar-source a)
-                                               (ar-fired-at a)
-                                               :none))))
-                   (dolist (n nevents)
-                     (orrery/coalton/core:cl-dispatch-notification n cfg nil)))))))
-    (setf timings (list t1 t2 t3 t4 t5 t6))
-    (let* ((total-ms (reduce #'+ timings :key #'st-total-ms))
-           (total-items (reduce #'+ timings :key #'st-items-processed))
-           (mem-kb (truncate (sb-kernel:dynamic-usage) 1024)))
-      (make-soak-report
-       :profile (sc-profile config)
-       :pass-p t
-       :timings timings
-       :total-items total-items
-       :total-ms total-ms
-       :peak-memory-kb mem-kb
-       :timestamp timestamp
-       :seed seed))))
+         (profiles (%mk-cost-profiles))
+         (cost-entries (%mk-cost-entries (subseq usage 0 (min 240 (length usage)))))
+         (session-metrics (%mk-session-metrics sessions usage)))
+    (let ((timings nil))
+      (flet ((push-timing (name thunk)
+               (push (measure-operation name iters thunk) timings)))
+        ;; Core soak operations
+        (push-timing "session-list-traversal"
+                     (lambda () (mapcar #'sr-id sessions)))
+        (push-timing "event-filter-by-kind"
+                     (lambda () (remove-if-not (lambda (e) (eq :warning (er-kind e))) events)))
+        (push-timing "usage-coalton-aggregate"
+                     (lambda ()
+                       (let ((entries (%mk-cost-entries (subseq usage 0 (min 200 (length usage))))))
+                         (orrery/coalton/core:cl-aggregate-entries "soak" entries))))
+        (push-timing "anomaly-pipeline"
+                     (lambda ()
+                       (let ((thresholds (orrery/coalton/core:cl-default-thresholds)))
+                         (list
+                          (orrery/coalton/core:cl-detect-session-drift thresholds (length sessions) 50)
+                          (orrery/coalton/core:cl-detect-cost-runaway
+                           thresholds (reduce #'+ usage :key #'ur-estimated-cost-cents) 100)
+                          (orrery/coalton/core:cl-detect-token-spike
+                           thresholds (reduce #'+ usage :key #'ur-total-tokens) 50000)))))
+        (push-timing "alert-sort-by-severity"
+                     (lambda ()
+                       (sort (copy-list alerts)
+                             (lambda (a b)
+                               (let ((sa (position (ar-severity a) '(:critical :warning :info)))
+                                     (sb (position (ar-severity b) '(:critical :warning :info))))
+                                 (< (or sa 99) (or sb 99)))))))
+        (push-timing "notification-dispatch-batch"
+                     (lambda ()
+                       (let ((cfg (orrery/coalton/core:cl-default-dispatcher-config))
+                             (nevents (loop for a in (subseq alerts 0 (min 20 (length alerts)))
+                                            collect (orrery/coalton/core:cl-make-notification-event
+                                                     (ar-id a) (ar-severity a) (ar-title a)
+                                                     (ar-source a) (ar-fired-at a) :none))))
+                         (dolist (n nevents)
+                           (orrery/coalton/core:cl-dispatch-notification n cfg nil)))))
+
+        ;; v2 module soak operations
+        (push-timing "audit-trail-append-verify"
+                     (lambda ()
+                       (let ((trail (orrery/coalton/core:cl-empty-trail)))
+                         (dotimes (i 25 trail)
+                           (setf trail (orrery/coalton/core:cl-append-entry
+                                        #'%soak-hash-fn trail (+ 1000 i)
+                                        (orrery/coalton/core:cl-audit-adapter-event)
+                                        (orrery/coalton/core:cl-audit-info)
+                                        "soak" "event" "append")))
+                         (when (orrery/coalton/core:cl-verify-trail #'%soak-hash-fn trail)
+                           (list (orrery/coalton/core:cl-trail-count trail))))))
+        (push-timing "cost-optimizer-recommend"
+                     (lambda ()
+                       (let ((rec (orrery/coalton/core:cl-recommend-model
+                                   profiles cost-entries
+                                   (orrery/coalton/core:cl-opt-balanced))))
+                         (list (orrery/coalton/core:cl-rr-model rec)
+                               (orrery/coalton/core:cl-rr-confidence-label rec)))))
+        (push-timing "capacity-planner-assess"
+                     (lambda ()
+                       (let* ((thresholds (orrery/coalton/core:cl-default-capacity-thresholds))
+                              (values (list (length sessions)
+                                            (truncate (reduce #'+ usage :key #'ur-total-tokens)
+                                                      (max 1 (sc-usage-hours config)))
+                                            (truncate (reduce #'+ usage :key #'ur-estimated-cost-cents)
+                                                      (max 1 (sc-usage-hours config)))
+                                            (max 1 (truncate (length events)
+                                                             (max 1 (sc-usage-hours config))))))
+                              (plan (orrery/coalton/core:cl-build-capacity-plan thresholds values)))
+                         (list (orrery/coalton/core:cl-plan-worst-zone-label plan)
+                               (orrery/coalton/core:cl-plan-headroom-pct plan)))))
+        (push-timing "session-analytics-summary"
+                     (lambda ()
+                       (let* ((summary (orrery/coalton/core:cl-analyze-sessions session-metrics))
+                              (projection (coalton-analytics->projection summary)))
+                         (list (orrery/coalton/core:cl-sas-total summary)
+                               (sap-total-cost-cents projection))))))
+      (setf timings (nreverse timings))
+      (let* ((total-ms (reduce #'+ timings :key #'st-total-ms))
+             (total-items (reduce #'+ timings :key #'st-items-processed))
+             (mem-kb (truncate (sb-kernel:dynamic-usage) 1024)))
+        (make-soak-report
+         :profile (sc-profile config)
+         :pass-p t
+         :timings timings
+         :total-items total-items
+         :total-ms total-ms
+         :peak-memory-kb mem-kb
+         :timestamp timestamp
+         :seed seed)))))
 
 (defun soak-timing->json (timing)
   (declare (type soak-timing timing) (optimize (safety 3)))

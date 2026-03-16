@@ -9,10 +9,12 @@
 
   (define-test default-scenarios-exist
     (let ((scenarios (orrery/adapter:make-default-resilience-scenarios)))
-      (true (>= (length scenarios) 7))
+      (true (>= (length scenarios) 9))
       (true (find "R1-timeout-sessions" scenarios
                   :key #'orrery/adapter:fs-scenario-id :test #'string=))
       (true (find "R5-not-found-cron" scenarios
+                  :key #'orrery/adapter:fs-scenario-id :test #'string=))
+      (true (find "R8-malformed-audit-projection" scenarios
                   :key #'orrery/adapter:fs-scenario-id :test #'string=))))
 
   (define-test timeout-scenario-degrades
@@ -56,8 +58,8 @@
                    :timestamp 5000
                    :delegate (orrery/harness:make-fixture-adapter))))
       (true (orrery/adapter:rrep-pass-p report))
-      (is = 7 (orrery/adapter:rrep-total report))
-      (is = 7 (orrery/adapter:rrep-passed report))
+      (is = 9 (orrery/adapter:rrep-total report))
+      (is = 9 (orrery/adapter:rrep-passed report))
       (is = 0 (orrery/adapter:rrep-failed report))))
 
   (define-test report-json-shape
@@ -67,6 +69,6 @@
                     :delegate (orrery/harness:make-fixture-adapter)))
            (json (orrery/adapter:resilience-report->json report)))
       (true (search "\"pass\":true" json))
-      (true (search "\"total\":7" json))
+      (true (search "\"total\":9" json))
       (true (search "\"results\"" json))
       (true (search "R1-timeout-sessions" json)))))
