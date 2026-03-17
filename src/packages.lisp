@@ -595,6 +595,15 @@
    #:usm-surface #:usm-kind #:usm-from-version #:usm-to-version #:usm-transformer
    #:make-default-ui-protocol-schema #:validate-payload-against-ui-schema
    #:migrate-ui-payload #:ui-protocol-schema->json #:ui-schema-migration->json
+   ;; Adapter contract checker (doy/5ue/chx)
+   #:adapter-contract-case #:adapter-contract-case-p #:make-adapter-contract-case
+   #:acc-surface #:acc-kind #:acc-payload #:acc-source
+   #:adapter-contract-row #:adapter-contract-row-p #:make-adapter-contract-row
+   #:acr-surface #:acr-kind #:acr-pass-p #:acr-error-count #:acr-errors #:acr-source
+   #:adapter-contract-report #:adapter-contract-report-p #:make-adapter-contract-report
+   #:acp-pass-p #:acp-rows #:acp-passed #:acp-failed #:acp-timestamp
+   #:make-default-adapter-contract-cases #:run-adapter-contract-checker
+   #:run-adapter-contract-checker-from-fixture #:adapter-contract-report->json
    ;; Boundary declaration gate (axv)
    #:boundary-declaration-kind
    #:boundary-declaration-violation #:boundary-declaration-violation-p

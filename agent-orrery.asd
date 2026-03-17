@@ -103,6 +103,7 @@
                    (:file "ui-protocol-boundary")
                    (:file "replay-protocol-bridge")
                    (:file "ui-protocol-schema")
+                   (:file "adapter-contract-checker")
                    (:file "boundary-declaration-gate")
                    (:file "design-doc-sync-gate")))
      (:module "pipeline"
@@ -248,5 +249,6 @@
                    (:file "ui-protocol-boundary-tests")
                    (:file "replay-protocol-bridge-tests")
                    (:file "ui-protocol-schema-tests")
+                   (:file "adapter-contract-checker-tests")
                    (:file "boundary-declaration-gate-tests")
                    (:file "design-doc-sync-gate-tests")))))))
