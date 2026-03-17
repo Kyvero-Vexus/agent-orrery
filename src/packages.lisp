@@ -493,6 +493,10 @@
    #:verify-runner-evidence #:build-evidence-parity-report #:verify-cross-ui-evidence
    #:evidence-compliance-report->json #:evidence-parity-report->json
    #:cross-ui-evidence-report->json
+   ;; Playwright evidence compiler (yzx)
+   #:*playwright-required-scenarios* #:*playwright-deterministic-command*
+   #:infer-web-runner-kind #:infer-playwright-scenario-id #:infer-web-artifact-kind
+   #:compile-playwright-evidence-manifest
    ;; Cross-UI parity suite + conformance report (eb0.6.3)
    #:conformance-target
    #:target-conformance-row #:target-conformance-row-p #:make-target-conformance-row
