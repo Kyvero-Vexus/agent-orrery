@@ -569,6 +569,17 @@
    #:symbol-has-public-type-definition-p #:package-defstruct-helper-symbols
    #:boundary-symbol-declaration-kind #:boundary-export-declaration-violations
    #:boundary-exports-declared-p
+   ;; Design-doc sync gate (mmw)
+   #:*design-doc-requirement-sentence*
+   #:design-doc-sync-result #:design-doc-sync-result-p #:make-design-doc-sync-result
+   #:ddsr-bead-id #:ddsr-requirement-present-p #:ddsr-docs-found-p
+   #:ddsr-matching-doc-paths #:ddsr-detail
+   #:bead-acceptance-result #:bead-acceptance-result-p #:make-bead-acceptance-result
+   #:bar-bead-id #:bar-design-doc-sync-ok-p #:bar-epic3-evidence-ok-p
+   #:bar-epic4-evidence-ok-p #:bar-overall-ok-p #:bar-detail
+   #:bead-requires-design-docs-p #:find-design-docs-for-bead
+   #:evaluate-design-doc-sync #:evaluate-bead-acceptance
+   #:design-doc-sync-result->json #:bead-acceptance-result->json
    ;; Scenario planning bridge (20d)
    #:scenario-projection #:scenario-projection-p #:make-scenario-projection
    #:sproj-scenario-name #:sproj-total-tokens #:sproj-total-cost

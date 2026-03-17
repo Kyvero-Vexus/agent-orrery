@@ -97,7 +97,8 @@
                    (:file "evidence-manifest-validator")
                    (:file "tui-scenario-contracts")
                    (:file "ui-protocol-boundary")
-                   (:file "boundary-declaration-gate")))
+                   (:file "boundary-declaration-gate")
+                   (:file "design-doc-sync-gate")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -235,4 +236,5 @@
                    (:file "plugin-lifecycle-hooks-tests")
                    (:file "v2-projection-bridge-tests")
                    (:file "ui-protocol-boundary-tests")
-                   (:file "boundary-declaration-gate-tests")))))))
+                   (:file "boundary-declaration-gate-tests")
+                   (:file "design-doc-sync-gate-tests")))))))
