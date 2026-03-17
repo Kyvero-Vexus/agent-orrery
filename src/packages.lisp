@@ -336,6 +336,15 @@
    #:normalize-event->replay-event #:snapshot->replay-events
    #:replay-stream->artifact #:replay-stream->fixture-json
    #:compile-fixture-replay-bundle
+   ;; Replay protocol bridge (a47)
+   #:replay-surface
+   #:protocol-parity-row #:protocol-parity-row-p #:make-protocol-parity-row
+   #:ppr-sequence-id #:ppr-web-kind #:ppr-tui-kind #:ppr-mcclim-kind
+   #:ppr-web-hash #:ppr-tui-hash #:ppr-mcclim-hash #:ppr-parity-p #:ppr-detail
+   #:protocol-parity-fixture #:protocol-parity-fixture-p #:make-protocol-parity-fixture
+   #:ppf-fixture-id #:ppf-rows #:ppf-parity-pass-p #:ppf-stream-count #:ppf-row-count #:ppf-timestamp
+   #:event-kind->ui-kind #:trace-event->ui-message #:trace-stream->ui-messages
+   #:build-protocol-parity-fixture #:protocol-parity-fixture->json
    ;; Evidence pack (cto)
    #:parity-verdict
    #:parity-entry #:parity-entry-p #:make-parity-entry

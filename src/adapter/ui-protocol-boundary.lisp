@@ -5,7 +5,7 @@
 
 (in-package #:orrery/adapter)
 
-(deftype ui-surface () '(member :tui :web))
+(deftype ui-surface () '(member :tui :web :mcclim))
 (deftype ui-message-kind () '(member :session :cron :health :alert :audit :analytics :capacity :cost :status))
 (deftype ui-error-kind () '(member :transport :validation :not-found :not-supported :internal))
 
