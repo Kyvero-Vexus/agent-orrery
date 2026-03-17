@@ -31,4 +31,8 @@
   (let ((report (orrery/adapter:run-adapter-contract-checker-from-fixture
                  "test-harness/fixtures/adapter-replay-fixtures.lisp")))
     (true (orrery/adapter:acp-pass-p report))
-    (is = 3 (length (orrery/adapter:acp-rows report)))))
+    (is = 7 (length (orrery/adapter:acp-rows report)))
+    ;; Expanded corpus includes cost/capacity/audit/analytics payload kinds.
+    (true (find :cost (orrery/adapter:acp-rows report) :key #'orrery/adapter:acr-kind :test #'eq))
+    (true (find :capacity (orrery/adapter:acp-rows report) :key #'orrery/adapter:acr-kind :test #'eq))
+    (true (find :audit (orrery/adapter:acp-rows report) :key #'orrery/adapter:acr-kind :test #'eq))))
