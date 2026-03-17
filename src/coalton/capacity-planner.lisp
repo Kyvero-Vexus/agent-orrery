@@ -146,8 +146,8 @@
       ((>= value (ts-warning spec))  (- (ts-critical spec) value))
       (True                          (- (ts-warning spec) value))))
 
-  (declare %recommendation (CapacityZone -> String -> String))
-  (define (%recommendation zone metric)
+  (declare %recommendation (CapacityZone -> String))
+  (define (%recommendation zone)
     (match zone
       ((ZoneIdle)     "No action needed")
       ((ZoneNormal)   "Operating normally")
@@ -167,7 +167,7 @@
        zone
        headroom
        util-pct
-       (%recommendation zone (ts-metric spec)))))
+       (%recommendation zone))))
 
   (declare %worst-zone ((List CapacityAssessment) -> CapacityZone))
   (define (%worst-zone assessments)

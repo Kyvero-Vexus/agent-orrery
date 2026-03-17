@@ -100,5 +100,6 @@ A PR touching a closed epic boundary must include:
 1. E2E artifacts (logs/screenshots/recordings)
 2. Passing scenario set required for that epic
 3. Design-doc update in `emacsen-design-docs` linked in PR
+4. Run-script gate pass (`make run-scripts-gate`) proving all runtime entrypoints still execute
 
 No exceptions.

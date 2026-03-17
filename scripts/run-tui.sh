@@ -21,8 +21,11 @@ echo "  Root: $ROOT"
 echo "  Quicklisp: $QL_SETUP"
 echo "  LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
 
-sbcl --noinform \
+sbcl --noinform --disable-debugger \
   --eval "(load \"$QL_SETUP\")" \
-  --eval '(push #p"'"$ROOT"'"/ asdf:*central-registry*)' \
-  --eval '(asdf:load-system "agent-orrery")' \
-  --eval '(let* ((adapter (orrery/harness:make-fixture-adapter)) (store (orrery/store:snapshot-from-adapter adapter))) (orrery/tui:start-dashboard :store store))'
+  --eval "(push #p\"$ROOT/\" asdf:*central-registry*)" \
+  --eval '(asdf:load-system "agent-orrery/test-harness")' \
+  --eval '(let* ((adapter (orrery/harness:make-fixture-adapter))
+                 (store (orrery/store:snapshot-from-adapter adapter)))
+            (orrery/tui:start-dashboard :store store))' \
+  --quit

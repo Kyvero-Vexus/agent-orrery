@@ -24,12 +24,13 @@ echo "  URL:  http://${ORRERY_HOST}:${ORRERY_PORT}"
 echo "  Quicklisp: $QL_SETUP"
 echo "  LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
 
-sbcl --noinform \
+sbcl --noinform --disable-debugger \
   --eval "(load \"$QL_SETUP\")" \
-  --eval '(push #p"'"$ROOT"'"/ asdf:*central-registry*)' \
+  --eval "(push #p\"$ROOT/\" asdf:*central-registry*)" \
   --eval '(asdf:load-system "agent-orrery")' \
-  --eval '(let* ((adapter (orrery/harness:make-fixture-adapter))
-                 (store (orrery/store:snapshot-from-adapter adapter)))
-            (setf orrery/web:*host* (uiop:getenv "ORRERY_HOST"))
-            (setf orrery/web:*port* (parse-integer (uiop:getenv "ORRERY_PORT")))
-            (orrery/web:start-server :store store))'
+  --eval '(let* ((port (parse-integer (or (uiop:getenv "ORRERY_PORT") "7890"))))
+            (setf orrery/web:*web-port* port)
+            (orrery/web:start-server :port port)
+            (format t "~&Web server ready on port ~D~%" port)
+            (finish-output)
+            (loop (sleep 1)))'

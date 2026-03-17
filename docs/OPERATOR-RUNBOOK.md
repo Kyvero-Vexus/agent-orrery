@@ -348,6 +348,7 @@ Run the resilience suite to verify fault recovery paths:
 - [ ] Soak test passes at `:medium` profile minimum
 - [ ] E2E Web: Playwright S1-S6 pass with screenshot + trace artifacts
 - [ ] E2E TUI: mcp-tui-driver T1-T6 pass with PNG + TXT + cast + JSON artifacts
+- [ ] Run-script gate: `make run-scripts-gate` passes (run-web/run-tui/e2e wrappers all verified)
 - [ ] Design docs updated in `emacsen-design-docs/agent-orrery/`
 - [ ] CHANGELOG updated
 - [ ] Version tag created: `git tag vX.Y.Z`
