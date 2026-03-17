@@ -497,6 +497,10 @@
    #:*playwright-required-scenarios* #:*playwright-deterministic-command*
    #:infer-web-runner-kind #:infer-playwright-scenario-id #:infer-web-artifact-kind
    #:compile-playwright-evidence-manifest
+   ;; mcp-tui-driver evidence compiler (y8p)
+   #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
+   #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
+   #:compile-mcp-tui-evidence-manifest
    ;; Cross-UI parity suite + conformance report (eb0.6.3)
    #:conformance-target
    #:target-conformance-row #:target-conformance-row-p #:make-target-conformance-row
