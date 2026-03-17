@@ -86,3 +86,20 @@
              (false (orrery/adapter:bar-overall-ok-p res))
              (false (orrery/adapter:bar-epic3-evidence-ok-p res))))
       (%cleanup-temp-doc-dir dir))))
+
+(define-test (design-doc-sync-gate-tests epic4-guard-fails-without-artifacts)
+  (false (orrery/adapter:epic4-s1-s6-evidence-ok-p "/tmp/nonexistent-e2e-report-dir/")))
+
+(define-test (design-doc-sync-gate-tests acceptance-epic4-fails-without-artifacts)
+  (let* ((dir (%make-temp-doc-dir "accept-epic4"))
+         (doc (merge-pathnames "eb045.md" dir))
+         (desc "Epic 4 Playwright S1-S6 for agent-orrery-eb0.4.5. Mandatory: develop/update Common Lisp design docs in /home/slime/projects/emacsen-design-docs."))
+    (unwind-protect
+         (progn
+           (with-open-file (s doc :direction :output :if-exists :supersede)
+             (write-string "agent-orrery-eb0.4.5" s))
+           (let ((res (orrery/adapter:evaluate-bead-acceptance
+                       "agent-orrery-eb0.4.5" "Epic 4 closure" desc dir "/tmp/nonexistent-artifacts-root/")))
+             (false (orrery/adapter:bar-overall-ok-p res))
+             (false (orrery/adapter:bar-epic4-evidence-ok-p res))))
+      (%cleanup-temp-doc-dir dir))))

@@ -29,6 +29,7 @@
  (ftype (function (string string) (values list &optional)) find-design-docs-for-bead)
  (ftype (function (string string string) (values design-doc-sync-result &optional))
         evaluate-design-doc-sync)
+ (ftype (function (string) (values boolean &optional)) epic4-s1-s6-evidence-ok-p)
  (ftype (function (string string string string string) (values bead-acceptance-result &optional))
         evaluate-bead-acceptance)
  (ftype (function (design-doc-sync-result) (values string &optional))
@@ -85,6 +86,25 @@
         (search "playwright" txt)
         (search "s1-s6" txt))))
 
+(defun epic4-s1-s6-evidence-ok-p (artifacts-directory)
+  "Hard guard for Epic 4 closure: Playwright S1-S6 + screenshot/trace + deterministic command."
+  (declare (type string artifacts-directory))
+  (let* ((manifest (validate-and-normalize-e2e-manifest :web-playwright artifacts-directory))
+         (cmd (e2e-manifest-deterministic-command manifest))
+         (command-ok (string= cmd "cd e2e && bash run-e2e.sh"))
+         (required-ids '("S1" "S2" "S3" "S4" "S5" "S6"))
+         (artifacts (e2e-manifest-artifacts manifest))
+         (scenario-ok
+           (every (lambda (sid)
+                    (let ((for-sid (remove-if-not
+                                    (lambda (a) (string= sid (manifest-artifact-scenario-id a)))
+                                    artifacts)))
+                      (and (not (null (find :screenshot for-sid :key #'manifest-artifact-kind)))
+                           (not (null (find :trace for-sid :key #'manifest-artifact-kind))))))
+                  required-ids)))
+    (and (e2e-manifest-valid-p manifest)
+         command-ok scenario-ok)))
+
 (defun evaluate-bead-acceptance (bead-id title description docs-root artifacts-root)
   "Evaluate closure eligibility for a bead.
 Checks: design-doc sync + Epic3/Epic4 evidence policy gates when applicable." 
@@ -99,9 +119,8 @@ Checks: design-doc sync + Epic3/Epic4 evidence policy gates when applicable."
                         (namestring (merge-pathnames "tui-artifacts/" artifacts-root)))
                        t))
          (epic4-ok (if epic4-needed
-                       (e2e-manifest-valid-p
-                        (validate-and-normalize-e2e-manifest :web-playwright
-                                                             (namestring (merge-pathnames "e2e-report/" artifacts-root))))
+                       (epic4-s1-s6-evidence-ok-p
+                        (namestring (merge-pathnames "e2e-report/" artifacts-root)))
                        t))
          (overall (and sync-ok epic3-ok epic4-ok)))
     (make-bead-acceptance-result
