@@ -510,6 +510,10 @@
    #:err-stored-pass-p #:err-regenerated-pass-p #:err-parity-pass-p #:err-overall-pass-p
    #:err-blockers #:err-detail #:err-timestamp
    #:evaluate-evidence-recertification-gate #:evidence-recertification-result->json
+   ;; Epic done-state guard (t5i)
+   #:epic-done-state-result #:epic-done-state-result-p #:make-epic-done-state-result
+   #:edr-epic-target #:edr-done-claim-p #:edr-evidence-pass-p #:edr-allowed-p #:edr-detail #:edr-timestamp
+   #:evaluate-epic-done-state-guard #:epic-done-state-result->json
    ;; Cross-UI parity suite + conformance report (eb0.6.3)
    #:conformance-target
    #:target-conformance-row #:target-conformance-row-p #:make-target-conformance-row
