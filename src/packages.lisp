@@ -501,6 +501,10 @@
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
    #:compile-mcp-tui-evidence-manifest
+   ;; Epic 3/4 closure gate (i9p)
+   #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
+   #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
+   #:evaluate-epic34-closure-gate #:epic-closure-gate-result->json
    ;; Cross-UI parity suite + conformance report (eb0.6.3)
    #:conformance-target
    #:target-conformance-row #:target-conformance-row-p #:make-target-conformance-row
