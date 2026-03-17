@@ -505,6 +505,11 @@
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
    #:evaluate-epic34-closure-gate #:epic-closure-gate-result->json
+   ;; Evidence recertification gate (f15)
+   #:evidence-recertification-result #:evidence-recertification-result-p #:make-evidence-recertification-result
+   #:err-stored-pass-p #:err-regenerated-pass-p #:err-parity-pass-p #:err-overall-pass-p
+   #:err-blockers #:err-detail #:err-timestamp
+   #:evaluate-evidence-recertification-gate #:evidence-recertification-result->json
    ;; Cross-UI parity suite + conformance report (eb0.6.3)
    #:conformance-target
    #:target-conformance-row #:target-conformance-row-p #:make-target-conformance-row
