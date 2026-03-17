@@ -559,6 +559,16 @@
    #:urh-hook-id #:urh-surface #:urh-deterministic-command #:urh-artifact-dir #:urh-seed #:urh-enabled-p
    #:make-ui-message-id #:make-ui-message* #:validate-ui-message #:project-ui-error
    #:ui-message->json #:ui-contract->json #:ui-error->json #:ui-replay-hook->json
+   ;; UI protocol schema (4ua)
+   #:ui-protocol-surface #:ui-protocol-kind
+   #:ui-schema-field #:ui-schema-field-p #:make-ui-schema-field
+   #:usf-name #:usf-required-p #:usf-type-tag #:usf-default-value
+   #:ui-protocol-schema #:ui-protocol-schema-p #:make-ui-protocol-schema
+   #:ups-surface #:ups-kind #:ups-version #:ups-fields #:ups-compat-versions
+   #:ui-schema-migration #:ui-schema-migration-p #:make-ui-schema-migration
+   #:usm-surface #:usm-kind #:usm-from-version #:usm-to-version #:usm-transformer
+   #:make-default-ui-protocol-schema #:validate-payload-against-ui-schema
+   #:migrate-ui-payload #:ui-protocol-schema->json #:ui-schema-migration->json
    ;; Boundary declaration gate (axv)
    #:boundary-declaration-kind
    #:boundary-declaration-violation #:boundary-declaration-violation-p
