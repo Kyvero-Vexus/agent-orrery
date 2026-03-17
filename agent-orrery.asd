@@ -43,6 +43,12 @@
     ((:file "packages")
      (:module "domain"
       :components ((:file "types")))
+     (:module "protocol-schema"
+      :serial t
+      :components ((:file "package")
+                   (:file "types")
+                   (:file "validators")
+                   (:file "serialization")))
      (:module "adapter"
       :components ((:file "protocol")
                    (:file "generic-starter-kit")
@@ -251,6 +257,7 @@
                    (:file "ui-protocol-boundary-tests")
                    (:file "replay-protocol-bridge-tests")
                    (:file "ui-protocol-schema-tests")
+                   (:file "protocol-schema-skeleton-tests")
                    (:file "adapter-contract-checker-tests")
                    (:file "boundary-declaration-gate-tests")
                    (:file "design-doc-sync-gate-tests")))))))
