@@ -599,11 +599,13 @@
    #:adapter-contract-case #:adapter-contract-case-p #:make-adapter-contract-case
    #:acc-surface #:acc-kind #:acc-payload #:acc-source
    #:adapter-contract-row #:adapter-contract-row-p #:make-adapter-contract-row
-   #:acr-surface #:acr-kind #:acr-pass-p #:acr-error-count #:acr-errors #:acr-source
+   #:acr-surface #:acr-kind #:acr-pass-p #:acr-error-count #:acr-errors #:acr-remediation-hints #:acr-source
    #:adapter-contract-report #:adapter-contract-report-p #:make-adapter-contract-report
-   #:acp-pass-p #:acp-rows #:acp-passed #:acp-failed #:acp-timestamp
+   #:acp-pass-p #:acp-rows #:acp-passed #:acp-failed #:acp-grouped-failures #:acp-timestamp
    #:make-default-adapter-contract-cases #:run-adapter-contract-checker
-   #:run-adapter-contract-checker-from-fixture #:adapter-contract-report->json
+   #:run-adapter-contract-checker-from-fixture
+   #:remediation-hints-for-errors #:grouped-failures-from-rows
+   #:adapter-contract-report->json
    ;; Boundary declaration gate (axv)
    #:boundary-declaration-kind
    #:boundary-declaration-violation #:boundary-declaration-violation-p

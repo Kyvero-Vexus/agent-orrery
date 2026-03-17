@@ -20,9 +20,12 @@
                     :kind :session
                     :payload (list (cons :session-id "s") (cons :agent "a") (cons :model 123) (cons :status :active))
                     :source "bad")))
-         (report (orrery/adapter:run-adapter-contract-checker bad)))
+         (report (orrery/adapter:run-adapter-contract-checker bad))
+         (row (first (orrery/adapter:acp-rows report))))
     (false (orrery/adapter:acp-pass-p report))
-    (is = 1 (orrery/adapter:acp-failed report))))
+    (is = 1 (orrery/adapter:acp-failed report))
+    (true (> (length (orrery/adapter:acr-remediation-hints row)) 0))
+    (true (> (length (orrery/adapter:acp-grouped-failures report)) 0))))
 
 (define-test (adapter-contract-checker-suite fixture-pass)
   (let ((report (orrery/adapter:run-adapter-contract-checker-from-fixture
