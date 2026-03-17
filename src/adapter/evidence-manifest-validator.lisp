@@ -86,7 +86,8 @@
          (ftype (function (string) string) normalize-artifact-path)
          (ftype (function (list) list) normalize-manifest-artifacts)
          (ftype (function (e2e-manifest) e2e-manifest) normalize-e2e-manifest)
-         (ftype (function (evidence-suite string) e2e-manifest) validate-and-normalize-e2e-manifest))
+         (ftype (function (evidence-suite string) e2e-manifest) validate-and-normalize-e2e-manifest)
+         (ftype (function (string) boolean) epic3-t1-t6-evidence-ok-p))
 
 (defun %infer-evidence-kind (lower-name)
   (cond
@@ -294,6 +295,32 @@ Returns an e2e-manifest struct with valid-p set."
            (type string artifacts-directory))
   (normalize-e2e-manifest
    (validate-e2e-manifest suite artifacts-directory)))
+
+(defun epic3-t1-t6-evidence-ok-p (artifacts-directory)
+  "Hard guard for Epic 3 closure: requires T1-T6 evidence + suite artifacts.
+Returns T only when deterministic command metadata and required artifacts are valid." 
+  (declare (type string artifacts-directory))
+  (let* ((manifest (validate-and-normalize-e2e-manifest :tui-mcp-driver artifacts-directory))
+         (required-ids '("T1" "T2" "T3" "T4" "T5" "T6"))
+         (artifacts (e2e-manifest-artifacts manifest))
+         (cmd (e2e-manifest-deterministic-command manifest))
+         (command-ok (or (string= cmd "make e2e-tui")
+                         (string= cmd "make e2e-tui-t1-t6")))
+         (scenario-ok
+           (every (lambda (sid)
+                    (let ((for-sid (remove-if-not
+                                    (lambda (a) (string= sid (manifest-artifact-scenario-id a)))
+                                    artifacts)))
+                      (and (not (null (find :screenshot for-sid :key #'manifest-artifact-kind)))
+                           (not (null (find :transcript for-sid :key #'manifest-artifact-kind))))))
+                  required-ids))
+         (suite-ok
+           (let ((suite-items (remove-if-not
+                               (lambda (a) (string= "SUITE" (manifest-artifact-scenario-id a)))
+                               artifacts)))
+             (and (not (null (find :report suite-items :key #'manifest-artifact-kind)))
+                  (not (null (find :asciicast suite-items :key #'manifest-artifact-kind)))))))
+    (and command-ok scenario-ok suite-ok)))
 
 ;;; ============================================================
 ;;; CI Hook

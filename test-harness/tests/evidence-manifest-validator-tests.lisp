@@ -250,6 +250,38 @@ ARTIFACT-SPECS is list of (scenario-suffix . extension) pairs."
            (is string= "S1" (first (orrery/adapter:e2e-manifest-scenarios-required m))))
       (%cleanup-temp-dir dir))))
 
+(define-test (e2e-manifest-tests epic3-guard-pass)
+  "Epic 3 guard passes with T1-T6 + suite artifacts present."
+  (let ((dir (%create-temp-evidence-dir
+              "epic3-guard-pass"
+              '("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8")
+              '(("screenshot" . "png") ("transcript" . "txt")))))
+    (with-open-file (s (merge-pathnames "tui-e2e-report.json" dir)
+                       :direction :output :if-exists :supersede)
+      (write-string "report" s))
+    (with-open-file (s (merge-pathnames "tui-e2e-session.cast" dir)
+                       :direction :output :if-exists :supersede)
+      (write-string "cast" s))
+    (unwind-protect
+         (true (orrery/adapter:epic3-t1-t6-evidence-ok-p dir))
+      (%cleanup-temp-dir dir))))
+
+(define-test (e2e-manifest-tests epic3-guard-fail-missing-t6)
+  "Epic 3 guard fails when T6 artifacts are missing."
+  (let ((dir (%create-temp-evidence-dir
+              "epic3-guard-fail"
+              '("T1" "T2" "T3" "T4" "T5" "T7" "T8")
+              '(("screenshot" . "png") ("transcript" . "txt")))))
+    (with-open-file (s (merge-pathnames "tui-e2e-report.json" dir)
+                       :direction :output :if-exists :supersede)
+      (write-string "report" s))
+    (with-open-file (s (merge-pathnames "tui-e2e-session.cast" dir)
+                       :direction :output :if-exists :supersede)
+      (write-string "cast" s))
+    (unwind-protect
+         (false (orrery/adapter:epic3-t1-t6-evidence-ok-p dir))
+      (%cleanup-temp-dir dir))))
+
 (define-test (e2e-manifest-tests evidence-suite-type)
   "evidence-suite type check."
   (true (typep :web-playwright 'orrery/adapter::evidence-suite))

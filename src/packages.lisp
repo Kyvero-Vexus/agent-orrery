@@ -538,6 +538,7 @@
    #:e2e-manifest-valid-p #:e2e-manifest-missing #:e2e-manifest-errors
    #:normalize-artifact-path #:normalize-manifest-artifacts #:normalize-e2e-manifest
    #:validate-e2e-manifest #:validate-and-normalize-e2e-manifest
+   #:epic3-t1-t6-evidence-ok-p
    #:report-manifest-validity #:ci-check-all-evidence #:discover-artifacts-in-dir
    ;; TUI scenario contracts (igw.1)
    #:tui-scenario-id
