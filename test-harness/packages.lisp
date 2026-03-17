@@ -120,7 +120,11 @@
                 #:adapter-tail-events #:adapter-list-alerts
                 #:adapter-acknowledge-alert #:adapter-snooze-alert
                 #:adapter-list-subagents #:adapter-capabilities
-                #:adapter-error #:adapter-not-supported #:adapter-not-found)
+                #:adapter-error #:adapter-not-supported #:adapter-not-found
+                ;; Boundary declaration gate (axv)
+                #:boundary-declaration-violation #:boundary-declaration-violation-p
+                #:bdv-package-name #:bdv-symbol-name #:bdv-reason
+                #:boundary-export-declaration-violations #:boundary-exports-declared-p)
   (:import-from #:orrery/adapter/openclaw
                 #:openclaw-adapter #:make-openclaw-adapter
                 #:openclaw-base-url #:openclaw-api-token #:openclaw-timeout-s

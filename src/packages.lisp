@@ -559,6 +559,16 @@
    #:urh-hook-id #:urh-surface #:urh-deterministic-command #:urh-artifact-dir #:urh-seed #:urh-enabled-p
    #:make-ui-message-id #:make-ui-message* #:validate-ui-message #:project-ui-error
    #:ui-message->json #:ui-contract->json #:ui-error->json #:ui-replay-hook->json
+   ;; Boundary declaration gate (axv)
+   #:boundary-declaration-kind
+   #:boundary-declaration-violation #:boundary-declaration-violation-p
+   #:make-boundary-declaration-violation
+   #:bdv-package-name #:bdv-symbol-name #:bdv-reason
+   #:*boundary-declaration-packages*
+   #:function-where-from-name #:symbol-has-declared-ftype-p
+   #:symbol-has-public-type-definition-p #:package-defstruct-helper-symbols
+   #:boundary-symbol-declaration-kind #:boundary-export-declaration-violations
+   #:boundary-exports-declared-p
    ;; Scenario planning bridge (20d)
    #:scenario-projection #:scenario-projection-p #:make-scenario-projection
    #:sproj-scenario-name #:sproj-total-tokens #:sproj-total-cost

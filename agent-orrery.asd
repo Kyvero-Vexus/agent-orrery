@@ -96,7 +96,8 @@
                    (:file "v2-projection-bridge")
                    (:file "evidence-manifest-validator")
                    (:file "tui-scenario-contracts")
-                   (:file "ui-protocol-boundary")))
+                   (:file "ui-protocol-boundary")
+                   (:file "boundary-declaration-gate")))
      (:module "pipeline"
       :components ((:file "events")
                    (:file "normalize")))
@@ -233,4 +234,5 @@
                    (:file "mcclim-v2-panes-tests")
                    (:file "plugin-lifecycle-hooks-tests")
                    (:file "v2-projection-bridge-tests")
-                   (:file "ui-protocol-boundary-tests")))))))
+                   (:file "ui-protocol-boundary-tests")
+                   (:file "boundary-declaration-gate-tests")))))))

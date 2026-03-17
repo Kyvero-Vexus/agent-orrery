@@ -23,8 +23,12 @@
 
 ;; Packages subject to the typing policy
 (defvar *checked-packages*
-  '("ORRERY/DOMAIN" "ORRERY/ADAPTER" "ORRERY/PIPELINE" "ORRERY/STORE")
+  '("ORRERY/DOMAIN" "ORRERY/ADAPTER" "ORRERY/ADAPTER/OPENCLAW" "ORRERY/PIPELINE" "ORRERY/STORE")
   "Packages whose exported function symbols must have ftype declarations.")
+
+(defvar *boundary-packages*
+  '("ORRERY/ADAPTER" "ORRERY/ADAPTER/OPENCLAW")
+  "Packages whose public exports must resolve to declared boundary symbols.")
 
 ;; ASDF systems to load
 (defvar *system-name* "agent-orrery")
@@ -66,6 +70,26 @@ Returns (values passed-p violations) where violations is a list of strings."
                           (package-name (symbol-package sym))
                           (symbol-name sym))
                   violations)))))
+    (values (null violations) (nreverse violations))))
+
+(defun check-boundary-declaration-coverage ()
+  "Check adapter/public exports map to declared boundary symbols.
+Returns (values passed-p violations) where violations is a list of strings.
+Must be called after ORRERY/ADAPTER is loaded."
+  (let ((violations '())
+        (fn-sym (find-symbol "BOUNDARY-EXPORT-DECLARATION-VIOLATIONS" "ORRERY/ADAPTER"))
+        (pkg-sym (find-symbol "BDV-PACKAGE-NAME" "ORRERY/ADAPTER"))
+        (sym-sym (find-symbol "BDV-SYMBOL-NAME" "ORRERY/ADAPTER"))
+        (reason-sym (find-symbol "BDV-REASON" "ORRERY/ADAPTER")))
+    (unless (and fn-sym (fboundp fn-sym))
+      (return-from check-boundary-declaration-coverage
+        (values nil (list "  boundary gate not loaded"))))
+    (dolist (violation (funcall (fdefinition fn-sym) *boundary-packages*))
+      (push (format nil "  ~A:~A — ~A"
+                    (funcall (fdefinition pkg-sym) violation)
+                    (funcall (fdefinition sym-sym) violation)
+                    (funcall (fdefinition reason-sym) violation))
+            violations))
     (values (null violations) (nreverse violations))))
 
 ;;; ============================================================
@@ -139,8 +163,22 @@ Returns (values clean-p warnings notes)."
             (format t "~%")
             (setf exit-code 1))))
 
-    ;; Step 3: Strict recompile
-    (format t "Step 3: Recompiling with (safety 3)...~%")
+    ;; Step 3: Check boundary declaration coverage
+    (format t "Step 3: Checking boundary declaration coverage in ~{~A~^, ~}...~%"
+            *boundary-packages*)
+    (multiple-value-bind (passed-p violations)
+        (check-boundary-declaration-coverage)
+      (if passed-p
+          (format t "  ✔ Adapter/public exports resolve to declared boundary symbols.~%~%")
+          (progn
+            (format t "  ✘ Undeclared boundary exports:~%")
+            (dolist (v violations)
+              (format t "~A~%" v))
+            (format t "~%")
+            (setf exit-code 1))))
+
+    ;; Step 4: Strict recompile
+    (format t "Step 4: Recompiling with (safety 3)...~%")
     (handler-case
         (multiple-value-bind (clean-p warnings notes)
             (compile-with-strict-policy)
