@@ -534,6 +534,16 @@
    #:scv-pass-p #:scv-missing-scenarios #:scv-mismatched-scenarios #:scv-detail
    #:simple-fingerprint #:collect-scenario-artifacts #:build-tui-scenario-ledger
    #:compare-ledger-runs #:scenario-continuity-verdict->json
+   ;; Playwright scenario ledger (osb)
+   #:web-scenario-attestation #:web-scenario-attestation-p #:make-web-scenario-attestation
+   #:wsa-scenario-id #:wsa-command-fingerprint #:wsa-screenshot-path #:wsa-trace-path
+   #:wsa-screenshot-hash #:wsa-trace-hash #:wsa-attested-p
+   #:playwright-scenario-ledger #:playwright-scenario-ledger-p #:make-playwright-scenario-ledger
+   #:psl-run-id #:psl-command #:psl-attestations #:psl-timestamp
+   #:web-continuity-verdict #:web-continuity-verdict-p #:make-web-continuity-verdict
+   #:wcv-pass-p #:wcv-missing-scenarios #:wcv-mismatched-scenarios #:wcv-detail
+   #:find-web-scenario-artifact-path #:build-web-scenario-attestation
+   #:compare-web-attestations #:write-playwright-scenario-ledger #:playwright-scenario-ledger->json
    ;; Epic 3/4 closure gate (i9p)
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
