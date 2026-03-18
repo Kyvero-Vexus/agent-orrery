@@ -97,6 +97,7 @@
                    (:file "cross-ui-evidence-verifier")
                    (:file "playwright-evidence-compiler")
                    (:file "mcp-tui-evidence-compiler")
+                   (:file "evidence-manifest-lock")
                    (:file "epic-closure-gate")
                    (:file "evidence-recertification-gate")
                    (:file "epic-done-state-guard")

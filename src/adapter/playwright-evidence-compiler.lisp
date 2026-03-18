@@ -41,7 +41,8 @@ are not present in artifact filenames."
           ((search "sessions-page-renders-table" lower) "S2")
           ((search "session-detail-shows-record" lower) "S3")
           ((search "cron-page-renders-job-table" lower) "S4")
-          ((search "alerts-page-renders-alert-table" lower) "S5")
+          ((or (search "alerts-page-renders-alert-table" lower)
+               (search "renders-alert-table" lower)) "S5")
           ((search "endpoints-return-valid-json" lower) "S6")
           (t nil)))))
 
@@ -81,7 +82,9 @@ are not present in artifact filenames."
                                 (pathname artifacts-dir))))
         (let* ((name (namestring path))
                (base (file-namestring path))
-               (sid (infer-playwright-scenario-id base))
+               ;; Use full path so scenario slug inference can see parent
+               ;; Playwright output directory names (deterministic but hashed).
+               (sid (infer-playwright-scenario-id name))
                (kind (infer-web-artifact-kind base))
                (present (%artifact-present-p path)))
           (when (and present (eq kind :screenshot)) (setf has-any-screenshot t))

@@ -501,6 +501,12 @@
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
    #:compile-mcp-tui-evidence-manifest
+   ;; Evidence manifest lock (itw/0tv)
+   #:evidence-manifest-lock #:evidence-manifest-lock-p #:make-evidence-manifest-lock
+   #:eml-epic #:eml-command #:eml-command-fingerprint #:eml-artifact-root
+   #:eml-scenario-count #:eml-pass-p #:eml-timestamp
+   #:command-fingerprint #:evidence-manifest-lock->json
+   #:write-epic4-manifest-lock #:write-epic3-manifest-lock
    ;; Epic 3/4 closure gate (i9p)
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
