@@ -497,6 +497,14 @@
    #:*playwright-required-scenarios* #:*playwright-deterministic-command*
    #:infer-web-runner-kind #:infer-playwright-scenario-id #:infer-web-artifact-kind
    #:compile-playwright-evidence-manifest
+   ;; Playwright artifact canonicalizer core (fwu)
+   #:canonical-web-artifact #:canonical-web-artifact-p #:make-canonical-web-artifact
+   #:cwa-scenario-id #:cwa-artifact-kind #:cwa-original-path #:cwa-canonical-path #:cwa-present-p
+   #:playwright-canonicalization-report #:playwright-canonicalization-report-p #:make-playwright-canonicalization-report
+   #:pcr-pass-p #:pcr-records #:pcr-missing-scenarios #:pcr-detail
+   #:normalize-path-slashes #:canonicalize-playwright-artifact-path
+   #:collect-canonical-web-artifacts #:compute-missing-s1-s6
+   #:build-playwright-canonicalization-report #:playwright-canonicalization-report->json
    ;; mcp-tui-driver evidence compiler (y8p)
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
