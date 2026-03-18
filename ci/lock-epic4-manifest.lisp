@@ -1,7 +1,7 @@
 (load #P"/home/slime/quicklisp/setup.lisp")
 (require "asdf")
 (asdf:load-system :agent-orrery)
-(let* ((artifact (or (uiop:getenv "WEB_EVIDENCE_DIR") "test-results/e2e-report/"))
+(let* ((artifact (or (uiop:getenv "WEB_EVIDENCE_DIR") "test-results/e2e-artifacts/"))
        (command (or (uiop:getenv "WEB_EVIDENCE_COMMAND") "cd e2e && ./run-e2e.sh"))
        (out (or (uiop:getenv "WEB_LOCK_OUT") "test-results/e2e-report/epic4-manifest-lock.json"))
        (lock (orrery/adapter:write-epic4-manifest-lock artifact command out)))

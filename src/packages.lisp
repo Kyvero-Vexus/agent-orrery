@@ -501,6 +501,16 @@
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
    #:compile-mcp-tui-evidence-manifest
+   ;; TUI scenario ledger + rerun attestations (h9i)
+   #:scenario-rerun-attestation #:scenario-rerun-attestation-p #:make-scenario-rerun-attestation
+   #:sra-scenario-id #:sra-command-fingerprint #:sra-artifact-fingerprint
+   #:sra-transcript-fingerprint #:sra-continuity-pass-p #:sra-detail
+   #:tui-scenario-ledger #:tui-scenario-ledger-p #:make-tui-scenario-ledger
+   #:tsl-command #:tsl-command-fingerprint #:tsl-artifact-root
+   #:tsl-scenario-attestations #:tsl-continuity-pass-p #:tsl-timestamp
+   #:file-sha256 #:find-scenario-artifact-path #:build-scenario-attestation
+   #:compare-attestations #:read-tui-scenario-ledger-sexp
+   #:tui-scenario-ledger->json #:write-tui-scenario-ledger
    ;; Evidence manifest lock (itw/0tv)
    #:evidence-manifest-lock #:evidence-manifest-lock-p #:make-evidence-manifest-lock
    #:eml-epic #:eml-command #:eml-command-fingerprint #:eml-artifact-root
@@ -514,6 +524,16 @@
    #:tdr-pass-p #:tdr-missing-in-current #:tdr-extra-in-current #:tdr-mismatch-count #:tdr-detail
    #:infer-tui-scenario-id-from-path #:infer-tui-kind-from-path
    #:collect-normalized-tui-artifacts #:compare-tui-artifact-bundles #:tui-diff-report->json
+   ;; TUI scenario ledger (h9i)
+   #:scenario-ledger-entry #:scenario-ledger-entry-p #:make-scenario-ledger-entry
+   #:sle-scenario-id #:sle-command #:sle-command-fingerprint #:sle-artifact-paths
+   #:sle-artifact-hashes #:sle-transcript-hash #:sle-attested-p
+   #:scenario-ledger #:scenario-ledger-p #:make-scenario-ledger
+   #:sl-run-id #:sl-entries #:sl-timestamp
+   #:scenario-continuity-verdict #:scenario-continuity-verdict-p #:make-scenario-continuity-verdict
+   #:scv-pass-p #:scv-missing-scenarios #:scv-mismatched-scenarios #:scv-detail
+   #:simple-fingerprint #:collect-scenario-artifacts #:build-tui-scenario-ledger
+   #:compare-ledger-runs #:scenario-continuity-verdict->json
    ;; Epic 3/4 closure gate (i9p)
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp

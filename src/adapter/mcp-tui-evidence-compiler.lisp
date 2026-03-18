@@ -9,7 +9,7 @@
   '("T1" "T2" "T3" "T4" "T5" "T6"))
 
 (defparameter *mcp-tui-deterministic-command*
-  "make e2e-tui")
+  "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")
 
 (declaim
  (ftype (function (string) (values evidence-runner-kind &optional)) infer-tui-runner-kind)

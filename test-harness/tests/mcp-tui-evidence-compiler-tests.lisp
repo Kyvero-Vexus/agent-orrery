@@ -37,7 +37,7 @@
              (%touch-tui-file (merge-pathnames (format nil "~A-transcript.txt" sid) dir) "txt"))
            (let* ((m (orrery/adapter:compile-mcp-tui-evidence-manifest
                       dir
-                      "make e2e-tui"))
+                      "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
                   (report (orrery/adapter:verify-runner-evidence
                            m
                            orrery/adapter:*default-tui-scenarios*
@@ -60,7 +60,7 @@
              (%touch-tui-file (merge-pathnames (format nil "~A-transcript.txt" sid) dir) "txt"))
            (let* ((m (orrery/adapter:compile-mcp-tui-evidence-manifest
                       dir
-                      "make e2e-tui"))
+                      "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
                   (report (orrery/adapter:verify-runner-evidence
                            m
                            orrery/adapter:*default-tui-scenarios*
