@@ -18,6 +18,13 @@
   (missing-scenarios nil :type list)
   (detail "" :type string))
 
+(defstruct (playwright-preflight-verdict (:conc-name ppv-))
+  (pass-p nil :type boolean)
+  (command-ok-p nil :type boolean)
+  (canonical-pass-p nil :type boolean)
+  (missing-scenarios nil :type list)
+  (detail "" :type string))
+
 (declaim
  (ftype (function (string) (values string &optional)) normalize-path-slashes)
  (ftype (function (string evidence-artifact-kind string) (values string &optional))
@@ -26,8 +33,12 @@
  (ftype (function (list) (values list &optional)) compute-missing-s1-s6)
  (ftype (function (string) (values playwright-canonicalization-report &optional))
         build-playwright-canonicalization-report)
+ (ftype (function (string string) (values playwright-preflight-verdict &optional))
+        run-playwright-s1-s6-preflight)
  (ftype (function (playwright-canonicalization-report) (values string &optional))
-        playwright-canonicalization-report->json))
+        playwright-canonicalization-report->json)
+ (ftype (function (playwright-preflight-verdict) (values string &optional))
+        playwright-preflight-verdict->json))
 
 (defun normalize-path-slashes (path)
   (declare (type string path))
@@ -117,6 +128,22 @@
                      (length records)
                      (length missing)))))
 
+(defun run-playwright-s1-s6-preflight (artifacts-root command)
+  (declare (type string artifacts-root command))
+  (let* ((canonical (build-playwright-canonicalization-report artifacts-root))
+         (command-ok (string= command *playwright-deterministic-command*))
+         (canonical-pass (pcr-pass-p canonical))
+         (pass (and command-ok canonical-pass)))
+    (make-playwright-preflight-verdict
+     :pass-p pass
+     :command-ok-p command-ok
+     :canonical-pass-p canonical-pass
+     :missing-scenarios (pcr-missing-scenarios canonical)
+     :detail (format nil "command_ok=~A canonical_pass=~A ~A"
+                     (if command-ok "true" "false")
+                     (if canonical-pass "true" "false")
+                     (pcr-detail canonical)))))
+
 (defun playwright-canonicalization-report->json (report)
   (declare (type playwright-canonicalization-report report))
   (format nil
@@ -125,3 +152,13 @@
           (length (pcr-records report))
           (length (pcr-missing-scenarios report))
           (pcr-detail report)))
+
+(defun playwright-preflight-verdict->json (verdict)
+  (declare (type playwright-preflight-verdict verdict))
+  (format nil
+          "{\"pass\":~A,\"command_ok\":~A,\"canonical_pass\":~A,\"missing\":~D,\"detail\":\"~A\"}"
+          (if (ppv-pass-p verdict) "true" "false")
+          (if (ppv-command-ok-p verdict) "true" "false")
+          (if (ppv-canonical-pass-p verdict) "true" "false")
+          (length (ppv-missing-scenarios verdict))
+          (ppv-detail verdict)))

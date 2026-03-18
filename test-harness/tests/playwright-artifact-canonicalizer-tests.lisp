@@ -49,3 +49,15 @@
              (false (orrery/adapter:pcr-pass-p report))
              (true (find "S6" (orrery/adapter:pcr-missing-scenarios report) :test #'string=))))
       (%cleanup-temp-playwright-canon-dir dir))))
+
+(define-test (playwright-artifact-canonicalizer-suite preflight-command-mismatch-fails)
+  (let ((dir (%mk-temp-playwright-canon-dir "cmd")))
+    (unwind-protect
+         (progn
+           (dolist (sid '("S1" "S2" "S3" "S4" "S5" "S6"))
+             (%touch-canon-file (merge-pathnames (format nil "~A-shot.png" sid) dir) "png")
+             (%touch-canon-file (merge-pathnames (format nil "~A-trace.zip" sid) dir) "zip"))
+           (let ((v (orrery/adapter:run-playwright-s1-s6-preflight dir "make e2e")))
+             (false (orrery/adapter:ppv-pass-p v))
+             (false (orrery/adapter:ppv-command-ok-p v))))
+      (%cleanup-temp-playwright-canon-dir dir))))

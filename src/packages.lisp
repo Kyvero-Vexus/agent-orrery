@@ -505,6 +505,9 @@
    #:normalize-path-slashes #:canonicalize-playwright-artifact-path
    #:collect-canonical-web-artifacts #:compute-missing-s1-s6
    #:build-playwright-canonicalization-report #:playwright-canonicalization-report->json
+   #:playwright-preflight-verdict #:playwright-preflight-verdict-p #:make-playwright-preflight-verdict
+   #:ppv-pass-p #:ppv-command-ok-p #:ppv-canonical-pass-p #:ppv-missing-scenarios #:ppv-detail
+   #:run-playwright-s1-s6-preflight #:playwright-preflight-verdict->json
    ;; mcp-tui-driver evidence compiler (y8p)
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
