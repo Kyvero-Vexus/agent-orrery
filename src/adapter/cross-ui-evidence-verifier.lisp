@@ -161,7 +161,7 @@ SCENARIO-ID is empty string for global artifacts."
   "Deterministic command contract for web evidence.")
 
 (defparameter *expected-tui-command*
-  "make e2e-tui"
+  "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"
   "Deterministic command contract for TUI evidence.")
 
 (declaim (ftype (function (string) (values string &optional)) normalize-scenario-id)
@@ -235,8 +235,17 @@ SCENARIO-ID is empty string for global artifacts."
         (push kind missing)))
     (nreverse missing)))
 
+(defun %command-equivalent-p (actual expected)
+  (or (string= actual expected)
+      ;; Accept normalized deterministic aliases used across scripts/CI wrappers.
+      (and (string= expected "cd e2e && ./run-e2e.sh")
+           (string= actual "cd e2e && bash run-e2e.sh"))
+      (and (string= expected "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")
+           (or (string= actual "make e2e-tui")
+               (string= actual "make e2e-tui-t1-t6")))))
+
 (defun %command-finding (actual expected)
-  (if (string= actual expected)
+  (if (%command-equivalent-p actual expected)
       nil
       (make-evidence-finding
        :severity :critical

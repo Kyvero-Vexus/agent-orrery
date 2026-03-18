@@ -507,6 +507,13 @@
    #:eml-scenario-count #:eml-pass-p #:eml-timestamp
    #:command-fingerprint #:evidence-manifest-lock->json
    #:write-epic4-manifest-lock #:write-epic3-manifest-lock
+   ;; TUI artifact diff checker (s95)
+   #:tui-artifact-record #:tui-artifact-record-p #:make-tui-artifact-record
+   #:tar-scenario-id #:tar-kind #:tar-path #:tar-present-p #:tar-size-bytes
+   #:tui-diff-report #:tui-diff-report-p #:make-tui-diff-report
+   #:tdr-pass-p #:tdr-missing-in-current #:tdr-extra-in-current #:tdr-mismatch-count #:tdr-detail
+   #:infer-tui-scenario-id-from-path #:infer-tui-kind-from-path
+   #:collect-normalized-tui-artifacts #:compare-tui-artifact-bundles #:tui-diff-report->json
    ;; Epic 3/4 closure gate (i9p)
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
