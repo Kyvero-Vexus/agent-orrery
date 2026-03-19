@@ -43,3 +43,16 @@
              (false (orrery/adapter:e4fcr-pass-p r))
              (true (find "S1" (orrery/adapter:e4fcr-missing-scenarios r) :test #'string=))))
       (%cleanup-epic4-dir dir))))
+
+(define-test (epic4-fail-closed-gate-suite fail-command-drift)
+  (let ((dir (%mk-temp-epic4-dir "cmd")))
+    (unwind-protect
+         (progn
+           (%touch-epic4-file (merge-pathnames "playwright-report.json" dir) "report")
+           (dolist (sid '("S1" "S2" "S3" "S4" "S5" "S6"))
+             (%touch-epic4-file (merge-pathnames (format nil "~A-shot.png" sid) dir) "png")
+             (%touch-epic4-file (merge-pathnames (format nil "~A-trace.zip" sid) dir) "zip"))
+           (let ((r (orrery/adapter:evaluate-epic4-fail-closed-gate dir "make e2e")))
+             (false (orrery/adapter:e4fcr-pass-p r))
+             (false (orrery/adapter:e4fcr-command-match-p r))))
+      (%cleanup-epic4-dir dir))))
