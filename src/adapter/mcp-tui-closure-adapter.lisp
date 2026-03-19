@@ -84,10 +84,11 @@
   (declare (type tui-closure-report report))
   (with-output-to-string (out)
     (format out
-            "{\"pass\":~A,\"command_match\":~A,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\",\"gap_count\":~D,\"detail\":\"~A\",\"timestamp\":~D,\"gaps\":["
+            "{\"pass\":~A,\"command_match\":~A,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\",\"required_scenarios\":~A,\"gap_count\":~D,\"detail\":\"~A\",\"timestamp\":~D,\"gaps\":["
             (if (tcr-pass-p report) "true" "false")
             (if (tcr-command-match-p report) "true" "false")
             (%json-escape *mcp-tui-deterministic-command*)
+            (%string-list->json-array *mcp-tui-required-scenarios*)
             (length (tcr-gaps report))
             (%json-escape (tcr-detail report))
             (tcr-timestamp report))

@@ -32,7 +32,9 @@
                   (json (orrery/adapter:tui-closure-report->json r)))
              (true (orrery/adapter:tcr-pass-p r))
              (is = 0 (length (orrery/adapter:tcr-gaps r)))
-             (true (search "\"required_runner\":\"mcp-tui-driver\"" json))))
+             (true (search "\"required_runner\":\"mcp-tui-driver\"" json))
+             (true (search "\"required_scenarios\"" json))
+             (true (search "\"T6\"" json))))
       (%cleanup-tui-closure-dir dir))))
 
 (define-test (mcp-tui-closure-adapter-suite closure-fails-with-gaps)
