@@ -5,7 +5,7 @@
 (let* ((root (or (uiop:getenv "TUI_EVIDENCE_DIR") "test-results/tui-artifacts/"))
        (cmd (or (uiop:getenv "TUI_EVIDENCE_COMMAND") "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
        (r (orrery/adapter:evaluate-mcp-tui-scorecard-gate root cmd)))
-  (format t "~A~%" (orrery/adapter:mcp-tui-scorecard-result->json r))
+  (format t "~A~%" (orrery/adapter:mcp-tui-scorecard-result->detailed-json r))
   (unless (orrery/adapter:mtsr-pass-p r)
     (uiop:quit 1)))
 

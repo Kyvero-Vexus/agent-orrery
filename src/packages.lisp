@@ -519,6 +519,7 @@
    #:mtsr-pass-p #:mtsr-command-match-p #:mtsr-scenario-scores #:mtsr-missing-scenarios #:mtsr-detail #:mtsr-timestamp
    #:scenario-has-artifact-kind-p #:build-tui-scenario-score
    #:evaluate-mcp-tui-scorecard-gate #:mcp-tui-scorecard-result->json
+   #:mcp-tui-scorecard-result->detailed-json
    ;; TUI scenario ledger + rerun attestations (h9i)
    #:scenario-rerun-attestation #:scenario-rerun-attestation-p #:make-scenario-rerun-attestation
    #:sra-scenario-id #:sra-command-fingerprint #:sra-artifact-fingerprint

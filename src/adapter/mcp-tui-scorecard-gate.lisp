@@ -29,8 +29,12 @@
         build-tui-scenario-score)
  (ftype (function (string string) (values mcp-tui-scorecard-result &optional))
         evaluate-mcp-tui-scorecard-gate)
+ (ftype (function (string) (values string &optional)) %json-escape)
+ (ftype (function (list) (values string &optional)) %string-list->json-array)
  (ftype (function (mcp-tui-scorecard-result) (values string &optional))
-        mcp-tui-scorecard-result->json))
+        mcp-tui-scorecard-result->json)
+ (ftype (function (mcp-tui-scorecard-result) (values string &optional))
+        mcp-tui-scorecard-result->detailed-json))
 
 (defun scenario-has-artifact-kind-p (manifest scenario-id kind)
   (declare (type runner-evidence-manifest manifest)
@@ -85,13 +89,63 @@ Requires mcp-tui-driver T1-T6 evidence and canonical deterministic command."
        :detail (format nil "command_ok=~A missing=~D" command-ok (length missing-rows))
        :timestamp (get-universal-time)))))
 
+(defun %json-escape (input)
+  (declare (type string input))
+  (with-output-to-string (out)
+    (loop for ch across input
+          do (case ch
+               (#\\ (write-string "\\\\" out))
+               (#\" (write-string "\\\"" out))
+               (#\Newline (write-string "\\n" out))
+               (#\Return (write-string "\\r" out))
+               (#\Tab (write-string "\\t" out))
+               (t (write-char ch out))))))
+
+(defun %string-list->json-array (items)
+  (declare (type list items))
+  (with-output-to-string (out)
+    (write-string "[" out)
+    (loop for item in items
+          for i from 0
+          do (progn
+               (when (> i 0) (write-string "," out))
+               (format out "\"~A\"" (%json-escape item))))
+    (write-string "]" out)))
+
 (defun mcp-tui-scorecard-result->json (result)
   (declare (type mcp-tui-scorecard-result result))
   (format nil
-          "{\"pass\":~A,\"command_match\":~A,\"scenario_count\":~D,\"missing\":~D,\"detail\":\"~A\",\"timestamp\":~D}"
+          "{\"pass\":~A,\"command_match\":~A,\"scenario_count\":~D,\"missing\":~D,\"missing_scenarios\":~A,\"detail\":\"~A\",\"timestamp\":~D,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\"}"
           (if (mtsr-pass-p result) "true" "false")
           (if (mtsr-command-match-p result) "true" "false")
           (length (mtsr-scenario-scores result))
           (length (mtsr-missing-scenarios result))
-          (mtsr-detail result)
-          (mtsr-timestamp result)))
+          (%string-list->json-array (mtsr-missing-scenarios result))
+          (%json-escape (mtsr-detail result))
+          (mtsr-timestamp result)
+          (%json-escape *mcp-tui-deterministic-command*))
+
+(defun mcp-tui-scorecard-result->detailed-json (result)
+  (declare (type mcp-tui-scorecard-result result))
+  (with-output-to-string (out)
+    (format out "{\"pass\":~A,\"command_match\":~A,\"scenario_count\":~D,\"missing\":~D,\"detail\":\"~A\",\"timestamp\":~D,\"scenarios\":["
+            (if (mtsr-pass-p result) "true" "false")
+            (if (mtsr-command-match-p result) "true" "false")
+            (length (mtsr-scenario-scores result))
+            (length (mtsr-missing-scenarios result))
+            (mtsr-detail result)
+            (mtsr-timestamp result))
+    (loop for row in (mtsr-scenario-scores result)
+          for i from 0
+          do (progn
+               (when (> i 0) (write-string "," out))
+               (format out
+                       "{\"id\":\"~A\",\"score\":~D,\"pass\":~A,\"shot\":~A,\"transcript\":~A,\"cast\":~A,\"report\":~A}"
+                       (mtss-scenario-id row)
+                       (mtss-score row)
+                       (if (mtss-pass-p row) "true" "false")
+                       (if (mtss-screenshot-p row) "true" "false")
+                       (if (mtss-transcript-p row) "true" "false")
+                       (if (mtss-asciicast-p row) "true" "false")
+                       (if (mtss-report-p row) "true" "false"))))
+    (write-string "]}" out)))
