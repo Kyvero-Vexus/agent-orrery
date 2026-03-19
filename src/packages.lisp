@@ -561,6 +561,10 @@
    #:pepi-missing-scenarios #:pepi-detail #:pepi-timestamp
    #:canonical-playwright-command-p #:build-playwright-evidence-pack-index
    #:playwright-evidence-pack-index->json
+   ;; Playwright lockstep checker (3dd4)
+   #:playwright-lockstep-result #:playwright-lockstep-result-p #:make-playwright-lockstep-result
+   #:plr-pass-p #:plr-command-match-p #:plr-missing-scenarios #:plr-detail #:plr-timestamp
+   #:evaluate-playwright-lockstep #:playwright-lockstep-result->json
    ;; Playwright evidence notarizer (bcq9)
    #:playwright-evidence-notarization #:playwright-evidence-notarization-p #:make-playwright-evidence-notarization
    #:pen-run-id #:pen-command #:pen-command-fingerprint #:pen-scenario-count #:pen-missing-scenarios
