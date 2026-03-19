@@ -512,6 +512,13 @@
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
    #:compile-mcp-tui-evidence-manifest
+   ;; mcp-tui scorecard gate (gmlq)
+   #:mcp-tui-scenario-score #:mcp-tui-scenario-score-p #:make-mcp-tui-scenario-score
+   #:mtss-scenario-id #:mtss-screenshot-p #:mtss-transcript-p #:mtss-asciicast-p #:mtss-report-p #:mtss-score #:mtss-pass-p
+   #:mcp-tui-scorecard-result #:mcp-tui-scorecard-result-p #:make-mcp-tui-scorecard-result
+   #:mtsr-pass-p #:mtsr-command-match-p #:mtsr-scenario-scores #:mtsr-missing-scenarios #:mtsr-detail #:mtsr-timestamp
+   #:scenario-has-artifact-kind-p #:build-tui-scenario-score
+   #:evaluate-mcp-tui-scorecard-gate #:mcp-tui-scorecard-result->json
    ;; TUI scenario ledger + rerun attestations (h9i)
    #:scenario-rerun-attestation #:scenario-rerun-attestation-p #:make-scenario-rerun-attestation
    #:sra-scenario-id #:sra-command-fingerprint #:sra-artifact-fingerprint
