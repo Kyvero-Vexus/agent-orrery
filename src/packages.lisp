@@ -555,6 +555,10 @@
    #:wcv-pass-p #:wcv-missing-scenarios #:wcv-mismatched-scenarios #:wcv-detail
    #:find-web-scenario-artifact-path #:build-web-scenario-attestation
    #:compare-web-attestations #:write-playwright-scenario-ledger #:playwright-scenario-ledger->json
+   ;; Epic 4 fail-closed gate (k2np)
+   #:epic4-fail-closed-result #:epic4-fail-closed-result-p #:make-epic4-fail-closed-result
+   #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-missing-scenarios #:e4fcr-detail #:e4fcr-timestamp
+   #:evaluate-epic4-fail-closed-gate #:epic4-fail-closed-result->json
    ;; Epic 3/4 closure gate (i9p)
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
