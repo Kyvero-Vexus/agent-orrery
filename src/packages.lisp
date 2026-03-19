@@ -555,6 +555,12 @@
    #:wcv-pass-p #:wcv-missing-scenarios #:wcv-mismatched-scenarios #:wcv-detail
    #:find-web-scenario-artifact-path #:build-web-scenario-attestation
    #:compare-web-attestations #:write-playwright-scenario-ledger #:playwright-scenario-ledger->json
+   ;; Playwright evidence notarizer (bcq9)
+   #:playwright-evidence-notarization #:playwright-evidence-notarization-p #:make-playwright-evidence-notarization
+   #:pen-run-id #:pen-command #:pen-command-fingerprint #:pen-scenario-count #:pen-missing-scenarios
+   #:pen-chain-digest #:pen-complete-p #:pen-timestamp
+   #:canonical-playwright-command-p #:compute-web-attestation-chain
+   #:notarize-playwright-evidence #:write-playwright-evidence-notarization #:playwright-evidence-notarization->json
    ;; Epic 4 fail-closed gate (k2np)
    #:epic4-fail-closed-result #:epic4-fail-closed-result-p #:make-epic4-fail-closed-result
    #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-missing-scenarios #:e4fcr-detail #:e4fcr-timestamp
