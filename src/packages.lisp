@@ -555,6 +555,12 @@
    #:wcv-pass-p #:wcv-missing-scenarios #:wcv-mismatched-scenarios #:wcv-detail
    #:find-web-scenario-artifact-path #:build-web-scenario-attestation
    #:compare-web-attestations #:write-playwright-scenario-ledger #:playwright-scenario-ledger->json
+   ;; Playwright evidence pack index (z7xe)
+   #:playwright-evidence-pack-index #:playwright-evidence-pack-index-p #:make-playwright-evidence-pack-index
+   #:pepi-pass-p #:pepi-command-match-p #:pepi-scenario-count #:pepi-artifact-count
+   #:pepi-missing-scenarios #:pepi-detail #:pepi-timestamp
+   #:canonical-playwright-command-p #:build-playwright-evidence-pack-index
+   #:playwright-evidence-pack-index->json
    ;; Playwright evidence notarizer (bcq9)
    #:playwright-evidence-notarization #:playwright-evidence-notarization-p #:make-playwright-evidence-notarization
    #:pen-run-id #:pen-command #:pen-command-fingerprint #:pen-scenario-count #:pen-missing-scenarios
