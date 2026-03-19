@@ -520,6 +520,13 @@
    #:scenario-has-artifact-kind-p #:build-tui-scenario-score
    #:evaluate-mcp-tui-scorecard-gate #:mcp-tui-scorecard-result->json
    #:mcp-tui-scorecard-result->detailed-json
+   ;; mcp-tui closure adapter (5bgp)
+   #:tui-closure-gap #:tui-closure-gap-p #:make-tui-closure-gap
+   #:tcg-scenario-id #:tcg-missing-kinds #:tcg-score
+   #:tui-closure-report #:tui-closure-report-p #:make-tui-closure-report
+   #:tcr-pass-p #:tcr-command-match-p #:tcr-deterministic-command #:tcr-gaps #:tcr-detail #:tcr-timestamp
+   #:scenario-score->closure-gap #:scorecard->closure-report
+   #:evaluate-mcp-tui-closure-adapter #:tui-closure-report->json
    ;; TUI scenario ledger + rerun attestations (h9i)
    #:scenario-rerun-attestation #:scenario-rerun-attestation-p #:make-scenario-rerun-attestation
    #:sra-scenario-id #:sra-command-fingerprint #:sra-artifact-fingerprint
