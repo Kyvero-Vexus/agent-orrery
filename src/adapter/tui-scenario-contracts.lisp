@@ -12,7 +12,7 @@
   "Typed contract for one TUI E2E scenario."
   (id :T1 :type tui-scenario-id)
   (name "" :type string)
-  (deterministic-command "make e2e-tui" :type string)
+  (deterministic-command "cd e2e-tui && ./run-tui-e2e-t1-t6.sh" :type string)
   (fixture-assumptions nil :type list)
   (required-artifacts '(:screenshot :transcript) :type list)
   (artifact-dir "test-results/tui-artifacts/" :type string))
@@ -63,7 +63,7 @@
 
 (defun tui-deterministic-contract-command ()
   "Deterministic command for T1-T6 contract execution."
-  "make e2e-tui")
+  "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")
 
 (defun tui-contracts-cover-t1-t6-p (contracts)
   "True when CONTRACTS contain every T1-T6 id exactly once."

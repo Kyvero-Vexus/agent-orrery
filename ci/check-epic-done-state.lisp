@@ -27,7 +27,7 @@
              (command (getenv-or "EVIDENCE_COMMAND"
                                  (if (eq target :epic4)
                                      "cd e2e && ./run-e2e.sh"
-                                     "make e2e-tui")))
+                                     "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")))
              (pkg (find-package "ORRERY/ADAPTER"))
              (eval-sym (and pkg (find-symbol "EVALUATE-EPIC-DONE-STATE-GUARD" pkg)))
              (ok-sym (and pkg (find-symbol "EDR-ALLOWED-P" pkg)))

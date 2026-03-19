@@ -12,7 +12,7 @@
       (let* ((web-dir (getenv-or "WEB_EVIDENCE_DIR" "test-results/e2e-report/"))
              (web-cmd (getenv-or "WEB_EVIDENCE_COMMAND" "cd e2e && ./run-e2e.sh"))
              (tui-dir (getenv-or "TUI_EVIDENCE_DIR" "test-results/tui-artifacts/"))
-             (tui-cmd (getenv-or "TUI_EVIDENCE_COMMAND" "make e2e-tui"))
+             (tui-cmd (getenv-or "TUI_EVIDENCE_COMMAND" "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
              (pkg (find-package "ORRERY/ADAPTER"))
              (eval-sym (and pkg (find-symbol "EVALUATE-EPIC34-CLOSURE-GATE" pkg)))
              (ok-sym (and pkg (find-symbol "ECGR-OVERALL-PASS-P" pkg)))

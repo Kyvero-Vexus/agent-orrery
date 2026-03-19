@@ -14,7 +14,7 @@
              (ts (getenv-or "TUI_STORED_DIR" "test-results/tui-artifacts/"))
              (tr (getenv-or "TUI_REGEN_DIR" "test-results/tui-artifacts/"))
              (wc (getenv-or "WEB_EVIDENCE_COMMAND" "cd e2e && ./run-e2e.sh"))
-             (tc (getenv-or "TUI_EVIDENCE_COMMAND" "make e2e-tui"))
+             (tc (getenv-or "TUI_EVIDENCE_COMMAND" "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
              (pkg (find-package "ORRERY/ADAPTER"))
              (eval-sym (and pkg (find-symbol "EVALUATE-EVIDENCE-RECERTIFICATION-GATE" pkg)))
              (ok-sym (and pkg (find-symbol "ERR-OVERALL-PASS-P" pkg)))

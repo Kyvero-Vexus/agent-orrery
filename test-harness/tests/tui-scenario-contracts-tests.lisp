@@ -13,10 +13,11 @@
       (is = 6 (length contracts))))
 
   (define-test deterministic-command
-    (is string= "make e2e-tui"
+    (is string= "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"
         (orrery/adapter:tui-deterministic-contract-command))
     (dolist (c (orrery/adapter:tui-scenario-contracts))
-      (is string= "make e2e-tui" (orrery/adapter:tsc-deterministic-command c))))
+      (is string= "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"
+          (orrery/adapter:tsc-deterministic-command c))))
 
   (define-test required-artifacts-declared
     (let ((missing (orrery/adapter:missing-tui-contract-artifacts
