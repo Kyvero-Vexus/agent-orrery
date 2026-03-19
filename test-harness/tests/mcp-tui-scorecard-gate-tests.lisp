@@ -48,3 +48,20 @@
              (false (orrery/adapter:mtsr-pass-p r))
              (false (orrery/adapter:mtsr-command-match-p r))))
       (%cleanup-tui-scorecard-dir dir))))
+
+(define-test (mcp-tui-scorecard-gate-suite scorecard-detailed-json-includes-scenarios)
+  (let ((dir (%mk-temp-tui-scorecard-dir "json")))
+    (unwind-protect
+         (progn
+           (%touch-tui-scorecard-file (merge-pathnames "T1-shot.png" dir) "png")
+           (%touch-tui-scorecard-file (merge-pathnames "T1-transcript.txt" dir) "txt")
+           (%touch-tui-scorecard-file (merge-pathnames "T1.cast" dir) "cast")
+           (%touch-tui-scorecard-file (merge-pathnames "T1-report.json" dir) "report")
+           (let* ((r (orrery/adapter:evaluate-mcp-tui-scorecard-gate dir "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
+                  (json (orrery/adapter:mcp-tui-scorecard-result->detailed-json r)))
+             (true (search "\"required_runner\":\"mcp-tui-driver\"" json))
+             (true (search "\"deterministic_command\":\"cd e2e-tui && ./run-tui-e2e-t1-t6.sh\"" json))
+             (true (search "\"scenarios\":[{" json))
+             (true (search "\"id\":\"T1\"" json))
+             (true (search "\"missing_scenarios\":[\"T2\"" json))))
+      (%cleanup-tui-scorecard-dir dir))))
