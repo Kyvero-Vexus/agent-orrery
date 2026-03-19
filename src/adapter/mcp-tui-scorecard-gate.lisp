@@ -123,25 +123,27 @@ Requires mcp-tui-driver T1-T6 evidence and canonical deterministic command."
           (%string-list->json-array (mtsr-missing-scenarios result))
           (%json-escape (mtsr-detail result))
           (mtsr-timestamp result)
-          (%json-escape *mcp-tui-deterministic-command*))
+          (%json-escape *mcp-tui-deterministic-command*)))
 
 (defun mcp-tui-scorecard-result->detailed-json (result)
   (declare (type mcp-tui-scorecard-result result))
   (with-output-to-string (out)
-    (format out "{\"pass\":~A,\"command_match\":~A,\"scenario_count\":~D,\"missing\":~D,\"detail\":\"~A\",\"timestamp\":~D,\"scenarios\":["
+    (format out "{\"pass\":~A,\"command_match\":~A,\"scenario_count\":~D,\"missing\":~D,\"missing_scenarios\":~A,\"detail\":\"~A\",\"timestamp\":~D,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\",\"scenarios\":["
             (if (mtsr-pass-p result) "true" "false")
             (if (mtsr-command-match-p result) "true" "false")
             (length (mtsr-scenario-scores result))
             (length (mtsr-missing-scenarios result))
-            (mtsr-detail result)
-            (mtsr-timestamp result))
+            (%string-list->json-array (mtsr-missing-scenarios result))
+            (%json-escape (mtsr-detail result))
+            (mtsr-timestamp result)
+            (%json-escape *mcp-tui-deterministic-command*))
     (loop for row in (mtsr-scenario-scores result)
           for i from 0
           do (progn
                (when (> i 0) (write-string "," out))
                (format out
                        "{\"id\":\"~A\",\"score\":~D,\"pass\":~A,\"shot\":~A,\"transcript\":~A,\"cast\":~A,\"report\":~A}"
-                       (mtss-scenario-id row)
+                       (%json-escape (mtss-scenario-id row))
                        (mtss-score row)
                        (if (mtss-pass-p row) "true" "false")
                        (if (mtss-screenshot-p row) "true" "false")
