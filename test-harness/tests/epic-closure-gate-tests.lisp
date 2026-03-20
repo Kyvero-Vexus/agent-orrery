@@ -22,6 +22,15 @@
   (with-open-file (s path :direction :output :if-exists :supersede)
     (write-string content s)))
 
+(defun %seed-complete-tui (dir)
+  (%touch (merge-pathnames "tui-e2e-report.json" dir) "report")
+  (%touch (merge-pathnames "tui-e2e-session.cast" dir) "cast")
+  (dolist (sid '("T1" "T2" "T3" "T4" "T5" "T6"))
+    (%touch (merge-pathnames (format nil "~A-shot.png" sid) dir) "png")
+    (%touch (merge-pathnames (format nil "~A-transcript.txt" sid) dir) "txt")
+    (%touch (merge-pathnames (format nil "~A-asciicast.cast" sid) dir) "cast")
+    (%touch (merge-pathnames (format nil "~A-report.json" sid) dir) "report")))
+
 (define-test (epic-closure-gate-suite full-pass)
   (let ((web (%mk-temp-closure-dir "web-ok"))
         (tui (%mk-temp-closure-dir "tui-ok")))
@@ -32,17 +41,14 @@
              (%touch (merge-pathnames (format nil "~A-shot.png" sid) web) "png")
              (%touch (merge-pathnames (format nil "~A-trace.zip" sid) web) "zip"))
 
-           (%touch (merge-pathnames "tui-e2e-report.json" tui) "report")
-           (%touch (merge-pathnames "tui-e2e-session.cast" tui) "cast")
-           (dolist (sid '("T1" "T2" "T3" "T4" "T5" "T6"))
-             (%touch (merge-pathnames (format nil "~A-shot.png" sid) tui) "png")
-             (%touch (merge-pathnames (format nil "~A-transcript.txt" sid) tui) "txt"))
+           (%seed-complete-tui tui)
 
            (let ((res (orrery/adapter:evaluate-epic34-closure-gate
                        web "cd e2e && ./run-e2e.sh"
                        tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")))
              (true (orrery/adapter:ecgr-overall-pass-p res))
-             (true (search "\"overall_pass\":true" (orrery/adapter:epic-closure-gate-result->json res)))))
+             (true (search "\"overall_pass\":true"
+                           (orrery/adapter:epic-closure-gate-result->json res)))))
       (%cleanup-closure-dir web)
       (%cleanup-closure-dir tui))))
 
@@ -56,11 +62,7 @@
              (%touch (merge-pathnames (format nil "~A-shot.png" sid) web) "png")
              (%touch (merge-pathnames (format nil "~A-trace.zip" sid) web) "zip"))
 
-           (%touch (merge-pathnames "tui-e2e-report.json" tui) "report")
-           (%touch (merge-pathnames "tui-e2e-session.cast" tui) "cast")
-           (dolist (sid '("T1" "T2" "T3" "T4" "T5" "T6"))
-             (%touch (merge-pathnames (format nil "~A-shot.png" sid) tui) "png")
-             (%touch (merge-pathnames (format nil "~A-transcript.txt" sid) tui) "txt"))
+           (%seed-complete-tui tui)
 
            (let ((res (orrery/adapter:evaluate-epic34-closure-gate
                        web "cd e2e && ./run-e2e.sh"

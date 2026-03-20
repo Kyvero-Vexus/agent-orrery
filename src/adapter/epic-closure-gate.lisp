@@ -39,16 +39,18 @@ Epic 3: mcp-tui-driver T1-T6 screenshot+transcript + machine-report/asciicast + 
                       *tui-required-artifacts*
                       '(:machine-report :asciicast)
                       *expected-tui-command*))
+         (tui-note (notarize-mcp-tui-artifacts tui-artifacts-dir tui-command tui-artifacts-dir))
          (epic4-ok (and (ecr-pass-p web-report)
                         (pel-pass-p web-lock)))
-         (epic3-ok (ecr-pass-p tui-report))
+         (epic3-ok (and (ecr-pass-p tui-report)
+                        (mtan-pass-p tui-note)))
          (overall (and epic3-ok epic4-ok)))
     (make-epic-closure-gate-result
      :epic3-pass-p epic3-ok
      :epic4-pass-p epic4-ok
      :overall-pass-p overall
-     :detail (format nil "epic3=~A epic4=~A lock=~A web_cov=~D/~D tui_cov=~D/~D"
-                     epic3-ok epic4-ok (pel-pass-p web-lock)
+     :detail (format nil "epic3=~A epic4=~A lock=~A notarized=~A web_cov=~D/~D tui_cov=~D/~D"
+                     epic3-ok epic4-ok (pel-pass-p web-lock) (mtan-pass-p tui-note)
                      (ecr-required-scenarios-covered web-report)
                      (ecr-required-scenarios-total web-report)
                      (ecr-required-scenarios-covered tui-report)

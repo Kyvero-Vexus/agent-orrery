@@ -33,7 +33,9 @@
   (%touch-r (merge-pathnames "tui-e2e-session.cast" dir) "cast")
   (dolist (sid ids)
     (%touch-r (merge-pathnames (format nil "~A-shot.png" sid) dir) "png")
-    (%touch-r (merge-pathnames (format nil "~A-transcript.txt" sid) dir) "txt")))
+    (%touch-r (merge-pathnames (format nil "~A-transcript.txt" sid) dir) "txt")
+    (%touch-r (merge-pathnames (format nil "~A-asciicast.cast" sid) dir) "cast")
+    (%touch-r (merge-pathnames (format nil "~A-report.json" sid) dir) "report")))
 
 (define-test (evidence-recertification-gate-suite recert-pass)
   (let ((ws (%mk-temp-dir "ws")) (wr (%mk-temp-dir "wr"))
@@ -45,7 +47,9 @@
            (%seed-tui ts '("T1" "T2" "T3" "T4" "T5" "T6"))
            (%seed-tui tr '("T1" "T2" "T3" "T4" "T5" "T6"))
            (let ((res (orrery/adapter:evaluate-evidence-recertification-gate
-                       ws wr ts tr "cd e2e && ./run-e2e.sh" "make e2e-tui")))
+                       ws wr ts tr
+                       "cd e2e && ./run-e2e.sh"
+                       "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")))
              (true (orrery/adapter:err-overall-pass-p res))
              (is = 0 (length (orrery/adapter:err-blockers res)))))
       (%cleanup-r ws) (%cleanup-r wr) (%cleanup-r ts) (%cleanup-r tr))))
@@ -60,7 +64,9 @@
            (%seed-tui ts '("T1" "T2" "T3" "T4" "T5" "T6"))
            (%seed-tui tr '("T1" "T2" "T3" "T4" "T5" "T6"))
            (let ((res (orrery/adapter:evaluate-evidence-recertification-gate
-                       ws wr ts tr "cd e2e && ./run-e2e.sh" "make e2e-tui")))
+                       ws wr ts tr
+                       "cd e2e && ./run-e2e.sh"
+                       "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")))
              (false (orrery/adapter:err-overall-pass-p res))
              (true (find "stored-vs-regenerated-evidence-mismatch"
                          (orrery/adapter:err-blockers res)
