@@ -524,9 +524,9 @@
    #:mcp-tui-artifact-path #:build-mcp-tui-command-row #:build-mcp-tui-command-pack #:mcp-tui-command-pack->json
    ;; mcp-tui replay verdict emitter (rf9l)
    #:mcp-tui-bundle-row #:mcp-tui-bundle-row-p #:make-mcp-tui-bundle-row
-   #:mtbr-scenario-id #:mtbr-screenshot-path #:mtbr-transcript-path #:mtbr-asciicast-path #:mtbr-report-path #:mtbr-score #:mtbr-pass-p
+   #:mtbr-scenario-id #:mtbr-screenshot-path #:mtbr-transcript-path #:mtbr-transcript-digest #:mtbr-asciicast-path #:mtbr-report-path #:mtbr-score #:mtbr-pass-p
    #:mcp-tui-replay-verdict #:mcp-tui-replay-verdict-p #:make-mcp-tui-replay-verdict
-   #:mtrv-pass-p #:mtrv-command-match-p #:mtrv-deterministic-command #:mtrv-bundle-rows #:mtrv-missing-scenarios #:mtrv-detail #:mtrv-timestamp
+   #:mtrv-pass-p #:mtrv-command-match-p #:mtrv-command-fingerprint #:mtrv-deterministic-command #:mtrv-bundle-rows #:mtrv-missing-scenarios #:mtrv-detail #:mtrv-timestamp
    #:scenario-score->bundle-row #:scorecard->replay-verdict #:evaluate-mcp-tui-replay-verdict #:mcp-tui-replay-verdict->json
    ;; mcp-tui fixture generator (17bl)
    #:tui-fixture-generation-result #:tui-fixture-generation-result-p #:make-tui-fixture-generation-result
