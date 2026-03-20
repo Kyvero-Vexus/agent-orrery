@@ -512,6 +512,10 @@
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
    #:compile-mcp-tui-evidence-manifest
+   ;; mcp-tui fixture generator (17bl)
+   #:tui-fixture-generation-result #:tui-fixture-generation-result-p #:make-tui-fixture-generation-result
+   #:tfgr-pass-p #:tfgr-output-dir #:tfgr-generated-files #:tfgr-mode #:tfgr-detail
+   #:scenario-artifact-path #:generate-tui-fixture-set #:tui-fixture-generation-result->json
    ;; mcp-tui scorecard gate (gmlq)
    #:mcp-tui-scenario-score #:mcp-tui-scenario-score-p #:make-mcp-tui-scenario-score
    #:mtss-scenario-id #:mtss-screenshot-p #:mtss-transcript-p #:mtss-asciicast-p #:mtss-report-p #:mtss-score #:mtss-pass-p
