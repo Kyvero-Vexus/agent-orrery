@@ -497,6 +497,10 @@
    #:*playwright-required-scenarios* #:*playwright-deterministic-command*
    #:infer-web-runner-kind #:infer-playwright-scenario-id #:infer-web-artifact-kind
    #:compile-playwright-evidence-manifest
+   ;; Playwright fixture synthesizer (j65d)
+   #:playwright-fixture-generation-result #:playwright-fixture-generation-result-p #:make-playwright-fixture-generation-result
+   #:pfgr-pass-p #:pfgr-output-dir #:pfgr-generated-files #:pfgr-mode #:pfgr-detail
+   #:playwright-scenario-artifact-path #:generate-playwright-fixture-set #:playwright-fixture-generation-result->json
    ;; Playwright artifact canonicalizer core (fwu)
    #:canonical-web-artifact #:canonical-web-artifact-p #:make-canonical-web-artifact
    #:cwa-scenario-id #:cwa-artifact-kind #:cwa-original-path #:cwa-canonical-path #:cwa-present-p
