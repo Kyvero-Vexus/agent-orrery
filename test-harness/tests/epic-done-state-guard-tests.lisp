@@ -29,8 +29,11 @@
            (%touch-gate (merge-pathnames "playwright-report.json" web) "S1 S2 S3 S4 S5")
            (%touch-gate (merge-pathnames "a.png" web) "png")
            (%touch-gate (merge-pathnames "a.zip" web) "zip")
-           (let ((res (orrery/adapter:evaluate-epic-done-state-guard :epic4 t web "cd e2e && ./run-e2e.sh")))
-             (false (orrery/adapter:edr-allowed-p res))))
+           (let* ((res (orrery/adapter:evaluate-epic-done-state-guard :epic4 t web "cd e2e && ./run-e2e.sh"))
+                  (json (orrery/adapter:epic-done-state-result->json res)))
+             (false (orrery/adapter:edr-allowed-p res))
+             (true (search "epic4-playwright-s1-s6-evidence-missing" json))
+             (true (search "cd e2e && ./run-e2e.sh" json))))
       (%cleanup-gate web))))
 
 (define-test (epic-done-state-guard-suite epic3-pass-with-valid-artifacts)

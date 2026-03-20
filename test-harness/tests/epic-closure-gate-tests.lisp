@@ -43,12 +43,14 @@
 
            (%seed-complete-tui tui)
 
-           (let ((res (orrery/adapter:evaluate-epic34-closure-gate
-                       web "cd e2e && ./run-e2e.sh"
-                       tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")))
+           (let* ((res (orrery/adapter:evaluate-epic34-closure-gate
+                        web "cd e2e && ./run-e2e.sh"
+                        tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
+                  (json (orrery/adapter:epic-closure-gate-result->json res)))
              (true (orrery/adapter:ecgr-overall-pass-p res))
-             (true (search "\"overall_pass\":true"
-                           (orrery/adapter:epic-closure-gate-result->json res)))))
+             (true (search "\"overall_pass\":true" json))
+             (true (search "\"blockers\":[]" json))
+             (true (search "\"remediation_commands\":[]" json))))
       (%cleanup-closure-dir web)
       (%cleanup-closure-dir tui))))
 
@@ -64,10 +66,13 @@
 
            (%seed-complete-tui tui)
 
-           (let ((res (orrery/adapter:evaluate-epic34-closure-gate
-                       web "cd e2e && ./run-e2e.sh"
-                       tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")))
+           (let* ((res (orrery/adapter:evaluate-epic34-closure-gate
+                        web "cd e2e && ./run-e2e.sh"
+                        tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
+                  (json (orrery/adapter:epic-closure-gate-result->json res)))
              (false (orrery/adapter:ecgr-overall-pass-p res))
-             (false (orrery/adapter:ecgr-epic4-pass-p res))))
+             (false (orrery/adapter:ecgr-epic4-pass-p res))
+             (true (search "epic4-playwright-s1-s6-evidence-missing" json))
+             (true (search "cd e2e && ./run-e2e.sh" json))))
       (%cleanup-closure-dir web)
       (%cleanup-closure-dir tui))))
