@@ -33,7 +33,7 @@
               (:transcript "txt")
               (:asciicast "cast")
               (otherwise "json")))
-    (pathname root))))
+    (uiop:ensure-directory-pathname root))))
 
 (defun %write-fixture-file (path content)
   (with-open-file (s path :direction :output :if-exists :supersede)
@@ -47,7 +47,8 @@
   (declare (type string output-dir)
            (type keyword mode)
            (optimize (safety 3)))
-  (ensure-directories-exist (merge-pathnames "dummy" output-dir))
+  (ensure-directories-exist
+   (merge-pathnames "dummy" (uiop:ensure-directory-pathname output-dir)))
   (let ((count 0))
     (dolist (sid *mcp-tui-required-scenarios*)
       (dolist (kind '(:screenshot :transcript :asciicast :report))
