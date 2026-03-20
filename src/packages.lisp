@@ -640,6 +640,12 @@
    #:*protocol-evidence-version* #:*protocol-spec-version*
    #:build-protocol-evidence-matrix #:evaluate-protocol-evidence-matrix
    #:protocol-matrix-row->json #:protocol-matrix-report->json
+   ;; Protocol evidence gap explainer (fdtj)
+   #:protocol-remediation-step #:protocol-remediation-step-p #:make-protocol-remediation-step
+   #:prs-epic #:prs-framework #:prs-command #:prs-artifact-dir #:prs-scenarios #:prs-artifacts
+   #:protocol-evidence-gap-report #:protocol-evidence-gap-report-p #:make-protocol-evidence-gap-report
+   #:pegr-closure-pass-p #:pegr-matrix-pass-p #:pegr-gaps #:pegr-remediation #:pegr-detail #:pegr-timestamp
+   #:explain-protocol-evidence-gaps #:protocol-remediation-step->json #:protocol-evidence-gap-report->json
    ;; Evidence recertification gate (f15)
    #:evidence-recertification-result #:evidence-recertification-result-p #:make-evidence-recertification-result
    #:err-stored-pass-p #:err-regenerated-pass-p #:err-parity-pass-p #:err-overall-pass-p
@@ -649,6 +655,10 @@
    #:epic-done-state-result #:epic-done-state-result-p #:make-epic-done-state-result
    #:edr-epic-target #:edr-done-claim-p #:edr-evidence-pass-p #:edr-allowed-p #:edr-detail #:edr-timestamp
    #:evaluate-epic-done-state-guard #:epic-done-state-result->json
+   ;; Closure-gate evidence-gap explainer (fdtj)
+   #:evidence-gap-explanation #:evidence-gap-explanation-p #:make-evidence-gap-explanation
+   #:ege-pass-p #:ege-web-pass-p #:ege-tui-pass-p #:ege-blockers #:ege-remediation-commands #:ege-detail #:ege-timestamp
+   #:explain-epic34-evidence-gaps #:evidence-gap-explanation->json
    ;; Cross-UI parity suite + conformance report (eb0.6.3)
    #:conformance-target
    #:target-conformance-row #:target-conformance-row-p #:make-target-conformance-row
