@@ -516,6 +516,12 @@
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
    #:compile-mcp-tui-evidence-manifest
+   ;; mcp-tui command pack (tojz)
+   #:mcp-tui-command-row #:mcp-tui-command-row-p #:make-mcp-tui-command-row
+   #:mtcr-scenario-id #:mtcr-command #:mtcr-screenshot-path #:mtcr-transcript-path #:mtcr-asciicast-path #:mtcr-report-path
+   #:mcp-tui-command-pack #:mcp-tui-command-pack-p #:make-mcp-tui-command-pack
+   #:mtcp-pass-p #:mtcp-deterministic-command #:mtcp-rows #:mtcp-detail #:mtcp-timestamp
+   #:mcp-tui-artifact-path #:build-mcp-tui-command-row #:build-mcp-tui-command-pack #:mcp-tui-command-pack->json
    ;; mcp-tui fixture generator (17bl)
    #:tui-fixture-generation-result #:tui-fixture-generation-result-p #:make-tui-fixture-generation-result
    #:tfgr-pass-p #:tfgr-output-dir #:tfgr-generated-files #:tfgr-mode #:tfgr-detail
