@@ -536,6 +536,14 @@
    #:mcp-tui-replay-lock-check #:mcp-tui-replay-lock-check-p #:make-mcp-tui-replay-lock-check
    #:mtrlc-pass-p #:mtrlc-reason #:mtrlc-expected-command #:mtrlc-actual-command #:mtrlc-expected-hash #:mtrlc-actual-hash
    #:simple-file-hash #:write-replay-lock-file #:verify-replay-lock-file #:replay-lock-check->json
+   ;; mcp-tui artifact notarizer + drift diff (l71w)
+   #:*mcp-tui-notary-env-keys*
+   #:mcp-tui-artifact-notarization #:mcp-tui-artifact-notarization-p #:make-mcp-tui-artifact-notarization
+   #:mtan-pass-p #:mtan-command-match-p #:mtan-command-fingerprint #:mtan-environment-fingerprint
+   #:mtan-scenario-count #:mtan-missing-scenarios #:mtan-drift-pass-p #:mtan-drift-mismatch-count
+   #:mtan-drift-detail #:mtan-detail #:mtan-timestamp
+   #:mcp-tui-environment-fingerprint #:notarize-mcp-tui-artifacts
+   #:write-mcp-tui-artifact-notarization #:mcp-tui-artifact-notarization->json
    ;; mcp-tui fixture generator (17bl)
    #:tui-fixture-generation-result #:tui-fixture-generation-result-p #:make-tui-fixture-generation-result
    #:tfgr-pass-p #:tfgr-output-dir #:tfgr-generated-files #:tfgr-mode #:tfgr-detail

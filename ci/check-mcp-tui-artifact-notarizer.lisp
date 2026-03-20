@@ -1,0 +1,13 @@
+(load #P"/home/slime/quicklisp/setup.lisp")
+(require "asdf")
+(asdf:load-system :agent-orrery)
+
+(let* ((artifacts (or (uiop:getenv "TUI_ARTIFACTS_DIR") "test-results/tui-artifacts/"))
+       (baseline (or (uiop:getenv "TUI_ARTIFACTS_BASELINE_DIR") "test-results/tui-artifacts-fixture-complete/"))
+       (command (or (uiop:getenv "TUI_EVIDENCE_COMMAND") "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
+       (out (or (uiop:getenv "TUI_NOTARY_JSON") "test-results/tui-artifacts/mcp-tui-artifact-notarization.json"))
+       (note (orrery/adapter:write-mcp-tui-artifact-notarization artifacts command baseline out)))
+  (format t "~A~%" (orrery/adapter:mcp-tui-artifact-notarization->json note))
+  (unless (orrery/adapter:mtan-pass-p note)
+    (uiop:quit 1))
+  (uiop:quit 0))
