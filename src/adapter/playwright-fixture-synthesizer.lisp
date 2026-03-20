@@ -40,6 +40,15 @@
     (write-string content s))
   t)
 
+(defun %reset-playwright-fixture-output-dir (output-dir)
+  (declare (type string output-dir)
+           (optimize (safety 3)))
+  (let ((dir (uiop:ensure-directory-pathname output-dir)))
+    (when (and (> (length output-dir) 8)
+               (probe-file dir))
+      (uiop:delete-directory-tree dir :validate t :if-does-not-exist :ignore))
+    (ensure-directories-exist (merge-pathnames "dummy" dir))))
+
 (defun generate-playwright-fixture-set (output-dir mode)
   "MODE can be :complete or :gapped.
 :complete writes S1-S6 screenshot/trace/transcript/report fixtures.
@@ -47,7 +56,7 @@
   (declare (type string output-dir)
            (type keyword mode)
            (optimize (safety 3)))
-  (ensure-directories-exist (merge-pathnames "dummy" output-dir))
+  (%reset-playwright-fixture-output-dir output-dir)
   (let ((count 0))
     (%write-playwright-fixture-file
      (merge-pathnames "playwright-report.json" (pathname output-dir))
