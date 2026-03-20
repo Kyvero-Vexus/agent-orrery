@@ -282,10 +282,55 @@ jobs:
             --eval '(load "~/quicklisp/setup.lisp")' \
             --script ci/check-evidence-recertification.lisp
 
+  unified-preflight-bundle-gate:
+    name: Unified Preflight Bundle Gate
+    runs-on: ubuntu-latest
+    needs: [web-e2e, tui-e2e]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SBCL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sbcl libssl-dev
+
+      - name: Install Quicklisp
+        run: |
+          curl -fsSL https://beta.quicklisp.org/quicklisp.lisp -o /tmp/ql.lisp
+          sbcl --noinform --non-interactive \
+            --load /tmp/ql.lisp \
+            --eval '(quicklisp-quickstart:install :path "~/quicklisp/")' \
+            --eval '(ql-dist:install-dist "http://beta.quicklisp.org/dist/quicklisp.txt" :prompt nil)'
+
+      - name: Download web E2E artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-e2e-report
+          path: test-results/e2e-report/
+
+      - name: Download TUI E2E artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: tui-e2e-artifacts
+          path: test-results/tui-artifacts/
+
+      - name: Emit and validate unified preflight bundle
+        run: |
+          sbcl --noinform --non-interactive \
+            --eval '(load "~/quicklisp/setup.lisp")' \
+            --script ci/check-unified-preflight-bundle.lisp
+
+      - name: Upload unified preflight bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unified-preflight-bundle
+          path: test-results/preflight/unified-preflight-bundle.json
+
   build:
     name: Build Verification
     runs-on: ubuntu-latest
-    needs: [type-check, test, evidence-gate, adapter-contract-gate, evidence-recertification-gate]
+    needs: [type-check, test, evidence-gate, adapter-contract-gate, evidence-recertification-gate, unified-preflight-bundle-gate]
     strategy:
       matrix:
         target: [cli, tui, web]
