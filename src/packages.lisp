@@ -630,6 +630,16 @@
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
    #:evaluate-epic34-closure-gate #:epic-closure-gate-result->json
+   ;; Protocol/evidence matrix (i944)
+   #:protocol-epic-key
+   #:protocol-matrix-row #:protocol-matrix-row-p #:make-protocol-matrix-row
+   #:pmr-epic #:pmr-protocol-version #:pmr-evidence-version #:pmr-deterministic-command
+   #:pmr-required-scenarios #:pmr-required-artifacts #:pmr-policy-note
+   #:protocol-matrix-report #:protocol-matrix-report-p #:make-protocol-matrix-report
+   #:pmrep-rows #:pmrep-epic3-pass-p #:pmrep-epic4-pass-p #:pmrep-overall-pass-p #:pmrep-detail #:pmrep-timestamp
+   #:*protocol-evidence-version* #:*protocol-spec-version*
+   #:build-protocol-evidence-matrix #:evaluate-protocol-evidence-matrix
+   #:protocol-matrix-row->json #:protocol-matrix-report->json
    ;; Evidence recertification gate (f15)
    #:evidence-recertification-result #:evidence-recertification-result-p #:make-evidence-recertification-result
    #:err-stored-pass-p #:err-regenerated-pass-p #:err-parity-pass-p #:err-overall-pass-p
