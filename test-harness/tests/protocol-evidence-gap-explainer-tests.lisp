@@ -70,3 +70,20 @@
                            (orrery/adapter:protocol-evidence-gap-report->json res)))))
       (%peg-clean web)
       (%peg-clean tui))))
+
+(define-test (protocol-evidence-gap-explainer-suite remediation-commands-are-canonical)
+  (let ((web (%peg-mk-dir "web-gap2"))
+        (tui (%peg-mk-dir "tui-gap2")))
+    (unwind-protect
+         (progn
+           (%peg-seed-web web '("S1"))
+           (%peg-seed-tui tui '("T1"))
+           (let* ((res (orrery/adapter:explain-protocol-evidence-gaps
+                        web "cd e2e && ./run-e2e.sh"
+                        tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
+                  (json (orrery/adapter:protocol-evidence-gap-report->json res)))
+             (false (orrery/adapter:pegr-closure-pass-p res))
+             (true (search "cd e2e && ./run-e2e.sh" json))
+             (true (search "cd e2e-tui && ./run-tui-e2e-t1-t6.sh" json))))
+      (%peg-clean web)
+      (%peg-clean tui))))
