@@ -38,7 +38,9 @@
              (%touch (merge-pathnames (format nil "~A-shot.png" sid) tui) "png")
              (%touch (merge-pathnames (format nil "~A-transcript.txt" sid) tui) "txt"))
 
-           (let ((res (orrery/adapter:evaluate-epic34-closure-gate web "cd e2e && ./run-e2e.sh" tui "make e2e-tui")))
+           (let ((res (orrery/adapter:evaluate-epic34-closure-gate
+                       web "cd e2e && ./run-e2e.sh"
+                       tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")))
              (true (orrery/adapter:ecgr-overall-pass-p res))
              (true (search "\"overall_pass\":true" (orrery/adapter:epic-closure-gate-result->json res)))))
       (%cleanup-closure-dir web)
@@ -60,7 +62,9 @@
              (%touch (merge-pathnames (format nil "~A-shot.png" sid) tui) "png")
              (%touch (merge-pathnames (format nil "~A-transcript.txt" sid) tui) "txt"))
 
-           (let ((res (orrery/adapter:evaluate-epic34-closure-gate web "cd e2e && ./run-e2e.sh" tui "make e2e-tui")))
+           (let ((res (orrery/adapter:evaluate-epic34-closure-gate
+                       web "cd e2e && ./run-e2e.sh"
+                       tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh")))
              (false (orrery/adapter:ecgr-overall-pass-p res))
              (false (orrery/adapter:ecgr-epic4-pass-p res))))
       (%cleanup-closure-dir web)

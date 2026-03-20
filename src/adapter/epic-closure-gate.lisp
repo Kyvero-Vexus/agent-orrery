@@ -32,21 +32,23 @@ Epic 3: mcp-tui-driver T1-T6 screenshot+transcript + machine-report/asciicast + 
                       *web-required-artifacts*
                       '(:machine-report)
                       *expected-web-command*))
+         (web-lock (build-playwright-evidence-lock web-artifacts-dir web-command))
          (tui-report (verify-runner-evidence
                       tui-manifest
                       *default-tui-scenarios*
                       *tui-required-artifacts*
                       '(:machine-report :asciicast)
                       *expected-tui-command*))
-         (epic4-ok (ecr-pass-p web-report))
+         (epic4-ok (and (ecr-pass-p web-report)
+                        (pel-pass-p web-lock)))
          (epic3-ok (ecr-pass-p tui-report))
          (overall (and epic3-ok epic4-ok)))
     (make-epic-closure-gate-result
      :epic3-pass-p epic3-ok
      :epic4-pass-p epic4-ok
      :overall-pass-p overall
-     :detail (format nil "epic3=~A epic4=~A web_cov=~D/~D tui_cov=~D/~D"
-                     epic3-ok epic4-ok
+     :detail (format nil "epic3=~A epic4=~A lock=~A web_cov=~D/~D tui_cov=~D/~D"
+                     epic3-ok epic4-ok (pel-pass-p web-lock)
                      (ecr-required-scenarios-covered web-report)
                      (ecr-required-scenarios-total web-report)
                      (ecr-required-scenarios-covered tui-report)
