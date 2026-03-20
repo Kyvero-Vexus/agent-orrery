@@ -528,6 +528,10 @@
    #:mcp-tui-replay-verdict #:mcp-tui-replay-verdict-p #:make-mcp-tui-replay-verdict
    #:mtrv-pass-p #:mtrv-command-match-p #:mtrv-command-fingerprint #:mtrv-deterministic-command #:mtrv-bundle-rows #:mtrv-missing-scenarios #:mtrv-detail #:mtrv-timestamp
    #:scenario-score->bundle-row #:scorecard->replay-verdict #:evaluate-mcp-tui-replay-verdict #:mcp-tui-replay-verdict->json
+   ;; mcp-tui replay lock writer (ztu4)
+   #:mcp-tui-replay-lock-check #:mcp-tui-replay-lock-check-p #:make-mcp-tui-replay-lock-check
+   #:mtrlc-pass-p #:mtrlc-reason #:mtrlc-expected-command #:mtrlc-actual-command #:mtrlc-expected-hash #:mtrlc-actual-hash
+   #:simple-file-hash #:write-replay-lock-file #:verify-replay-lock-file #:replay-lock-check->json
    ;; mcp-tui fixture generator (17bl)
    #:tui-fixture-generation-result #:tui-fixture-generation-result-p #:make-tui-fixture-generation-result
    #:tfgr-pass-p #:tfgr-output-dir #:tfgr-generated-files #:tfgr-mode #:tfgr-detail

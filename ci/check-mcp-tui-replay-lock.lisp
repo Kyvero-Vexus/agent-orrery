@@ -1,0 +1,17 @@
+(load #P"/home/slime/quicklisp/setup.lisp")
+(require "asdf")
+(asdf:load-system :agent-orrery)
+
+(let* ((verdict (or (uiop:getenv "TUI_VERDICT_JSON") "test-results/tui-artifacts/replay-verdict.json"))
+       (lock (or (uiop:getenv "TUI_REPLAY_LOCK") "test-results/tui-artifacts/replay-verdict.lock"))
+       (mode (or (uiop:getenv "TUI_REPLAY_LOCK_MODE") "verify")))
+  (if (string= mode "write")
+      (progn
+        (orrery/adapter:write-replay-lock-file verdict lock)
+        (format t "{\"pass\":true,\"mode\":\"write\"}~%")
+        (uiop:quit 0))
+      (let ((check (orrery/adapter:verify-replay-lock-file verdict lock)))
+        (format t "~A~%" (orrery/adapter:replay-lock-check->json check))
+        (unless (orrery/adapter:mtrlc-pass-p check)
+          (uiop:quit 1))
+        (uiop:quit 0))))
