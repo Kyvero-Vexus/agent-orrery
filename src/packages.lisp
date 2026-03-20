@@ -646,6 +646,10 @@
    #:protocol-evidence-gap-report #:protocol-evidence-gap-report-p #:make-protocol-evidence-gap-report
    #:pegr-closure-pass-p #:pegr-matrix-pass-p #:pegr-gaps #:pegr-remediation #:pegr-detail #:pegr-timestamp
    #:explain-protocol-evidence-gaps #:protocol-remediation-step->json #:protocol-evidence-gap-report->json
+   ;; Unified preflight bundle (pk7y)
+   #:unified-preflight-bundle #:unified-preflight-bundle-p #:make-unified-preflight-bundle
+   #:upb-closure #:upb-matrix #:upb-gaps #:upb-overall-pass-p #:upb-detail #:upb-timestamp
+   #:evaluate-unified-preflight-bundle #:unified-preflight-bundle->json
    ;; Evidence recertification gate (f15)
    #:evidence-recertification-result #:evidence-recertification-result-p #:make-evidence-recertification-result
    #:err-stored-pass-p #:err-regenerated-pass-p #:err-parity-pass-p #:err-overall-pass-p
