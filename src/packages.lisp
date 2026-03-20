@@ -501,6 +501,10 @@
    #:playwright-fixture-generation-result #:playwright-fixture-generation-result-p #:make-playwright-fixture-generation-result
    #:pfgr-pass-p #:pfgr-output-dir #:pfgr-generated-files #:pfgr-mode #:pfgr-detail
    #:playwright-scenario-artifact-path #:generate-playwright-fixture-set #:playwright-fixture-generation-result->json
+   ;; Playwright evidence locker (8cvx)
+   #:playwright-evidence-lock #:playwright-evidence-lock-p #:make-playwright-evidence-lock
+   #:pel-pass-p #:pel-command-match-p #:pel-command #:pel-artifact-count #:pel-missing-scenarios #:pel-detail #:pel-timestamp
+   #:build-playwright-evidence-lock #:playwright-evidence-lock->json
    ;; Playwright artifact canonicalizer core (fwu)
    #:canonical-web-artifact #:canonical-web-artifact-p #:make-canonical-web-artifact
    #:cwa-scenario-id #:cwa-artifact-kind #:cwa-original-path #:cwa-canonical-path #:cwa-present-p
