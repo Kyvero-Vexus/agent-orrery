@@ -8,7 +8,7 @@
 
 SBCL ?= sbcl
 
-.PHONY: bootstrap-quicklisp test check-types e2e-smoke e2e-tui e2e-tui-t1-t6 t1-t6-continuity-preflight web-s1-s6-bundle-verifier tui-fixture-regression web-fixture-regression unified-preflight run-scripts-gate ci clean
+.PHONY: bootstrap-quicklisp test check-types e2e-smoke e2e-tui e2e-tui-t1-t6 t1-t6-continuity-preflight web-s1-s6-bundle-verifier tui-fixture-regression web-fixture-regression unified-preflight unified-closure-gate run-scripts-gate ci clean
 
 bootstrap-quicklisp:
 	@$(SBCL) --script ci/bootstrap-quicklisp.lisp
@@ -45,10 +45,13 @@ web-fixture-regression:
 unified-preflight:
 	@$(SBCL) --load ci/check-unified-preflight-bundle.lisp
 
+unified-closure-gate:
+	@$(SBCL) --script ci/check-unified-closure-gate.lisp
+
 run-scripts-gate:
 	@bash scripts/test-run-scripts.sh
 
-ci: check-types test e2e-smoke web-s1-s6-bundle-verifier t1-t6-continuity-preflight web-fixture-regression tui-fixture-regression unified-preflight
+ci: check-types test e2e-smoke web-s1-s6-bundle-verifier t1-t6-continuity-preflight web-fixture-regression tui-fixture-regression unified-preflight unified-closure-gate
 	@echo ""
 	@echo "=== All CI checks passed ==="
 
