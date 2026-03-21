@@ -37,6 +37,8 @@
              (true (orrery/adapter:mtir-command-match-p r))
              (is = 0 (length (orrery/adapter:mtir-missing-scenarios r)))
              (true (search "\"required_runner\":\"mcp-tui-driver\""
+                           (orrery/adapter:mcp-tui-ingestion-result->json r)))
+             (true (search "\"command_hash\":"
                            (orrery/adapter:mcp-tui-ingestion-result->json r)))))
       (%cleanup-ingest-dir dir))))
 

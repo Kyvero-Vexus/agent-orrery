@@ -19,11 +19,12 @@
 
 (defstruct (mcp-tui-ingestion-result (:conc-name mtir-)
             (:constructor make-mcp-tui-ingestion-result
-                (&key pass-p command-match-p runner-match-p missing-scenarios
+                (&key pass-p command-match-p runner-match-p command-fingerprint missing-scenarios
                       scenario-results detail timestamp)))
   (pass-p nil :type boolean)
   (command-match-p nil :type boolean)
   (runner-match-p nil :type boolean)
+  (command-fingerprint 0 :type integer)
   (missing-scenarios '() :type list)
   (scenario-results '() :type list)
   (detail "" :type string)
@@ -90,6 +91,7 @@
      :pass-p (and runner-match command-match (null missing-scenarios))
      :command-match-p command-match
      :runner-match-p runner-match
+     :command-fingerprint (command-fingerprint command)
      :missing-scenarios missing-scenarios
      :scenario-results rows
      :detail (if (and runner-match command-match (null missing-scenarios))
@@ -115,10 +117,11 @@
   (declare (type mcp-tui-ingestion-result result)
            (optimize (safety 3)))
   (with-output-to-string (s)
-    (format s "{\"pass\":~A,\"runner_match\":~A,\"command_match\":~A,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\",\"missing_scenarios\":["
+    (format s "{\"pass\":~A,\"runner_match\":~A,\"command_match\":~A,\"command_hash\":~D,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\",\"missing_scenarios\":["
             (if (mtir-pass-p result) "true" "false")
             (if (mtir-runner-match-p result) "true" "false")
             (if (mtir-command-match-p result) "true" "false")
+            (mtir-command-fingerprint result)
             (%json-escape-mtir *mcp-tui-deterministic-command*))
     (loop for sid in (mtir-missing-scenarios result)
           for i from 0 do
