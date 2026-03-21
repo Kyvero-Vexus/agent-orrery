@@ -46,7 +46,9 @@
     (unwind-protect
          (progn
            (%seed-witness-artifacts dir)
-           (let ((bundle (orrery/adapter:evaluate-mcp-tui-witness-bundle dir "cd e2e-tui && ./wrong.sh")))
+           (let* ((bundle (orrery/adapter:evaluate-mcp-tui-witness-bundle dir "cd e2e-tui && ./wrong.sh"))
+                  (json (orrery/adapter:mcp-tui-witness-bundle->json bundle)))
              (false (orrery/adapter:mtwb-pass-p bundle))
-             (false (orrery/adapter:mtwb-command-match-p bundle))))
+             (false (orrery/adapter:mtwb-command-match-p bundle))
+             (true (search "\"missing_scenarios\"" json))))
       (%cleanup-witness-dir dir))))

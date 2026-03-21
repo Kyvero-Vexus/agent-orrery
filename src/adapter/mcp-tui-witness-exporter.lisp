@@ -85,7 +85,7 @@
   (declare (type mcp-tui-witness-bundle bundle))
   (with-output-to-string (out)
     (format out
-            "{\"pass\":~A,\"deterministic_command\":\"~A\",\"command_match\":~A,\"command_fingerprint\":~D,\"scenario_count\":~D,\"missing\":~D,\"closure_pass\":~A,\"signature\":\"~A\",\"detail\":\"~A\",\"timestamp\":~D,\"transcript_digests\":["
+            "{\"pass\":~A,\"deterministic_command\":\"~A\",\"command_match\":~A,\"command_fingerprint\":~D,\"scenario_count\":~D,\"missing\":~D,\"closure_pass\":~A,\"signature\":\"~A\",\"detail\":\"~A\",\"timestamp\":~D,\"missing_scenarios\":["
             (if (mtwb-pass-p bundle) "true" "false")
             (mtwb-deterministic-command bundle)
             (if (mtwb-command-match-p bundle) "true" "false")
@@ -96,6 +96,12 @@
             (mtwb-signature bundle)
             (mtwb-detail bundle)
             (mtwb-timestamp bundle))
+    (loop for sid in (mtwb-missing-scenarios bundle)
+          for idx from 0
+          do (progn
+               (when (> idx 0) (write-string "," out))
+               (format out "\"~A\"" sid)))
+    (write-string "],\"transcript_digests\":[" out)
     (loop for pair in (mtwb-transcript-digest-map bundle)
           for idx from 0
           do (progn
