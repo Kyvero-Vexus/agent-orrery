@@ -527,9 +527,16 @@
    #:mcp-tui-ingestion-scenario #:mcp-tui-ingestion-scenario-p #:make-mcp-tui-ingestion-scenario
    #:mtis-scenario-id #:mtis-pass-p #:mtis-missing-artifact-kinds #:mtis-artifact-count #:mtis-detail
    #:mcp-tui-ingestion-result #:mcp-tui-ingestion-result-p #:make-mcp-tui-ingestion-result
-   #:mtir-pass-p #:mtir-command-match-p #:mtir-runner-match-p #:mtir-missing-scenarios
+   #:mtir-pass-p #:mtir-command-match-p #:mtir-runner-match-p #:mtir-command-fingerprint #:mtir-missing-scenarios
    #:mtir-scenario-results #:mtir-detail #:mtir-timestamp
    #:evaluate-mcp-tui-ingestion-adapter #:mcp-tui-ingestion-result->json
+   ;; mcp-tui unified envelope projector (8a3x)
+   #:ingestion-taxonomy-code
+   #:mcp-tui-envelope-row #:mcp-tui-envelope-row-p #:make-mcp-tui-envelope-row
+   #:mter-scenario-id #:mter-pass-p #:mter-command-hash #:mter-taxonomy-codes #:mter-artifact-count #:mter-missing-artifact-kinds #:mter-detail
+   #:mcp-tui-envelope-report #:mcp-tui-envelope-report-p #:make-mcp-tui-envelope-report
+   #:mtep-pass-p #:mtep-command-match-p #:mtep-rows #:mtep-detail #:mtep-timestamp
+   #:ingestion-scenario->envelope-row #:project-mcp-tui-unified-envelope #:mcp-tui-envelope-report->json
    ;; mcp-tui command pack (tojz)
    #:mcp-tui-command-row #:mcp-tui-command-row-p #:make-mcp-tui-command-row
    #:mtcr-scenario-id #:mtcr-command #:mtcr-screenshot-path #:mtcr-transcript-path #:mtcr-asciicast-path #:mtcr-report-path

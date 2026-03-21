@@ -8,7 +8,7 @@
 
 SBCL ?= sbcl
 
-.PHONY: bootstrap-quicklisp test check-types e2e-smoke e2e-tui e2e-tui-t1-t6 t1-t6-continuity-preflight mcp-tui-ingestion-adapter web-s1-s6-bundle-verifier tui-fixture-regression web-fixture-regression unified-preflight unified-closure-gate run-scripts-gate ci clean
+.PHONY: bootstrap-quicklisp test check-types e2e-smoke e2e-tui e2e-tui-t1-t6 t1-t6-continuity-preflight mcp-tui-ingestion-adapter mcp-tui-unified-envelope web-s1-s6-bundle-verifier tui-fixture-regression web-fixture-regression unified-preflight unified-closure-gate run-scripts-gate ci clean
 
 bootstrap-quicklisp:
 	@$(SBCL) --script ci/bootstrap-quicklisp.lisp
@@ -36,6 +36,9 @@ t1-t6-continuity-preflight:
 mcp-tui-ingestion-adapter:
 	@$(SBCL) --script ci/check-mcp-tui-ingestion-adapter.lisp
 
+mcp-tui-unified-envelope:
+	@$(SBCL) --script ci/check-mcp-tui-unified-envelope.lisp
+
 web-s1-s6-bundle-verifier:
 	@$(SBCL) --script ci/check-playwright-s1-s6-bundle-verifier.lisp
 
@@ -54,7 +57,7 @@ unified-closure-gate:
 run-scripts-gate:
 	@bash scripts/test-run-scripts.sh
 
-ci: check-types test e2e-smoke web-s1-s6-bundle-verifier t1-t6-continuity-preflight mcp-tui-ingestion-adapter web-fixture-regression tui-fixture-regression unified-preflight unified-closure-gate
+ci: check-types test e2e-smoke web-s1-s6-bundle-verifier t1-t6-continuity-preflight mcp-tui-ingestion-adapter mcp-tui-unified-envelope web-fixture-regression tui-fixture-regression unified-preflight unified-closure-gate
 	@echo ""
 	@echo "=== All CI checks passed ==="
 
