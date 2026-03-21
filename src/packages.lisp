@@ -537,6 +537,13 @@
    #:mcp-tui-envelope-report #:mcp-tui-envelope-report-p #:make-mcp-tui-envelope-report
    #:mtep-pass-p #:mtep-command-match-p #:mtep-rows #:mtep-detail #:mtep-timestamp
    #:ingestion-scenario->envelope-row #:project-mcp-tui-unified-envelope #:mcp-tui-envelope-report->json
+   ;; mcp-tui unified-envelope gate adapter (i1x1)
+   #:mcp-tui-gate-input-row #:mcp-tui-gate-input-row-p #:make-mcp-tui-gate-input-row
+   #:mtgir-scenario-id #:mtgir-blocking-p #:mtgir-taxonomy-codes #:mtgir-command-hash #:mtgir-detail
+   #:mcp-tui-gate-adapter-result #:mcp-tui-gate-adapter-result-p #:make-mcp-tui-gate-adapter-result
+   #:mtgar-pass-p #:mtgar-deterministic-command #:mtgar-rows #:mtgar-detail #:mtgar-timestamp
+   #:envelope-row->gate-row #:project-unified-envelope->gate-input
+   #:evaluate-mcp-tui-unified-envelope-gate-adapter #:mcp-tui-gate-adapter-result->json
    ;; mcp-tui command pack (tojz)
    #:mcp-tui-command-row #:mcp-tui-command-row-p #:make-mcp-tui-command-row
    #:mtcr-scenario-id #:mtcr-command #:mtcr-screenshot-path #:mtcr-transcript-path #:mtcr-asciicast-path #:mtcr-report-path
