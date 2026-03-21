@@ -55,7 +55,9 @@ Epic 3: mcp-tui-driver T1-T6 screenshot+transcript + machine-report/asciicast + 
                       *tui-required-artifacts*
                       '(:machine-report :asciicast)
                       *expected-tui-command*))
-         (tui-note (notarize-mcp-tui-artifacts tui-artifacts-dir tui-command tui-artifacts-dir))
+         (tui-baseline-dir (or (uiop:getenv "TUI_BASELINE_ARTIFACTS_DIR")
+                               tui-artifacts-dir))
+         (tui-note (notarize-mcp-tui-artifacts tui-artifacts-dir tui-command tui-baseline-dir))
          (epic4-ok (and (ecr-pass-p web-report)
                         (pel-pass-p web-lock)))
          (epic3-ok (and (ecr-pass-p tui-report)
@@ -65,7 +67,12 @@ Epic 3: mcp-tui-driver T1-T6 screenshot+transcript + machine-report/asciicast + 
          (remediation '()))
     (unless epic3-ok
       (push "epic3-mcp-tui-driver-t1-t6-evidence-missing" blockers)
-      (push *expected-tui-command* remediation))
+      (unless (mtan-command-match-p tui-note)
+        (push "epic3-mcp-tui-driver-command-mismatch" blockers))
+      (unless (mtan-drift-pass-p tui-note)
+        (push "epic3-mcp-tui-driver-drift-mismatch" blockers))
+      (push *expected-tui-command* remediation)
+      (push "TUI_BASELINE_ARTIFACTS_DIR=<baseline-dir> sbcl --script ci/check-epic34-closure-gate.lisp" remediation))
     (unless epic4-ok
       (push "epic4-playwright-s1-s6-evidence-missing" blockers)
       (push *expected-web-command* remediation))
@@ -75,12 +82,14 @@ Epic 3: mcp-tui-driver T1-T6 screenshot+transcript + machine-report/asciicast + 
      :overall-pass-p overall
      :blockers (nreverse blockers)
      :remediation-commands (nreverse remediation)
-     :detail (format nil "epic3=~A epic4=~A lock=~A notarized=~A web_cov=~D/~D tui_cov=~D/~D"
+     :detail (format nil "epic3=~A epic4=~A lock=~A notarized=~A cmd_ok=~A drift_ok=~A drift_mismatches=~D web_cov=~D/~D tui_cov=~D/~D baseline=~A"
                      epic3-ok epic4-ok (pel-pass-p web-lock) (mtan-pass-p tui-note)
+                     (mtan-command-match-p tui-note) (mtan-drift-pass-p tui-note) (mtan-drift-mismatch-count tui-note)
                      (ecr-required-scenarios-covered web-report)
                      (ecr-required-scenarios-total web-report)
                      (ecr-required-scenarios-covered tui-report)
-                     (ecr-required-scenarios-total tui-report))
+                     (ecr-required-scenarios-total tui-report)
+                     tui-baseline-dir)
      :timestamp (get-universal-time))))
 
 (defun epic-closure-gate-result->json (result)

@@ -76,3 +76,55 @@
              (true (search "cd e2e && ./run-e2e.sh" json))))
       (%cleanup-closure-dir web)
       (%cleanup-closure-dir tui))))
+
+(define-test (epic-closure-gate-suite fail-tui-notarization-command-mismatch)
+  (let ((web (%mk-temp-closure-dir "web-ok-cmd"))
+        (tui (%mk-temp-closure-dir "tui-cmd-fail")))
+    (unwind-protect
+         (progn
+           (%touch (merge-pathnames "e2e-report.json" web) "report")
+           (dolist (sid '("S1" "S2" "S3" "S4" "S5" "S6"))
+             (%touch (merge-pathnames (format nil "~A-shot.png" sid) web) "png")
+             (%touch (merge-pathnames (format nil "~A-trace.zip" sid) web) "zip"))
+           (%seed-complete-tui tui)
+           (let* ((res (orrery/adapter:evaluate-epic34-closure-gate
+                        web "cd e2e && ./run-e2e.sh"
+                        tui "make e2e-tui-t1-t6"))
+                  (json (orrery/adapter:epic-closure-gate-result->json res)))
+             (false (orrery/adapter:ecgr-overall-pass-p res))
+             (false (orrery/adapter:ecgr-epic3-pass-p res))
+             (true (search "epic3-mcp-tui-driver-command-mismatch" json))))
+      (%cleanup-closure-dir web)
+      (%cleanup-closure-dir tui))))
+
+(define-test (epic-closure-gate-suite fail-tui-notarization-drift-mismatch)
+  (let ((web (%mk-temp-closure-dir "web-ok-drift"))
+        (tui (%mk-temp-closure-dir "tui-drift-current"))
+        (baseline (%mk-temp-closure-dir "tui-drift-baseline")))
+    (unwind-protect
+         (progn
+           (%touch (merge-pathnames "e2e-report.json" web) "report")
+           (dolist (sid '("S1" "S2" "S3" "S4" "S5" "S6"))
+             (%touch (merge-pathnames (format nil "~A-shot.png" sid) web) "png")
+             (%touch (merge-pathnames (format nil "~A-trace.zip" sid) web) "zip"))
+           (%seed-complete-tui tui)
+           (%seed-complete-tui baseline)
+           (%touch (merge-pathnames "unexpected-drift.txt" tui) "drift")
+           (let ((old-baseline (uiop:getenv "TUI_BASELINE_ARTIFACTS_DIR")))
+             (unwind-protect
+                  (progn
+                    #+sbcl (sb-posix:setenv "TUI_BASELINE_ARTIFACTS_DIR" baseline 1)
+                    (let* ((res (orrery/adapter:evaluate-epic34-closure-gate
+                                 web "cd e2e && ./run-e2e.sh"
+                                 tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
+                           (json (orrery/adapter:epic-closure-gate-result->json res)))
+                      (false (orrery/adapter:ecgr-overall-pass-p res))
+                      (false (orrery/adapter:ecgr-epic3-pass-p res))
+                      (true (search "epic3-mcp-tui-driver-drift-mismatch" json))
+                      (true (search "TUI_BASELINE_ARTIFACTS_DIR=<baseline-dir>" json))))
+               (if old-baseline
+                   #+sbcl (sb-posix:setenv "TUI_BASELINE_ARTIFACTS_DIR" old-baseline 1)
+                   #+sbcl (sb-posix:unsetenv "TUI_BASELINE_ARTIFACTS_DIR")))))
+      (%cleanup-closure-dir web)
+      (%cleanup-closure-dir tui)
+      (%cleanup-closure-dir baseline))))
