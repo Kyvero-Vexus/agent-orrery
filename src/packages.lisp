@@ -499,8 +499,10 @@
    #:compile-playwright-evidence-manifest
    ;; Playwright fixture synthesizer (j65d)
    #:playwright-fixture-generation-result #:playwright-fixture-generation-result-p #:make-playwright-fixture-generation-result
-   #:pfgr-pass-p #:pfgr-output-dir #:pfgr-generated-files #:pfgr-mode #:pfgr-detail
-   #:playwright-scenario-artifact-path #:generate-playwright-fixture-set #:playwright-fixture-generation-result->json
+   #:pfgr-pass-p #:pfgr-output-dir #:pfgr-generated-files #:pfgr-mode
+   #:pfgr-deterministic-command #:pfgr-command-transcript-path #:pfgr-detail
+   #:playwright-scenario-artifact-path #:playwright-command-transcript-path
+   #:generate-playwright-fixture-set #:playwright-fixture-generation-result->json
    ;; Playwright evidence locker (8cvx)
    #:playwright-evidence-lock #:playwright-evidence-lock-p #:make-playwright-evidence-lock
    #:pel-pass-p #:pel-command-match-p #:pel-command #:pel-artifact-count #:pel-missing-scenarios #:pel-detail #:pel-timestamp

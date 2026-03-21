@@ -66,6 +66,17 @@ are not present in artifact filenames."
   (and (probe-file path)
        (> (%artifact-size-bytes path) 0)))
 
+(defun %scenario-kind-present-p (artifacts sid kind)
+  (declare (type list artifacts)
+           (type string sid)
+           (type evidence-artifact-kind kind)
+           (optimize (safety 3)))
+  (some (lambda (artifact)
+          (and (string= sid (ea-scenario-id artifact))
+               (eq kind (ea-artifact-kind artifact))
+               (ea-present-p artifact)))
+        artifacts))
+
 (defun compile-playwright-evidence-manifest (artifacts-dir command)
   "Compile Playwright S1-S6 evidence from ARTIFACTS-DIR into typed manifest." 
   (declare (type string artifacts-dir command))
@@ -116,22 +127,25 @@ are not present in artifact filenames."
                   (and has-any-screenshot has-any-trace)))))
 
       ;; Pass 3: synthesize per-scenario screenshot/trace artifacts when report proves Sx execution.
+      ;; Fail closed: each scenario must have its own screenshot+trace evidence.
       (dolist (sid *playwright-required-scenarios*)
         (when (gethash sid seen-scenarios)
-          (push (make-evidence-artifact
-                 :scenario-id sid
-                 :artifact-kind :screenshot
-                 :path (format nil "~A#~A-screenshot" artifacts-dir sid)
-                 :present-p has-any-screenshot
-                 :detail "synthetic-from-playwright-report")
-                artifacts)
-          (push (make-evidence-artifact
-                 :scenario-id sid
-                 :artifact-kind :trace
-                 :path (format nil "~A#~A-trace" artifacts-dir sid)
-                 :present-p has-any-trace
-                 :detail "synthetic-from-playwright-report")
-                artifacts))))
+          (let ((scenario-shot (%scenario-kind-present-p artifacts sid :screenshot))
+                (scenario-trace (%scenario-kind-present-p artifacts sid :trace)))
+            (push (make-evidence-artifact
+                   :scenario-id sid
+                   :artifact-kind :screenshot
+                   :path (format nil "~A#~A-screenshot" artifacts-dir sid)
+                   :present-p scenario-shot
+                   :detail "synthetic-from-playwright-report")
+                  artifacts)
+            (push (make-evidence-artifact
+                   :scenario-id sid
+                   :artifact-kind :trace
+                   :path (format nil "~A#~A-trace" artifacts-dir sid)
+                   :present-p scenario-trace
+                   :detail "synthetic-from-playwright-report")
+                  artifacts)))))
 
     (dolist (sid *playwright-required-scenarios*)
       (push (make-scenario-evidence

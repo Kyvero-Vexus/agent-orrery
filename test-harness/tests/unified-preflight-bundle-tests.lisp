@@ -22,6 +22,12 @@
                                            (pathname dir))))
       (ignore-errors (delete-file f)))))
 
+(defun %upb-read-file (path)
+  (with-open-file (s path :direction :input)
+    (let ((buf (make-string (file-length s))))
+      (read-sequence buf s)
+      buf)))
+
 (defun %upb-seed-web (dir ids)
   (%upb-touch (merge-pathnames "e2e-report.json" dir) "report")
   (dolist (sid ids)
@@ -72,5 +78,39 @@
                   (json (orrery/adapter:unified-preflight-bundle->json bundle)))
              (false (orrery/adapter:upb-overall-pass-p bundle))
              (true (search "epic4-playwright-s1-s6-evidence-missing" json))))
+      (%upb-clean web)
+      (%upb-clean tui))))
+
+(define-test (unified-preflight-bundle-suite playwright-fixture-missing-trace-fails-closed)
+  (let ((web (%upb-mk-dir "web-missing-trace"))
+        (tui (%upb-mk-dir "tui-ok3")))
+    (unwind-protect
+         (progn
+           (let* ((fixture (orrery/adapter:generate-playwright-fixture-set web :missing-trace))
+                  (transcript (%upb-read-file (orrery/adapter:pfgr-command-transcript-path fixture))))
+             (%upb-seed-tui tui '("T1" "T2" "T3" "T4" "T5" "T6"))
+             (let* ((bundle (orrery/adapter:evaluate-unified-preflight-bundle
+                             web (orrery/adapter:pfgr-deterministic-command fixture)
+                             tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
+                    (json (orrery/adapter:unified-preflight-bundle->json bundle)))
+               (false (orrery/adapter:upb-overall-pass-p bundle))
+               (true (search "deterministic_command" transcript))
+               (true (search "epic4-playwright-s1-s6-evidence-missing" json)))))
+      (%upb-clean web)
+      (%upb-clean tui))))
+
+(define-test (unified-preflight-bundle-suite playwright-fixture-missing-scenario-fails-closed)
+  (let ((web (%upb-mk-dir "web-missing-scenario"))
+        (tui (%upb-mk-dir "tui-ok4")))
+    (unwind-protect
+         (progn
+           (let ((fixture (orrery/adapter:generate-playwright-fixture-set web :missing-scenario)))
+             (%upb-seed-tui tui '("T1" "T2" "T3" "T4" "T5" "T6"))
+             (let* ((bundle (orrery/adapter:evaluate-unified-preflight-bundle
+                             web (orrery/adapter:pfgr-deterministic-command fixture)
+                             tui "cd e2e-tui && ./run-tui-e2e-t1-t6.sh"))
+                    (json (orrery/adapter:unified-preflight-bundle->json bundle)))
+               (false (orrery/adapter:upb-overall-pass-p bundle))
+               (true (search "epic4-playwright-s1-s6-evidence-missing" json)))))
       (%upb-clean web)
       (%upb-clean tui))))
