@@ -522,6 +522,14 @@
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
    #:compile-mcp-tui-evidence-manifest
+   ;; mcp-tui ingestion adapter (24c)
+   #:*mcp-tui-required-artifact-kinds*
+   #:mcp-tui-ingestion-scenario #:mcp-tui-ingestion-scenario-p #:make-mcp-tui-ingestion-scenario
+   #:mtis-scenario-id #:mtis-pass-p #:mtis-missing-artifact-kinds #:mtis-artifact-count #:mtis-detail
+   #:mcp-tui-ingestion-result #:mcp-tui-ingestion-result-p #:make-mcp-tui-ingestion-result
+   #:mtir-pass-p #:mtir-command-match-p #:mtir-runner-match-p #:mtir-missing-scenarios
+   #:mtir-scenario-results #:mtir-detail #:mtir-timestamp
+   #:evaluate-mcp-tui-ingestion-adapter #:mcp-tui-ingestion-result->json
    ;; mcp-tui command pack (tojz)
    #:mcp-tui-command-row #:mcp-tui-command-row-p #:make-mcp-tui-command-row
    #:mtcr-scenario-id #:mtcr-command #:mtcr-screenshot-path #:mtcr-transcript-path #:mtcr-asciicast-path #:mtcr-report-path
