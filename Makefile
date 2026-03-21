@@ -8,7 +8,7 @@
 
 SBCL ?= sbcl
 
-.PHONY: test check-types e2e-smoke e2e-tui e2e-tui-t1-t6 tui-fixture-regression unified-preflight run-scripts-gate ci clean
+.PHONY: test check-types e2e-smoke e2e-tui e2e-tui-t1-t6 tui-fixture-regression web-fixture-regression unified-preflight run-scripts-gate ci clean
 
 test:
 	@$(SBCL) --load ci/run-tests.lisp
@@ -30,13 +30,16 @@ e2e-tui-t1-t6:
 tui-fixture-regression:
 	@$(SBCL) --script ci/run-mcp-tui-fixture-regression-matrix.lisp
 
+web-fixture-regression:
+	@$(SBCL) --script ci/run-playwright-fixture-regression-matrix.lisp
+
 unified-preflight:
 	@$(SBCL) --load ci/check-unified-preflight-bundle.lisp
 
 run-scripts-gate:
 	@bash scripts/test-run-scripts.sh
 
-ci: check-types test e2e-smoke tui-fixture-regression unified-preflight
+ci: check-types test e2e-smoke web-fixture-regression tui-fixture-regression unified-preflight
 	@echo ""
 	@echo "=== All CI checks passed ==="
 
