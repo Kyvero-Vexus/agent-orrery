@@ -12,6 +12,13 @@
 
 (require :asdf)
 
+(let* ((local-ql (merge-pathnames "setup.lisp" (pathname "ci/.quicklisp/")))
+       (home-ql (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
+  (cond ((probe-file local-ql) (load local-ql))
+        ((probe-file home-ql) (load home-ql))
+        (t (format *error-output* "~&LOAD ERROR: Quicklisp setup not found. Run: sbcl --script ci/bootstrap-quicklisp.lisp~%")
+           (sb-ext:exit :code 2))))
+
 ;; Try workspace-local path first, then current directory
 (dolist (path (list #P"/home/slime/projects/agent-orrery/"
                     (truename ".")))
@@ -22,7 +29,7 @@
 (format t "~&=== Agent Orrery Test Suite ===~%~%")
 
 (handler-case
-    (ql:quickload :agent-orrery/test-harness :silent t)
+    (asdf:load-system :agent-orrery/test-harness)
   (error (e)
     (format *error-output* "~&LOAD ERROR: ~A~%" e)
     (sb-ext:exit :code 2)))

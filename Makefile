@@ -8,7 +8,10 @@
 
 SBCL ?= sbcl
 
-.PHONY: test check-types e2e-smoke e2e-tui e2e-tui-t1-t6 tui-fixture-regression web-fixture-regression unified-preflight run-scripts-gate ci clean
+.PHONY: bootstrap-quicklisp test check-types e2e-smoke e2e-tui e2e-tui-t1-t6 tui-fixture-regression web-fixture-regression unified-preflight run-scripts-gate ci clean
+
+bootstrap-quicklisp:
+	@$(SBCL) --script ci/bootstrap-quicklisp.lisp
 
 test:
 	@$(SBCL) --load ci/run-tests.lisp
