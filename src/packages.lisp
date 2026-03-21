@@ -553,6 +553,12 @@
    #:mtwb-signature #:mtwb-detail #:mtwb-timestamp
    #:manifest-transcript-digest-map #:evaluate-mcp-tui-witness-bundle
    #:write-mcp-tui-witness-bundle #:mcp-tui-witness-bundle->json
+   ;; mcp-tui witness verifier (kh0z)
+   #:mcp-tui-witness-verification #:mcp-tui-witness-verification-p #:make-mcp-tui-witness-verification
+   #:mtwv-pass-p #:mtwv-signature-valid-p #:mtwv-command-lineage-valid-p #:mtwv-digest-map-valid-p
+   #:mtwv-closure-semantics-valid-p #:mtwv-detail #:mtwv-timestamp
+   #:mcp-tui-witness-expected-signature #:verify-mcp-tui-witness-bundle
+   #:mcp-tui-witness-verification->json
    ;; mcp-tui fixture generator (17bl)
    #:tui-fixture-generation-result #:tui-fixture-generation-result-p #:make-tui-fixture-generation-result
    #:tfgr-pass-p #:tfgr-output-dir #:tfgr-generated-files #:tfgr-mode #:tfgr-detail
@@ -631,6 +637,13 @@
    #:pen-chain-digest #:pen-complete-p #:pen-timestamp
    #:canonical-playwright-command-p #:compute-web-attestation-chain
    #:notarize-playwright-evidence #:write-playwright-evidence-notarization #:playwright-evidence-notarization->json
+   ;; Playwright witness exporter (r9xw)
+   #:playwright-witness-bundle #:playwright-witness-bundle-p #:make-playwright-witness-bundle
+   #:pwb-pass-p #:pwb-deterministic-command #:pwb-command-match-p #:pwb-command-fingerprint
+   #:pwb-scenario-count #:pwb-missing-scenarios #:pwb-screenshot-digest-map #:pwb-trace-digest-map
+   #:pwb-transcript-digest-map #:pwb-closure-pass-p #:pwb-signature #:pwb-detail #:pwb-timestamp
+   #:playwright-artifact-digest-map #:evaluate-playwright-witness-bundle
+   #:write-playwright-witness-bundle #:playwright-witness-bundle->json
    ;; Epic 4 fail-closed gate (k2np)
    #:epic4-fail-closed-result #:epic4-fail-closed-result-p #:make-epic4-fail-closed-result
    #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-missing-scenarios #:e4fcr-detail #:e4fcr-timestamp
