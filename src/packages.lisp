@@ -546,6 +546,13 @@
    #:mtan-drift-detail #:mtan-detail #:mtan-timestamp
    #:mcp-tui-environment-fingerprint #:notarize-mcp-tui-artifacts
    #:write-mcp-tui-artifact-notarization #:mcp-tui-artifact-notarization->json
+   ;; mcp-tui witness exporter (s164)
+   #:mcp-tui-witness-bundle #:mcp-tui-witness-bundle-p #:make-mcp-tui-witness-bundle
+   #:mtwb-pass-p #:mtwb-deterministic-command #:mtwb-command-match-p #:mtwb-command-fingerprint
+   #:mtwb-scenario-count #:mtwb-missing-scenarios #:mtwb-transcript-digest-map #:mtwb-closure-pass-p
+   #:mtwb-signature #:mtwb-detail #:mtwb-timestamp
+   #:manifest-transcript-digest-map #:evaluate-mcp-tui-witness-bundle
+   #:write-mcp-tui-witness-bundle #:mcp-tui-witness-bundle->json
    ;; mcp-tui fixture generator (17bl)
    #:tui-fixture-generation-result #:tui-fixture-generation-result-p #:make-tui-fixture-generation-result
    #:tfgr-pass-p #:tfgr-output-dir #:tfgr-generated-files #:tfgr-mode #:tfgr-detail
