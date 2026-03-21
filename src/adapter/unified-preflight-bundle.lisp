@@ -7,11 +7,13 @@
 
 (defstruct (unified-preflight-bundle
              (:constructor make-unified-preflight-bundle
-                 (&key closure matrix gaps overall-pass-p detail timestamp))
+                 (&key closure matrix gaps web-preflight tui-scorecard overall-pass-p detail timestamp))
              (:conc-name upb-))
   (closure nil :type epic-closure-gate-result)
   (matrix nil :type protocol-matrix-report)
   (gaps nil :type protocol-evidence-gap-report)
+  (web-preflight nil :type playwright-preflight-verdict)
+  (tui-scorecard nil :type mcp-tui-scorecard-result)
   (overall-pass-p nil :type boolean)
   (detail "" :type string)
   (timestamp 0 :type integer))
@@ -28,14 +30,20 @@
   (let* ((closure (evaluate-epic34-closure-gate web-artifacts-dir web-command tui-artifacts-dir tui-command))
          (matrix (evaluate-protocol-evidence-matrix web-artifacts-dir web-command tui-artifacts-dir tui-command))
          (gaps (explain-protocol-evidence-gaps web-artifacts-dir web-command tui-artifacts-dir tui-command))
+         (web-preflight (run-playwright-s1-s6-preflight web-artifacts-dir web-command))
+         (tui-scorecard (evaluate-mcp-tui-scorecard-gate tui-artifacts-dir tui-command))
          (overall (and (ecgr-overall-pass-p closure)
                        (pmrep-overall-pass-p matrix)
                        (pegr-closure-pass-p gaps)
-                       (pegr-matrix-pass-p gaps))))
+                       (pegr-matrix-pass-p gaps)
+                       (ppv-pass-p web-preflight)
+                       (mtsr-pass-p tui-scorecard))))
     (make-unified-preflight-bundle
      :closure closure
      :matrix matrix
      :gaps gaps
+     :web-preflight web-preflight
+     :tui-scorecard tui-scorecard
      :overall-pass-p overall
      :detail (if overall
                  "Unified preflight bundle passed: closure gate, protocol matrix, and evidence gaps all satisfied."
@@ -61,4 +69,22 @@
     (write-string (protocol-matrix-report->json (upb-matrix bundle)) s)
     (write-string ",\"evidence_gaps\":" s)
     (write-string (protocol-evidence-gap-report->json (upb-gaps bundle)) s)
+    (write-string ",\"tracks\":{" s)
+    (write-string "\"playwright\":{" s)
+    (write-string "\"command_hash\":" s)
+    (format s "~D" (command-fingerprint *playwright-deterministic-command*))
+    (write-string ",\"missing_scenarios\":[" s)
+    (loop for sid in (ppv-missing-scenarios (upb-web-preflight bundle))
+          for i from 0 do
+            (when (> i 0) (write-char #\, s))
+            (write-string (%json-string-ecgr sid) s))
+    (write-string "]},\"mcp_tui\":{" s)
+    (write-string "\"command_hash\":" s)
+    (format s "~D" (command-fingerprint *mcp-tui-deterministic-command*))
+    (write-string ",\"missing_scenarios\":[" s)
+    (loop for sid in (mtsr-missing-scenarios (upb-tui-scorecard bundle))
+          for i from 0 do
+            (when (> i 0) (write-char #\, s))
+            (write-string (%json-string-ecgr sid) s))
+    (write-string "]}}" s)
     (write-string "}" s)))
