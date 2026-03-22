@@ -612,6 +612,14 @@
    #:scenario-has-artifact-kind-p #:build-tui-scenario-score
    #:evaluate-mcp-tui-scorecard-gate #:mcp-tui-scorecard-result->json
    #:mcp-tui-scorecard-result->detailed-json
+   ;; mcp-tui drift classifier (l7ni)
+   #:tui-drift-hint #:tui-drift-hint-p #:make-tui-drift-hint
+   #:tdh-scenario-id #:tdh-drift-class #:tdh-expected-hash #:tdh-actual-hash #:tdh-remediation
+   #:tui-drift-classification #:tui-drift-classification-p #:make-tui-drift-classification
+   #:tdc-pass-p #:tdc-drift-classes #:tdc-drift-count #:tdc-stable-count
+   #:tdc-remediation-hints #:tdc-command-hash #:tdc-expected-hash #:tdc-detail #:tdc-timestamp
+   #:classify-tui-scenario-drift #:classify-tui-command-hash-drift
+   #:tui-drift-classification->json
    ;; mcp-tui closure adapter (5bgp)
    #:tui-closure-gap #:tui-closure-gap-p #:make-tui-closure-gap
    #:tcg-scenario-id #:tcg-missing-kinds #:tcg-score
