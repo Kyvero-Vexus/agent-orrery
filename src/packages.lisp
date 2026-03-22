@@ -604,7 +604,7 @@
    #:mcp-tui-scenario-score #:mcp-tui-scenario-score-p #:make-mcp-tui-scenario-score
    #:mtss-scenario-id #:mtss-screenshot-p #:mtss-transcript-p #:mtss-asciicast-p #:mtss-report-p #:mtss-score #:mtss-pass-p
    #:mcp-tui-scorecard-result #:mcp-tui-scorecard-result-p #:make-mcp-tui-scorecard-result
-   #:mtsr-pass-p #:mtsr-command-match-p #:mtsr-scenario-scores #:mtsr-missing-scenarios #:mtsr-detail #:mtsr-timestamp
+   #:mtsr-pass-p #:mtsr-command-match-p #:mtsr-command-hash #:mtsr-scenario-scores #:mtsr-missing-scenarios #:mtsr-detail #:mtsr-timestamp
    #:scenario-has-artifact-kind-p #:build-tui-scenario-score
    #:evaluate-mcp-tui-scorecard-gate #:mcp-tui-scorecard-result->json
    #:mcp-tui-scorecard-result->detailed-json

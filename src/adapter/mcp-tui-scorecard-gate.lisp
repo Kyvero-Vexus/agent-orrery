@@ -17,6 +17,7 @@
 (defstruct (mcp-tui-scorecard-result (:conc-name mtsr-))
   (pass-p nil :type boolean)
   (command-match-p nil :type boolean)
+  (command-hash 0 :type integer)
   (scenario-scores nil :type list)
   (missing-scenarios nil :type list)
   (detail "" :type string)
@@ -84,6 +85,7 @@ Requires mcp-tui-driver T1-T6 evidence and canonical deterministic command."
       (make-mcp-tui-scorecard-result
        :pass-p pass
        :command-match-p command-ok
+       :command-hash (command-fingerprint command)
        :scenario-scores rows
        :missing-scenarios missing-rows
        :detail (format nil "command_ok=~A missing=~D" command-ok (length missing-rows))
@@ -115,9 +117,10 @@ Requires mcp-tui-driver T1-T6 evidence and canonical deterministic command."
 (defun mcp-tui-scorecard-result->json (result)
   (declare (type mcp-tui-scorecard-result result))
   (format nil
-          "{\"pass\":~A,\"command_match\":~A,\"scenario_count\":~D,\"missing\":~D,\"missing_scenarios\":~A,\"detail\":\"~A\",\"timestamp\":~D,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\"}"
+          "{\"pass\":~A,\"command_match\":~A,\"command_hash\":~D,\"scenario_count\":~D,\"missing\":~D,\"missing_scenarios\":~A,\"detail\":\"~A\",\"timestamp\":~D,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\"}"
           (if (mtsr-pass-p result) "true" "false")
           (if (mtsr-command-match-p result) "true" "false")
+          (mtsr-command-hash result)
           (length (mtsr-scenario-scores result))
           (length (mtsr-missing-scenarios result))
           (%string-list->json-array (mtsr-missing-scenarios result))
@@ -128,9 +131,10 @@ Requires mcp-tui-driver T1-T6 evidence and canonical deterministic command."
 (defun mcp-tui-scorecard-result->detailed-json (result)
   (declare (type mcp-tui-scorecard-result result))
   (with-output-to-string (out)
-    (format out "{\"pass\":~A,\"command_match\":~A,\"scenario_count\":~D,\"missing\":~D,\"missing_scenarios\":~A,\"detail\":\"~A\",\"timestamp\":~D,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\",\"scenarios\":["
+    (format out "{\"pass\":~A,\"command_match\":~A,\"command_hash\":~D,\"scenario_count\":~D,\"missing\":~D,\"missing_scenarios\":~A,\"detail\":\"~A\",\"timestamp\":~D,\"required_runner\":\"mcp-tui-driver\",\"deterministic_command\":\"~A\",\"scenarios\":["
             (if (mtsr-pass-p result) "true" "false")
             (if (mtsr-command-match-p result) "true" "false")
+            (mtsr-command-hash result)
             (length (mtsr-scenario-scores result))
             (length (mtsr-missing-scenarios result))
             (%string-list->json-array (mtsr-missing-scenarios result))
