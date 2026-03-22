@@ -38,6 +38,8 @@
              (true (search "\"transcript_chain_digest\":" json))
              (true (search "\"command_hash\":" json))
              (true (search "\"artifact_checksums\":{" json))
+             (true (search "\"rerun_cards\":[" json))
+             (true (search "\"scenario\":\"T1\"" json))
              (true (search "\"missing_scenarios\":[]" json))))
       (%cleanup-lineage-dir dir))))
 

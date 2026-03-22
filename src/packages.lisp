@@ -589,12 +589,16 @@
    #:mtwv-closure-semantics-valid-p #:mtwv-detail #:mtwv-timestamp
    #:mcp-tui-witness-expected-signature #:verify-mcp-tui-witness-bundle
    #:mcp-tui-witness-verification->json
-   ;; mcp-tui lineage stamp (e1hc)
+   ;; mcp-tui lineage stamp (e1hc/fnpn)
+   #:mcp-tui-rerun-card #:mcp-tui-rerun-card-p #:make-mcp-tui-rerun-card
+   #:mtrc-scenario-id #:mtrc-command #:mtrc-command-hash #:mtrc-transcript-path #:mtrc-screenshot-path
+   #:mtrc-asciicast-path #:mtrc-report-path #:mtrc-ready-p
    #:mcp-tui-lineage-stamp #:mcp-tui-lineage-stamp-p #:make-mcp-tui-lineage-stamp
    #:mtls-pass-p #:mtls-required-runner #:mtls-deterministic-command #:mtls-command-match-p
-   #:mtls-command-hash #:mtls-transcript-chain-digest #:mtls-artifact-checksum-map
+   #:mtls-command-hash #:mtls-transcript-chain-digest #:mtls-artifact-checksum-map #:mtls-rerun-cards
    #:mtls-missing-scenarios #:mtls-detail #:mtls-timestamp
    #:manifest-artifact-digest-map #:lineage-digest-from-map
+   #:build-mcp-tui-rerun-card #:build-mcp-tui-rerun-cards
    #:evaluate-mcp-tui-lineage-stamp #:mcp-tui-lineage-stamp->json
    ;; mcp-tui fixture generator (17bl)
    #:tui-fixture-generation-result #:tui-fixture-generation-result-p #:make-tui-fixture-generation-result

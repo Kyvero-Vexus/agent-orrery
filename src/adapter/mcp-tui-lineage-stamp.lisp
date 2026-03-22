@@ -1,9 +1,19 @@
 ;;; -*- Mode: Lisp; Syntax: Common-Lisp -*-
 ;;;
 ;;; mcp-tui-lineage-stamp.lisp — Epic 3 deterministic T1-T6 lineage stamp
-;;; Bead: agent-orrery-e1hc
+;;; Bead: agent-orrery-fnpn
 
 (in-package #:orrery/adapter)
+
+(defstruct (mcp-tui-rerun-card (:conc-name mtrc-))
+  (scenario-id "" :type string)
+  (command "" :type string)
+  (command-hash 0 :type integer)
+  (transcript-path "" :type string)
+  (screenshot-path "" :type string)
+  (asciicast-path "" :type string)
+  (report-path "" :type string)
+  (ready-p nil :type boolean))
 
 (defstruct (mcp-tui-lineage-stamp (:conc-name mtls-))
   (pass-p nil :type boolean)
@@ -13,6 +23,7 @@
   (command-hash 0 :type integer)
   (transcript-chain-digest "" :type string)
   (artifact-checksum-map nil :type list)
+  (rerun-cards nil :type list)
   (missing-scenarios nil :type list)
   (detail "" :type string)
   (timestamp 0 :type integer))
@@ -21,6 +32,10 @@
  (ftype (function (runner-evidence-manifest evidence-artifact-kind) (values list &optional))
         manifest-artifact-digest-map)
  (ftype (function (list) (values string &optional)) lineage-digest-from-map)
+ (ftype (function (string string) (values mcp-tui-rerun-card &optional))
+        build-mcp-tui-rerun-card)
+ (ftype (function (string string) (values list &optional))
+        build-mcp-tui-rerun-cards)
  (ftype (function (string string) (values mcp-tui-lineage-stamp &optional))
         evaluate-mcp-tui-lineage-stamp)
  (ftype (function (mcp-tui-lineage-stamp) (values string &optional))
@@ -55,6 +70,32 @@
         (unless (and row (eq :pass (sce-status row)))
           (push sid missing))))))
 
+(defun build-mcp-tui-rerun-card (artifacts-dir scenario-id)
+  (declare (type string artifacts-dir scenario-id)
+           (optimize (safety 3)))
+  (let* ((command *mcp-tui-deterministic-command*)
+         (transcript (merge-pathnames (format nil "~A-transcript.txt" scenario-id) artifacts-dir))
+         (shot (merge-pathnames (format nil "~A-shot.png" scenario-id) artifacts-dir))
+         (cast (merge-pathnames (format nil "~A-asciicast.cast" scenario-id) artifacts-dir))
+         (report (merge-pathnames (format nil "~A-report.json" scenario-id) artifacts-dir))
+         (ready (and (probe-file transcript) (probe-file shot) (probe-file cast) (probe-file report))))
+    (make-mcp-tui-rerun-card
+     :scenario-id scenario-id
+     :command command
+     :command-hash (command-fingerprint command)
+     :transcript-path (namestring transcript)
+     :screenshot-path (namestring shot)
+     :asciicast-path (namestring cast)
+     :report-path (namestring report)
+     :ready-p (not (null ready)))))
+
+(defun build-mcp-tui-rerun-cards (artifacts-dir command)
+  (declare (type string artifacts-dir command)
+           (ignore command)
+           (optimize (safety 3)))
+  (mapcar (lambda (sid) (build-mcp-tui-rerun-card artifacts-dir sid))
+          *mcp-tui-required-scenarios*))
+
 (defun evaluate-mcp-tui-lineage-stamp (artifacts-dir command)
   (declare (type string artifacts-dir command)
            (optimize (safety 3)))
@@ -69,6 +110,7 @@
                              (cons :screenshot shot-map)
                              (cons :asciicast cast-map)
                              (cons :machine-report report-map)))
+         (rerun-cards (build-mcp-tui-rerun-cards artifacts-dir command))
          (lineage (lineage-digest-from-map transcript-map))
          (pass (and command-match
                     (null missing)
@@ -81,6 +123,7 @@
      :command-hash (command-fingerprint command)
      :transcript-chain-digest lineage
      :artifact-checksum-map artifact-map
+     :rerun-cards rerun-cards
      :missing-scenarios missing
      :detail (format nil "command_ok=~A missing=~D transcripts=~D"
                      command-match (length missing) (length transcript-map))
@@ -95,6 +138,25 @@
           do (progn
                (when (> i 0) (write-string "," out))
                (format out "{\"scenario\":\"~A\",\"digest\":\"~A\"}" (car pair) (cdr pair))))
+    (write-string "]" out)))
+
+(defun %emit-rerun-cards-json (cards)
+  (with-output-to-string (out)
+    (write-string "[" out)
+    (loop for card in cards
+          for i from 0
+          do (progn
+               (when (> i 0) (write-string "," out))
+               (format out
+                       "{\"scenario\":\"~A\",\"command\":\"~A\",\"command_hash\":~D,\"transcript\":\"~A\",\"screenshot\":\"~A\",\"asciicast\":\"~A\",\"report\":\"~A\",\"ready\":~A}"
+                       (mtrc-scenario-id card)
+                       (mtrc-command card)
+                       (mtrc-command-hash card)
+                       (mtrc-transcript-path card)
+                       (mtrc-screenshot-path card)
+                       (mtrc-asciicast-path card)
+                       (mtrc-report-path card)
+                       (if (mtrc-ready-p card) "true" "false"))))
     (write-string "]" out)))
 
 (defun mcp-tui-lineage-stamp->json (stamp)
@@ -121,6 +183,7 @@
                (when (> i 0) (write-string "," out))
                (format out "\"~(~A~)\":~A" kind (%emit-digest-rows-json rows))))
     (format out
-            "},\"detail\":\"~A\",\"timestamp\":~D}"
+            "},\"rerun_cards\":~A,\"detail\":\"~A\",\"timestamp\":~D}"
+            (%emit-rerun-cards-json (mtls-rerun-cards stamp))
             (mtls-detail stamp)
             (mtls-timestamp stamp))))
