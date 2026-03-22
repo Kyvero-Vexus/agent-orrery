@@ -662,6 +662,14 @@
    #:wcv-pass-p #:wcv-missing-scenarios #:wcv-mismatched-scenarios #:wcv-detail
    #:find-web-scenario-artifact-path #:build-web-scenario-attestation
    #:compare-web-attestations #:write-playwright-scenario-ledger #:playwright-scenario-ledger->json
+   ;; Playwright command-table verifier gate (91gj)
+   #:playwright-cmd-table-row #:playwright-cmd-table-row-p #:make-playwright-cmd-table-row
+   #:pctr-scenario-id #:pctr-provided-p #:pctr-deterministic-p #:pctr-command-hash
+   #:pctr-expected-hash #:pctr-hash-match-p #:pctr-taxonomy-codes #:pctr-detail
+   #:playwright-cmd-table-verdict #:playwright-cmd-table-verdict-p #:make-playwright-cmd-table-verdict
+   #:pctv-pass-p #:pctv-rows #:pctv-mismatch-count #:pctv-missing-count #:pctv-detail #:pctv-timestamp
+   #:verify-playwright-command-table #:playwright-cmd-table-verdict->json
+   #:*playwright-canonical-command* #:*playwright-canonical-command-hash*
    ;; Playwright evidence pack index (z7xe)
    #:playwright-evidence-pack-index #:playwright-evidence-pack-index-p #:make-playwright-evidence-pack-index
    #:pepi-pass-p #:pepi-command-match-p #:pepi-scenario-count #:pepi-artifact-count
