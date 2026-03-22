@@ -518,6 +518,12 @@
    #:playwright-preflight-verdict #:playwright-preflight-verdict-p #:make-playwright-preflight-verdict
    #:ppv-pass-p #:ppv-command-ok-p #:ppv-canonical-pass-p #:ppv-missing-scenarios #:ppv-detail
    #:run-playwright-s1-s6-preflight #:playwright-preflight-verdict->json
+   ;; Playwright ingestion adapter (9d8)
+   #:playwright-ingestion-scenario #:playwright-ingestion-scenario-p #:make-playwright-ingestion-scenario
+   #:pwis-scenario-id #:pwis-pass-p #:pwis-artifact-count #:pwis-missing-artifact-kinds #:pwis-detail
+   #:playwright-ingestion-result #:playwright-ingestion-result-p #:make-playwright-ingestion-result
+   #:pwir-pass-p #:pwir-command-match-p #:pwir-command-fingerprint #:pwir-missing-scenarios #:pwir-scenario-results #:pwir-detail #:pwir-timestamp
+   #:collect-playwright-s1-s6-rows #:evaluate-playwright-ingestion-adapter #:playwright-ingestion-result->json
    ;; mcp-tui-driver evidence compiler (y8p)
    #:*mcp-tui-required-scenarios* #:*mcp-tui-deterministic-command*
    #:infer-tui-runner-kind #:infer-mcp-tui-scenario-id #:infer-tui-artifact-kind
