@@ -698,8 +698,14 @@
    #:explain-protocol-evidence-gaps #:protocol-remediation-step->json #:protocol-evidence-gap-report->json
    ;; Unified preflight bundle (pk7y)
    #:unified-preflight-bundle #:unified-preflight-bundle-p #:make-unified-preflight-bundle
-   #:upb-closure #:upb-matrix #:upb-gaps #:upb-overall-pass-p #:upb-detail #:upb-timestamp
+   #:upb-closure #:upb-matrix #:upb-gaps #:upb-web-preflight #:upb-tui-scorecard #:upb-overall-pass-p #:upb-detail #:upb-timestamp
    #:evaluate-unified-preflight-bundle #:unified-preflight-bundle->json
+   ;; Unified evidence envelope ADT (bag)
+   #:unified-evidence-track #:unified-evidence-track-p #:make-unified-evidence-track
+   #:uet-framework #:uet-deterministic-command #:uet-command-hash #:uet-pass-p #:uet-missing-scenarios
+   #:unified-evidence-envelope #:unified-evidence-envelope-p #:make-unified-evidence-envelope
+   #:uee-schema-version #:uee-pass-p #:uee-epic3 #:uee-epic4 #:uee-detail #:uee-timestamp
+   #:build-unified-evidence-envelope #:unified-evidence-envelope->json
    ;; Evidence recertification gate (f15)
    #:evidence-recertification-result #:evidence-recertification-result-p #:make-evidence-recertification-result
    #:err-stored-pass-p #:err-regenerated-pass-p #:err-parity-pass-p #:err-overall-pass-p
