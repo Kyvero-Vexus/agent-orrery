@@ -674,6 +674,13 @@
    #:pwb-transcript-digest-map #:pwb-closure-pass-p #:pwb-signature #:pwb-detail #:pwb-timestamp
    #:playwright-artifact-digest-map #:evaluate-playwright-witness-bundle
    #:write-playwright-witness-bundle #:playwright-witness-bundle->json
+   ;; Playwright attestation CLI report (cmkb)
+   #:playwright-attestation-cli-report #:playwright-attestation-cli-report-p #:make-playwright-attestation-cli-report
+   #:pacr-pass-p #:pacr-deterministic-command #:pacr-command-match-p #:pacr-command-fingerprint
+   #:pacr-scenario-count #:pacr-missing-scenarios #:pacr-attestations #:pacr-transcript-digest-map
+   #:pacr-signature #:pacr-timestamp #:pacr-detail
+   #:web-scenario-attestation->json #:evaluate-playwright-attestation-cli-report
+   #:playwright-attestation-cli-report->json #:write-playwright-attestation-cli-report
    ;; Epic 4 fail-closed gate (k2np)
    #:epic4-fail-closed-result #:epic4-fail-closed-result-p #:make-epic4-fail-closed-result
    #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-missing-scenarios #:e4fcr-detail #:e4fcr-timestamp

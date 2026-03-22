@@ -8,7 +8,7 @@
 
 Semantics:
 - If SBCL_BIN is present and non-empty after trimming, return it.
-- Otherwise return the stable default executable name "sbcl"."
+- Otherwise return the stable default executable name sbcl."
   (let* ((raw (or (uiop:getenv "SBCL_BIN") ""))
          (trimmed (string-trim '(#\Space #\Tab #\Newline #\Return) raw)))
     (if (plusp (length trimmed))
