@@ -670,6 +670,14 @@
    #:pctv-pass-p #:pctv-rows #:pctv-mismatch-count #:pctv-missing-count #:pctv-detail #:pctv-timestamp
    #:verify-playwright-command-table #:playwright-cmd-table-verdict->json
    #:*playwright-canonical-command* #:*playwright-canonical-command-hash*
+   ;; Playwright attestation merger (k75i)
+   #:pw-envelope-row #:pw-envelope-row-p #:make-pw-envelope-row
+   #:pwer-scenario-id #:pwer-pass-p #:pwer-command-hash #:pwer-expected-hash #:pwer-hash-match-p
+   #:pwer-screenshot-present-p #:pwer-trace-present-p #:pwer-taxonomy-codes #:pwer-detail
+   #:pw-attestation-merger-report #:pw-attestation-merger-report-p #:make-pw-attestation-merger-report
+   #:pwam-pass-p #:pwam-command-match-p #:pwam-rows #:pwam-missing-scenarios #:pwam-drift-scenarios
+   #:pwam-command-hash #:pwam-expected-hash #:pwam-detail #:pwam-timestamp
+   #:merge-playwright-attestations->envelope #:pw-attestation-merger-report->json
    ;; Playwright evidence pack index (z7xe)
    #:playwright-evidence-pack-index #:playwright-evidence-pack-index-p #:make-playwright-evidence-pack-index
    #:pepi-pass-p #:pepi-command-match-p #:pepi-scenario-count #:pepi-artifact-count
@@ -705,12 +713,6 @@
    #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-command-hash #:e4fcr-missing-scenarios
    #:e4fcr-reason-codes #:e4fcr-remediation #:e4fcr-detail #:e4fcr-timestamp
    #:evaluate-epic4-fail-closed-gate #:epic4-fail-closed-result->json
-   ;; Epic 4 replay card emitter (cuvt)
-   #:epic4-replay-card #:epic4-replay-card-p #:make-epic4-replay-card
-   #:e4rc-scenario-id #:e4rc-canonical-command #:e4rc-screenshot-path #:e4rc-trace-path
-   #:e4rc-present-p
-   #:make-epic4-replay-card-for-scenario #:emit-epic4-replay-cards
-   #:epic4-replay-card->json #:epic4-replay-cards->json
    ;; Epic 3/4 closure gate (i9p)
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
