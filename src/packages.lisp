@@ -690,7 +690,7 @@
    #:playwright-attestation-cli-report->json #:write-playwright-attestation-cli-report
    ;; Epic 4 fail-closed gate (k2np)
    #:epic4-fail-closed-result #:epic4-fail-closed-result-p #:make-epic4-fail-closed-result
-   #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-missing-scenarios #:e4fcr-detail #:e4fcr-timestamp
+   #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-command-hash #:e4fcr-missing-scenarios #:e4fcr-detail #:e4fcr-timestamp
    #:evaluate-epic4-fail-closed-gate #:epic4-fail-closed-result->json
    ;; Epic 3/4 closure gate (i9p)
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result

@@ -8,6 +8,7 @@
 (defstruct (epic4-fail-closed-result (:conc-name e4fcr-))
   (pass-p nil :type boolean)
   (command-match-p nil :type boolean)
+  (command-hash 0 :type integer)
   (missing-scenarios nil :type list)
   (detail "" :type string)
   (timestamp 0 :type integer))
@@ -60,6 +61,7 @@
     (make-epic4-fail-closed-result
      :pass-p pass
      :command-match-p command-ok
+     :command-hash (command-fingerprint command)
      :missing-scenarios missing
      :detail (format nil "pass=~A command_ok=~A missing=~D"
                      pass command-ok (length missing))
@@ -67,10 +69,18 @@
 
 (defun epic4-fail-closed-result->json (result)
   (declare (type epic4-fail-closed-result result))
-  (format nil
-          "{\"pass\":~A,\"command_match\":~A,\"missing\":~D,\"detail\":\"~A\",\"timestamp\":~D}"
-          (if (e4fcr-pass-p result) "true" "false")
-          (if (e4fcr-command-match-p result) "true" "false")
-          (length (e4fcr-missing-scenarios result))
-          (e4fcr-detail result)
-          (e4fcr-timestamp result)))
+  (with-output-to-string (out)
+    (format out
+            "{\"pass\":~A,\"command_match\":~A,\"command_hash\":~D,\"missing\":~D,\"missing_scenarios\":["
+            (if (e4fcr-pass-p result) "true" "false")
+            (if (e4fcr-command-match-p result) "true" "false")
+            (e4fcr-command-hash result)
+            (length (e4fcr-missing-scenarios result)))
+    (loop for sid in (e4fcr-missing-scenarios result)
+          for i from 0
+          do (progn
+               (when (> i 0) (write-char #\, out))
+               (format out "\"~A\"" sid)))
+    (format out "],\"detail\":\"~A\",\"timestamp\":~D}"
+            (e4fcr-detail result)
+            (e4fcr-timestamp result))))
