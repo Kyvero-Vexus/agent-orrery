@@ -130,6 +130,8 @@
    #:apply-failure-policies #:run-gate
    ;; Preflight JSON (apd)
    #:preflight-report-to-json #:gate-result-to-json
+   ;; SBCL binary contract (fmoe)
+   #:selected-sbcl-binary #:selected-sbcl-binary-json-field
    ;; Contract harness (8ro)
    #:runtime-target #:runtime-target-p #:make-runtime-target
    #:rt-profile #:rt-base-url #:rt-token #:rt-description

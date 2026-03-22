@@ -62,6 +62,7 @@
                    (:file "preflight")
                    (:file "gate-runner")
                    (:file "preflight-json")
+                   (:file "sbcl-binary-contract")
                    (:file "contract-harness")
                    (:file "probe-orchestrator")
                    (:file "compatibility-report")
