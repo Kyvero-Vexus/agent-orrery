@@ -39,14 +39,13 @@
 
 ;;; ── Taxonomy codes ────────────────────────────────────────────────────────────
 
-(defun %cmd-table-taxonomy (scenario-id provided-p deterministic-p hash-match-p)
+(defun %cmd-table-taxonomy (scenario-id provided-p hash-match-p)
   (declare (type string scenario-id)
-           (type boolean provided-p deterministic-p hash-match-p))
+           (type boolean provided-p hash-match-p))
   (cond
-    ((not provided-p)      (list (format nil "E4_CMD_TABLE_MISSING_~A" scenario-id)))
-    ((not deterministic-p) (list (format nil "E4_CMD_TABLE_NONDETERMINISTIC_~A" scenario-id)))
-    ((not hash-match-p)    (list (format nil "E4_CMD_TABLE_DRIFT_~A" scenario-id)))
-    (t                     nil)))
+    ((not provided-p)   (list (format nil "E4_CMD_TABLE_MISSING_~A" scenario-id)))
+    ((not hash-match-p) (list (format nil "E4_CMD_TABLE_DRIFT_~A" scenario-id)))
+    (t                  nil)))
 
 ;;; ── Row builder ──────────────────────────────────────────────────────────────
 
@@ -68,7 +67,6 @@
          (deterministic-p (and provided-p hash-match-p))
          (taxonomy-codes  (%cmd-table-taxonomy scenario-id
                                                provided-p
-                                               deterministic-p
                                                hash-match-p))
          (detail          (if (null taxonomy-codes)
                               (format nil "scenario ~A: cmd_hash=~D ok" scenario-id cmd-hash)

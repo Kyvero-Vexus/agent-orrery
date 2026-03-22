@@ -114,3 +114,74 @@
     (format out "],\"detail\":\"~A\",\"timestamp\":~D}"
             (e4fcr-detail result)
             (e4fcr-timestamp result))))
+
+;;; Replay card emitter for Epic 4 (bead: agent-orrery-cuvt)
+
+(defstruct (epic4-replay-card (:conc-name e4rc-))
+  (scenario-id "" :type string)
+  (canonical-command "" :type string)
+  (screenshot-path "" :type string)
+  (trace-path "" :type string)
+  (present-p nil :type boolean))
+
+(declaim
+ (ftype (function (string) (values epic4-replay-card &optional))
+        make-epic4-replay-card-for-scenario)
+ (ftype (function (string) (values (simple-array epic4-replay-card) &optional))
+        emit-epic4-replay-cards)
+ (ftype (function (epic4-replay-card) (values string &optional))
+        epic4-replay-card->json)
+ (ftype (function ((simple-array epic4-replay-card)) (values string &optional))
+        epic4-replay-cards->json))
+
+(defun make-epic4-replay-card-for-scenario (scenario-id)
+  "Create a replay card for a single Epic 4 scenario."
+  (declare (type string scenario-id)
+           (optimize (safety 3)))
+  (let* ((cmd *playwright-deterministic-command*)
+         (screenshot-path (format nil "artifacts/playwright/~A/screenshot.png" scenario-id))
+         (trace-path (format nil "artifacts/playwright/~A/trace.zip" scenario-id)))
+    (make-epic4-replay-card
+     :scenario-id scenario-id
+     :canonical-command cmd
+     :screenshot-path screenshot-path
+     :trace-path trace-path
+     :present-p nil))) ; Presence determined by manifest at emission time
+
+(defun emit-epic4-replay-cards (artifacts-dir)
+  "Emit replay cards for all Epic 4 S1-S6 scenarios.
+Returns a simple-array of epic4-replay-card structs."
+  (declare (type string artifacts-dir)
+           (optimize (safety 3)))
+  (declare (ignore artifacts-dir)) ; Will be used when manifest integration is complete
+  (let ((cards (make-array (length *playwright-required-scenarios*)
+                           :element-type 'epic4-replay-card
+                           :initial-element (make-epic4-replay-card))))
+    (loop for sid in *playwright-required-scenarios*
+          for i from 0
+          do (setf (aref cards i) (make-epic4-replay-card-for-scenario sid)))
+    cards))
+
+(defun epic4-replay-card->json (card)
+  "Serialize a single replay card to JSON."
+  (declare (type epic4-replay-card card))
+  (with-output-to-string (out)
+    (format out "{\"scenario_id\":\"~A\",\"canonical_command\":\"~A\","
+            (e4rc-scenario-id card)
+            (e4rc-canonical-command card))
+    (format out "\"screenshot_path\":\"~A\",\"trace_path\":\"~A\","
+            (e4rc-screenshot-path card)
+            (e4rc-trace-path card))
+    (format out "\"present\":~A}"
+            (if (e4rc-present-p card) "true" "false"))))
+
+(defun epic4-replay-cards->json (cards)
+  "Serialize an array of replay cards to JSON."
+  (declare (type (simple-array epic4-replay-card) cards))
+  (with-output-to-string (out)
+    (write-char #\[ out)
+    (loop for i from 0 below (length cards)
+          do (progn
+               (when (> i 0) (write-char #\, out))
+               (write-string (epic4-replay-card->json (aref cards i)) out)))
+    (write-char #\] out)))

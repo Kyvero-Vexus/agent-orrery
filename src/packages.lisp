@@ -705,6 +705,12 @@
    #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-command-hash #:e4fcr-missing-scenarios
    #:e4fcr-reason-codes #:e4fcr-remediation #:e4fcr-detail #:e4fcr-timestamp
    #:evaluate-epic4-fail-closed-gate #:epic4-fail-closed-result->json
+   ;; Epic 4 replay card emitter (cuvt)
+   #:epic4-replay-card #:epic4-replay-card-p #:make-epic4-replay-card
+   #:e4rc-scenario-id #:e4rc-canonical-command #:e4rc-screenshot-path #:e4rc-trace-path
+   #:e4rc-present-p
+   #:make-epic4-replay-card-for-scenario #:emit-epic4-replay-cards
+   #:epic4-replay-card->json #:epic4-replay-cards->json
    ;; Epic 3/4 closure gate (i9p)
    #:epic-closure-gate-result #:epic-closure-gate-result-p #:make-epic-closure-gate-result
    #:ecgr-epic3-pass-p #:ecgr-epic4-pass-p #:ecgr-overall-pass-p #:ecgr-detail #:ecgr-timestamp
