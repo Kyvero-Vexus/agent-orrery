@@ -10,6 +10,8 @@
   (command-match-p nil :type boolean)
   (command-hash 0 :type integer)
   (missing-scenarios nil :type list)
+  (reason-codes nil :type list)
+  (remediation nil :type list)
   (detail "" :type string)
   (timestamp 0 :type integer))
 
@@ -38,6 +40,14 @@
         (push sid missing)))
     (nreverse missing)))
 
+(defun %scenario-reason-code (scenario-id)
+  (declare (type string scenario-id))
+  (format nil "E4_MISSING_ARTIFACT_~A" scenario-id))
+
+(defun %scenario-remediation (scenario-id)
+  (declare (type string scenario-id))
+  (format nil "rerun Playwright scenario ~A via: cd e2e && ./run-e2e.sh --scenario ~A" scenario-id scenario-id))
+
 (defun evaluate-epic4-fail-closed-gate (artifacts-dir command)
   "Fail-closed Epic 4 gate:
 - Playwright evidence only
@@ -55,6 +65,12 @@
                   *expected-web-command*))
          (missing (%missing-s1-s6-screenshot-or-trace manifest))
          (command-ok (string= command *playwright-deterministic-command*))
+         (reason-codes (append (if command-ok nil (list "E4_COMMAND_DRIFT"))
+                               (mapcar #'%scenario-reason-code missing)))
+         (remediation (append (if command-ok
+                                  nil
+                                  (list "use canonical command: cd e2e && ./run-e2e.sh"))
+                              (mapcar #'%scenario-remediation missing)))
          (pass (and (ecr-pass-p report)
                     command-ok
                     (null missing))))
@@ -63,6 +79,8 @@
      :command-match-p command-ok
      :command-hash (command-fingerprint command)
      :missing-scenarios missing
+     :reason-codes reason-codes
+     :remediation remediation
      :detail (format nil "pass=~A command_ok=~A missing=~D"
                      pass command-ok (length missing))
      :timestamp (get-universal-time))))
@@ -81,6 +99,18 @@
           do (progn
                (when (> i 0) (write-char #\, out))
                (format out "\"~A\"" sid)))
+    (format out "],\"reason_codes\":[")
+    (loop for code in (e4fcr-reason-codes result)
+          for i from 0
+          do (progn
+               (when (> i 0) (write-char #\, out))
+               (format out "\"~A\"" code)))
+    (format out "],\"remediation\":[")
+    (loop for item in (e4fcr-remediation result)
+          for i from 0
+          do (progn
+               (when (> i 0) (write-char #\, out))
+               (format out "\"~A\"" item)))
     (format out "],\"detail\":\"~A\",\"timestamp\":~D}"
             (e4fcr-detail result)
             (e4fcr-timestamp result))))
