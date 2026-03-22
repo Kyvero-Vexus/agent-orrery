@@ -33,6 +33,8 @@
              (is = 0 (length (orrery/adapter:pepi-missing-scenarios idx)))
              (true (search "\"command_hash\":" json))
              (true (search "\"attest_rows\":" json))
+             (true (search "\"replay_cards\":" json))
+             (true (search "\"scenario\":\"S1\"" json))
              (true (search "\"missing_scenarios\":[]" json))))
       (%cleanup-pack-index-dir dir))))
 
@@ -50,7 +52,8 @@
              (false (orrery/adapter:pepi-pass-p idx))
              (false (orrery/adapter:pepi-command-match-p idx))
              (true (search "\"missing_scenarios\":[\"S6\"]" json))
-             (true (search "\"provided\":\"make e2e\"" json))))
+             (true (search "\"provided\":\"make e2e\"" json))
+             (true (search "\"ready\":false" json))))
       (%cleanup-pack-index-dir dir))))
 
 (define-test (playwright-evidence-pack-index-suite index-pass-with-canonical-bash-alias)

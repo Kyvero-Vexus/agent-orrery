@@ -11,6 +11,15 @@
   (trace-digest "" :type string)
   (complete-p nil :type boolean))
 
+(defstruct (playwright-replay-card (:conc-name pprc-))
+  (scenario-id "" :type string)
+  (command "" :type string)
+  (command-hash 0 :type integer)
+  (replay-command "" :type string)
+  (screenshot-digest "" :type string)
+  (trace-digest "" :type string)
+  (ready-p nil :type boolean))
+
 (defstruct (playwright-evidence-pack-index (:conc-name pepi-))
   (pass-p nil :type boolean)
   (command-match-p nil :type boolean)
@@ -19,6 +28,7 @@
   (artifact-count 0 :type integer)
   (missing-scenarios nil :type list)
   (attest-rows nil :type list)
+  (replay-cards nil :type list)
   (command-table nil :type list)
   (detail "" :type string)
   (timestamp 0 :type integer))
@@ -28,6 +38,7 @@
  (ftype (function (runner-evidence-manifest string evidence-artifact-kind) (values (or null evidence-artifact) &optional))
         find-scenario-artifact)
  (ftype (function (runner-evidence-manifest) (values list &optional)) build-playwright-attest-rows)
+ (ftype (function (runner-evidence-manifest string) (values list &optional)) build-playwright-replay-cards)
  (ftype (function (string string) (values playwright-evidence-pack-index &optional))
         build-playwright-evidence-pack-index)
  (ftype (function (playwright-evidence-pack-index) (values string &optional))
@@ -76,6 +87,29 @@
                :complete-p complete)
               rows)))))
 
+(defun build-playwright-replay-cards (manifest command)
+  (declare (type runner-evidence-manifest manifest)
+           (type string command)
+           (optimize (safety 3)))
+  (let ((cards nil)
+        (deterministic *playwright-deterministic-command*))
+    (dolist (sid *playwright-required-scenarios* (nreverse cards))
+      (let* ((shot (find-scenario-artifact manifest sid :screenshot))
+             (trace (find-scenario-artifact manifest sid :trace))
+             (shot-digest (if shot (file-sha256 (ea-path shot)) ""))
+             (trace-digest (if trace (file-sha256 (ea-path trace)) ""))
+             (replay (format nil "WEB_EVIDENCE_COMMAND='~A' SCENARIO=~A cd e2e && ./run-e2e.sh" deterministic sid))
+             (ready (and shot trace (canonical-playwright-command-p command))))
+        (push (make-playwright-replay-card
+               :scenario-id sid
+               :command command
+               :command-hash (command-fingerprint command)
+               :replay-command replay
+               :screenshot-digest shot-digest
+               :trace-digest trace-digest
+               :ready-p (not (null ready)))
+              cards)))))
+
 (defun build-playwright-evidence-pack-index (artifacts-dir command)
   (declare (type string artifacts-dir command)
            (optimize (safety 3)))
@@ -85,6 +119,7 @@
          (scenario-count (length *playwright-required-scenarios*))
          (artifact-count (length (rem-artifacts manifest)))
          (attest-rows (build-playwright-attest-rows manifest))
+         (replay-cards (build-playwright-replay-cards manifest command))
          (command-table (list (cons :deterministic *playwright-deterministic-command*)
                               (cons :provided command)))
          (pass (and command-ok (null missing))))
@@ -96,6 +131,7 @@
      :artifact-count artifact-count
      :missing-scenarios missing
      :attest-rows attest-rows
+     :replay-cards replay-cards
      :command-table command-table
      :detail (format nil "command_ok=~A missing=~D artifacts=~D"
                      command-ok (length missing) artifact-count)
@@ -127,11 +163,29 @@
                (format out "\"~A\"" item)))
     (write-string "]" out)))
 
+(defun %replay-cards->json (cards)
+  (with-output-to-string (out)
+    (write-string "[" out)
+    (loop for card in cards
+          for i from 0
+          do (progn
+               (when (> i 0) (write-char #\, out))
+               (format out
+                       "{\"scenario\":\"~A\",\"command\":\"~A\",\"command_hash\":~D,\"replay_command\":\"~A\",\"screenshot_digest\":\"~A\",\"trace_digest\":\"~A\",\"ready\":~A}"
+                       (pprc-scenario-id card)
+                       (pprc-command card)
+                       (pprc-command-hash card)
+                       (pprc-replay-command card)
+                       (pprc-screenshot-digest card)
+                       (pprc-trace-digest card)
+                       (if (pprc-ready-p card) "true" "false"))))
+    (write-string "]" out)))
+
 (defun playwright-evidence-pack-index->json (index)
   (declare (type playwright-evidence-pack-index index))
   (with-output-to-string (out)
     (format out
-            "{\"pass\":~A,\"command_match\":~A,\"command_hash\":~D,\"scenario_count\":~D,\"artifact_count\":~D,\"missing\":~D,\"missing_scenarios\":~A,\"command_table\":{\"deterministic\":\"~A\",\"provided\":\"~A\"},\"attest_rows\":~A,\"detail\":\"~A\",\"timestamp\":~D}"
+            "{\"pass\":~A,\"command_match\":~A,\"command_hash\":~D,\"scenario_count\":~D,\"artifact_count\":~D,\"missing\":~D,\"missing_scenarios\":~A,\"command_table\":{\"deterministic\":\"~A\",\"provided\":\"~A\"},\"attest_rows\":~A,\"replay_cards\":~A,\"detail\":\"~A\",\"timestamp\":~D}"
             (if (pepi-pass-p index) "true" "false")
             (if (pepi-command-match-p index) "true" "false")
             (pepi-command-hash index)
@@ -142,5 +196,6 @@
             (cdr (assoc :deterministic (pepi-command-table index)))
             (cdr (assoc :provided (pepi-command-table index)))
             (%rows->json (pepi-attest-rows index))
+            (%replay-cards->json (pepi-replay-cards index))
             (pepi-detail index)
             (pepi-timestamp index))))
