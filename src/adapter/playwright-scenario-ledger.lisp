@@ -149,13 +149,15 @@
                   :run-id (format nil "playwright-run-~D" (get-universal-time))
                   :command command
                   :attestations att
-                  :timestamp (get-universal-time))))
-    (let ((out (merge-pathnames "playwright-scenario-ledger.json" (pathname artifact-root)))
-          (sexp (merge-pathnames "playwright-scenario-ledger.sexp" (pathname artifact-root)))
-          (prev (merge-pathnames "playwright-scenario-ledger.prev.sexp" (pathname artifact-root))))
+                  :timestamp (get-universal-time)))
+         (root-abs (uiop:ensure-absolute-pathname (pathname artifact-root)
+                                                  (uiop:getcwd))))
+    (let ((out (merge-pathnames "playwright-scenario-ledger.json" root-abs))
+          (sexp (merge-pathnames "playwright-scenario-ledger.sexp" root-abs))
+          (prev (merge-pathnames "playwright-scenario-ledger.prev.sexp" root-abs)))
       (when (probe-file sexp)
         (ignore-errors (delete-file prev))
-        (rename-file sexp prev))
+        (ignore-errors (rename-file sexp prev)))
       (%write-web-ledger-sexp sexp ledger)
       (with-open-file (s out :direction :output :if-exists :supersede)
         (write-string (playwright-scenario-ledger->json ledger) s))
@@ -163,9 +165,24 @@
 
 (defun playwright-scenario-ledger->json (ledger)
   (declare (type playwright-scenario-ledger ledger))
-  (format nil
-          "{\"run_id\":\"~A\",\"command\":\"~A\",\"attestation_count\":~D,\"timestamp\":~D}"
-          (psl-run-id ledger)
-          (psl-command ledger)
-          (length (psl-attestations ledger))
-          (psl-timestamp ledger)))
+  (with-output-to-string (out)
+    (format out
+            "{\"run_id\":\"~A\",\"command\":\"~A\",\"command_hash\":~D,\"attestation_count\":~D,\"missing_attestations\":~D,\"timestamp\":~D,\"scenarios\":["
+            (psl-run-id ledger)
+            (psl-command ledger)
+            (command-fingerprint (psl-command ledger))
+            (length (psl-attestations ledger))
+            (count-if-not #'wsa-attested-p (psl-attestations ledger))
+            (psl-timestamp ledger))
+    (loop for att in (psl-attestations ledger)
+          for i from 0
+          do (progn
+               (when (> i 0) (write-char #\, out))
+               (format out
+                       "{\"scenario\":\"~A\",\"attested\":~A,\"command_hash\":~D,\"screenshot_path\":\"~A\",\"trace_path\":\"~A\"}"
+                       (wsa-scenario-id att)
+                       (if (wsa-attested-p att) "true" "false")
+                       (wsa-command-fingerprint att)
+                       (wsa-screenshot-path att)
+                       (wsa-trace-path att))))
+    (write-string "]}" out)))
