@@ -292,6 +292,7 @@
                    (:file "protocol-evidence-matrix-tests")
                    (:file "protocol-evidence-gap-explainer-tests")
                    (:file "unified-preflight-bundle-tests")
+                   (:file "unified-closure-gate-cli-tests")
                    (:file "evidence-recertification-gate-tests")
                    (:file "epic-done-state-guard-tests")
                    (:file "evidence-gap-explainer-tests")

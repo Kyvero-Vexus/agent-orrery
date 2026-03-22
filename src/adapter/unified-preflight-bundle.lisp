@@ -7,13 +7,14 @@
 
 (defstruct (unified-preflight-bundle
              (:constructor make-unified-preflight-bundle
-                 (&key closure matrix gaps web-preflight tui-scorecard overall-pass-p detail timestamp))
+                 (&key closure matrix gaps web-preflight tui-scorecard tui-gate-adapter overall-pass-p detail timestamp))
              (:conc-name upb-))
   (closure nil :type epic-closure-gate-result)
   (matrix nil :type protocol-matrix-report)
   (gaps nil :type protocol-evidence-gap-report)
   (web-preflight nil :type playwright-preflight-verdict)
   (tui-scorecard nil :type mcp-tui-scorecard-result)
+  (tui-gate-adapter nil :type mcp-tui-gate-adapter-result)
   (overall-pass-p nil :type boolean)
   (detail "" :type string)
   (timestamp 0 :type integer))
@@ -32,18 +33,21 @@
          (gaps (explain-protocol-evidence-gaps web-artifacts-dir web-command tui-artifacts-dir tui-command))
          (web-preflight (run-playwright-s1-s6-preflight web-artifacts-dir web-command))
          (tui-scorecard (evaluate-mcp-tui-scorecard-gate tui-artifacts-dir tui-command))
+         (tui-gate-adapter (evaluate-mcp-tui-unified-envelope-gate-adapter tui-artifacts-dir tui-command))
          (overall (and (ecgr-overall-pass-p closure)
                        (pmrep-overall-pass-p matrix)
                        (pegr-closure-pass-p gaps)
                        (pegr-matrix-pass-p gaps)
                        (ppv-pass-p web-preflight)
-                       (mtsr-pass-p tui-scorecard))))
+                       (mtsr-pass-p tui-scorecard)
+                       (mtgar-pass-p tui-gate-adapter))))
     (make-unified-preflight-bundle
      :closure closure
      :matrix matrix
      :gaps gaps
      :web-preflight web-preflight
      :tui-scorecard tui-scorecard
+     :tui-gate-adapter tui-gate-adapter
      :overall-pass-p overall
      :detail (if overall
                  "Unified preflight bundle passed: closure gate, protocol matrix, and evidence gaps all satisfied."
@@ -69,6 +73,8 @@
     (write-string (protocol-matrix-report->json (upb-matrix bundle)) s)
     (write-string ",\"evidence_gaps\":" s)
     (write-string (protocol-evidence-gap-report->json (upb-gaps bundle)) s)
+    (write-string ",\"mcp_tui_gate_adapter\":" s)
+    (write-string (mcp-tui-gate-adapter-result->json (upb-tui-gate-adapter bundle)) s)
     (write-string ",\"tracks\":{" s)
     (write-string "\"playwright\":{" s)
     (write-string "\"command_hash\":" s)
