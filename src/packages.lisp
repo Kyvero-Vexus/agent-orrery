@@ -619,6 +619,16 @@
    #:tcr-pass-p #:tcr-command-match-p #:tcr-deterministic-command #:tcr-gaps #:tcr-detail #:tcr-timestamp
    #:scenario-score->closure-gap #:scorecard->closure-report
    #:evaluate-mcp-tui-closure-adapter #:tui-closure-report->json
+   ;; T1-T6 evidence validator + closure verdict (1ts)
+   #:t1t6-scenario-failure #:t1t6-scenario-failure-p #:make-t1t6-scenario-failure
+   #:t1t6sf-scenario-id #:t1t6sf-missing-artifacts #:t1t6sf-artifact-score #:t1t6sf-reason-code
+   #:t1t6-closure-verdict #:t1t6-closure-verdict-p #:make-t1t6-closure-verdict
+   #:t1t6cv-pass-p #:t1t6cv-command-ok-p #:t1t6cv-deterministic-command
+   #:t1t6cv-command-hash #:t1t6cv-scenarios-required #:t1t6cv-scenarios-passed
+   #:t1t6cv-scenario-failures #:t1t6cv-missing-scenarios #:t1t6cv-failure-diagnostics
+   #:t1t6cv-detail #:t1t6cv-timestamp
+   #:scorecard->t1t6-closure-verdict #:evaluate-t1t6-evidence-validator
+   #:t1t6sf->json #:t1t6-closure-verdict->json
    ;; TUI scenario ledger + rerun attestations (h9i)
    #:scenario-rerun-attestation #:scenario-rerun-attestation-p #:make-scenario-rerun-attestation
    #:sra-scenario-id #:sra-command-fingerprint #:sra-artifact-fingerprint
