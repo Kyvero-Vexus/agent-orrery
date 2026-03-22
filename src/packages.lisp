@@ -628,6 +628,16 @@
    #:tmar-by-scenario #:tmar-by-kind #:tmar-by-reason
    #:tmar-command-hash #:tmar-detail #:tmar-timestamp
    #:normalize-tui-missing-artifacts #:tui-missing-artifact-report->json
+   ;; mcp-tui rerun command table normalizer (v8uu)
+   #:tui-rerun-command-entry #:tui-rerun-command-entry-p #:make-tui-rerun-command-entry
+   #:trce-scenario-id #:trce-expected-command #:trce-expected-hash
+   #:trce-provided-hash #:trce-lineage-match-p #:trce-rerun-hint
+   #:tui-rerun-command-table #:tui-rerun-command-table-p #:make-tui-rerun-command-table
+   #:trct-pass-p #:trct-command-table #:trct-drift-scenarios #:trct-missing-scenarios
+   #:trct-match-count #:trct-drift-count #:trct-missing-count
+   #:trct-deterministic-command #:trct-command-hash #:trct-detail #:trct-timestamp
+   #:build-tui-rerun-command-entry #:normalize-tui-rerun-command-table
+   #:tui-rerun-command-table->json
    ;; mcp-tui closure adapter (5bgp)
    #:tui-closure-gap #:tui-closure-gap-p #:make-tui-closure-gap
    #:tcg-scenario-id #:tcg-missing-kinds #:tcg-score
