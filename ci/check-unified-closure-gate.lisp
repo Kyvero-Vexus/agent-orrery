@@ -15,21 +15,24 @@
            (tui-baseline (getenv-or "TUI_BASELINE_ARTIFACTS_DIR" tui-dir))
            (out (getenv-or "UNIFIED_CLOSURE_OUT" "artifacts/preflight/unified-closure-acceptance.json"))
            #+sbcl (old-baseline (uiop:getenv "TUI_BASELINE_ARTIFACTS_DIR"))
-           bundle gate-adapter lineage-stamp pass verify-cmd selected-bin json)
+           bundle gate-adapter lineage-stamp web-attestation pass verify-cmd selected-bin json)
       #+sbcl (sb-posix:setenv "TUI_BASELINE_ARTIFACTS_DIR" tui-baseline 1)
       (setf bundle (orrery/adapter:evaluate-unified-preflight-bundle web-dir web-cmd tui-dir tui-cmd)
             gate-adapter (orrery/adapter:evaluate-mcp-tui-unified-envelope-gate-adapter tui-dir tui-cmd)
             lineage-stamp (orrery/adapter:evaluate-mcp-tui-lineage-stamp tui-dir tui-cmd)
+            web-attestation (orrery/adapter:build-playwright-evidence-lock web-dir web-cmd)
             pass (and (orrery/adapter:upb-overall-pass-p bundle)
                       (orrery/adapter:mtgar-pass-p gate-adapter)
-                      (orrery/adapter:mtls-pass-p lineage-stamp))
+                      (orrery/adapter:mtls-pass-p lineage-stamp)
+                      (orrery/adapter:pel-pass-p web-attestation))
             verify-cmd "make web-fixture-regression tui-fixture-regression unified-preflight unified-closure-gate"
             selected-bin (orrery/adapter:selected-sbcl-binary)
-            json (format nil "{\"pass\":~A,\"deterministic_verification_command\":\"~A\",\"selected_sbcl_binary\":\"~A\",\"tui_baseline_artifacts_dir\":\"~A\",\"bundle\":~A,\"gate_adapter\":~A,\"mcp_tui_lineage_stamp\":~A}"
+            json (format nil "{\"pass\":~A,\"deterministic_verification_command\":\"~A\",\"selected_sbcl_binary\":\"~A\",\"tui_baseline_artifacts_dir\":\"~A\",\"bundle\":~A,\"gate_adapter\":~A,\"mcp_tui_lineage_stamp\":~A,\"playwright_attestation\":~A}"
                          (if pass "true" "false") verify-cmd selected-bin tui-baseline
                          (orrery/adapter:unified-preflight-bundle->json bundle)
                          (orrery/adapter:mcp-tui-gate-adapter-result->json gate-adapter)
-                         (orrery/adapter:mcp-tui-lineage-stamp->json lineage-stamp)))
+                         (orrery/adapter:mcp-tui-lineage-stamp->json lineage-stamp)
+                         (orrery/adapter:playwright-evidence-lock->json web-attestation)))
       (ensure-directories-exist out)
       (with-open-file (o out :direction :output :if-exists :supersede)
         (write-string json o))
