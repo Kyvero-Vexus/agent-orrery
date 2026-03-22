@@ -620,6 +620,14 @@
    #:tdc-remediation-hints #:tdc-command-hash #:tdc-expected-hash #:tdc-detail #:tdc-timestamp
    #:classify-tui-scenario-drift #:classify-tui-command-hash-drift
    #:tui-drift-classification->json
+   ;; mcp-tui missing artifact normalizer (wztc)
+   #:tui-missing-artifact-entry #:tui-missing-artifact-entry-p #:make-tui-missing-artifact-entry
+   #:tmae-scenario-id #:tmae-artifact-kind #:tmae-reason-code #:tmae-expected-path #:tmae-remediation
+   #:tui-missing-artifact-report #:tui-missing-artifact-report-p #:make-tui-missing-artifact-report
+   #:tmar-pass-p #:tmar-total-missing #:tmar-reason-code-matrix
+   #:tmar-by-scenario #:tmar-by-kind #:tmar-by-reason
+   #:tmar-command-hash #:tmar-detail #:tmar-timestamp
+   #:normalize-tui-missing-artifacts #:tui-missing-artifact-report->json
    ;; mcp-tui closure adapter (5bgp)
    #:tui-closure-gap #:tui-closure-gap-p #:make-tui-closure-gap
    #:tcg-scenario-id #:tcg-missing-kinds #:tcg-score
