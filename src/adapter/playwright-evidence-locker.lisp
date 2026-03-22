@@ -57,12 +57,19 @@
 
 (defun playwright-evidence-lock->json (lock)
   (declare (type playwright-evidence-lock lock))
-  (format nil
-          "{\"pass\":~A,\"command_match\":~A,\"command\":\"~A\",\"artifact_count\":~D,\"missing\":~D,\"detail\":\"~A\",\"timestamp\":~D}"
-          (if (pel-pass-p lock) "true" "false")
-          (if (pel-command-match-p lock) "true" "false")
-          (pel-command lock)
-          (pel-artifact-count lock)
-          (length (pel-missing-scenarios lock))
-          (pel-detail lock)
-          (pel-timestamp lock)))
+  (with-output-to-string (s)
+    (format s
+            "{\"pass\":~A,\"command_match\":~A,\"command\":\"~A\",\"command_hash\":~D,\"artifact_count\":~D,\"missing\":~D,\"missing_scenarios\":["
+            (if (pel-pass-p lock) "true" "false")
+            (if (pel-command-match-p lock) "true" "false")
+            (pel-command lock)
+            (command-fingerprint (pel-command lock))
+            (pel-artifact-count lock)
+            (length (pel-missing-scenarios lock)))
+    (loop for sid in (pel-missing-scenarios lock)
+          for i from 0 do
+            (when (> i 0) (write-char #\, s))
+            (format s "\"~A\"" sid))
+    (format s "],\"detail\":\"~A\",\"timestamp\":~D}"
+            (pel-detail lock)
+            (pel-timestamp lock))))
