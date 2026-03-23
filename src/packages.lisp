@@ -736,6 +736,23 @@
    #:playwright-lockstep-result #:playwright-lockstep-result-p #:make-playwright-lockstep-result
    #:plr-pass-p #:plr-command-match-p #:plr-missing-scenarios #:plr-detail #:plr-timestamp
    #:evaluate-playwright-lockstep #:playwright-lockstep-result->json
+   ;; Playwright replay-certificate compiler + artifact ledger exporter (0vdb)
+   #:playwright-replay-cert-row #:playwright-replay-cert-row-p #:make-playwright-replay-cert-row
+   #:prcr-scenario-id #:prcr-screenshot-hash #:prcr-trace-hash #:prcr-transcript-hash
+   #:prcr-command-hash #:prcr-complete-p
+   #:playwright-replay-certificate #:playwright-replay-certificate-p #:make-playwright-replay-certificate
+   #:prc-run-id #:prc-deterministic-command #:prc-command-fingerprint #:prc-command-canonical-p
+   #:prc-scenario-count #:prc-complete-scenario-count #:prc-missing-scenarios #:prc-rows
+   #:prc-ledger-hash #:prc-closure-ready-p #:prc-timestamp
+   #:playwright-artifact-ledger-entry #:playwright-artifact-ledger-entry-p #:make-playwright-artifact-ledger-entry
+   #:pale-scenario-id #:pale-screenshot-hash #:pale-trace-hash #:pale-transcript-hash
+   #:pale-command-hash #:pale-present-p
+   #:playwright-artifact-ledger #:playwright-artifact-ledger-p #:make-playwright-artifact-ledger
+   #:pal-cert-run-id #:pal-entries #:pal-scenario-count #:pal-complete-count
+   #:pal-pass-p #:pal-ledger-hash #:pal-exported-at
+   #:replay-cert-row->json #:compute-replay-ledger-hash
+   #:compile-playwright-replay-certificate #:export-playwright-artifact-ledger
+   #:playwright-replay-certificate->json #:playwright-artifact-ledger->json
    ;; Playwright evidence notarizer (bcq9)
    #:playwright-evidence-notarization #:playwright-evidence-notarization-p #:make-playwright-evidence-notarization
    #:pen-run-id #:pen-command #:pen-command-fingerprint #:pen-scenario-count #:pen-missing-scenarios
