@@ -68,7 +68,7 @@
         epic4-closure-attestation->json)
  (ftype (function (string) (values string &optional))
         %file-sha256-hex)
- (ftype (function (playwright-replay-row) (values epic4-diagnostic &optional))
+ (ftype (function (playwright-replay-row epic4-scenario-attestation) (values epic4-diagnostic &optional))
         %build-scenario-diagnostic))
 
 ;;; ── SHA256 digest helper ─────────────────────────────────────────────────────
