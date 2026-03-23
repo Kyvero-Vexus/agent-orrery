@@ -3,7 +3,7 @@
 ;;; epic4-closure-attestation-exporter-tests.lisp — tests for S1-S6 attestation exporter
 ;;; Bead: agent-orrery-xx9m
 
-(in-package #:orrery/test-harness)
+(in-package #:orrery/harness-tests)
 
 (define-test "epic4-closure-attestation-exporter" 
   (let ((suite (make-instance 'test-suite :name "epic4-closure-attestation-exporter")))

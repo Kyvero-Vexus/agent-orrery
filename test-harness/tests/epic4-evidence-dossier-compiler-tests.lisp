@@ -3,7 +3,7 @@
 ;;; epic4-evidence-dossier-compiler-tests.lisp — tests for S1-S6 evidence dossier compiler
 ;;; Bead: agent-orrery-nlup
 
-(in-package #:orrery/test-harness)
+(in-package #:orrery/harness-tests)
 
 (define-test "epic4-evidence-dossier-compiler" 
   (let ((suite (make-instance 'test-suite :name "epic4-evidence-dossier-compiler")))

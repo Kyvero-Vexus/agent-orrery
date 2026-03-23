@@ -828,6 +828,33 @@
    #:pacr-signature #:pacr-timestamp #:pacr-detail
    #:web-scenario-attestation->json #:evaluate-playwright-attestation-cli-report
    #:playwright-attestation-cli-report->json #:write-playwright-attestation-cli-report
+   ;; Epic 4 closure attestation exporter (xx9m)
+   #:epic4-diagnostic #:epic4-diagnostic-p #:make-epic4-diagnostic
+   #:e4d-category #:e4d-scenario-id #:e4d-detail
+   #:epic4-scenario-attestation #:epic4-scenario-attestation-p #:make-epic4-scenario-attestation
+   #:e4sa-scenario-id #:e4sa-command-fingerprint #:e4sa-screenshot-present-p #:e4sa-screenshot-path
+   #:e4sa-screenshot-digest #:e4sa-trace-present-p #:e4sa-trace-path #:e4sa-trace-digest
+   #:e4sa-transcript-fingerprint #:e4sa-verdict
+   #:epic4-closure-attestation #:epic4-closure-attestation-p #:make-epic4-closure-attestation
+   #:e4ca-run-id #:e4ca-lineage-tag #:e4ca-deterministic-command #:e4ca-command-fingerprint
+   #:e4ca-scenario-coverage #:e4ca-attestations #:e4ca-screenshot-digests #:e4ca-trace-digests
+   #:e4ca-transcript-fingerprints #:e4ca-fail-closed-diagnostics #:e4ca-closure-verdict
+   #:e4ca-timestamp #:e4ca-policy-note
+   #:replay-row->attestation #:compile-epic4-closure-attestation
+   #:epic4-closure-attestation->json #:run-epic4-closure-attestation-exporter
+   ;; Epic 4 evidence dossier compiler (nlup)
+   #:epic4-dossier-diagnostic #:epic4-dossier-diagnostic-p #:make-epic4-dossier-diagnostic
+   #:edd-category #:edd-scenario-id #:edd-detail
+   #:epic4-scenario-record #:epic4-scenario-record-p #:make-epic4-scenario-record
+   #:e4sr-scenario-id #:e4sr-command-fingerprint #:e4sr-evidence-complete-p #:e4sr-verdict
+   #:epic4-evidence-dossier #:epic4-evidence-dossier-p #:make-epic4-evidence-dossier
+   #:e4ed-run-id #:e4ed-lineage-tag #:e4ed-deterministic-command #:e4ed-command-fingerprint
+   #:e4ed-records #:e4ed-scenario-coverage #:e4ed-screenshot-digests #:e4ed-trace-digests
+   #:e4ed-transcript-fingerprints #:e4ed-fail-closed-diagnostics #:e4ed-closure-verdict
+   #:e4ed-timestamp #:e4ed-policy-note
+   #:attestation->scenario-record #:build-scenario-diagnostic
+   #:compile-epic4-evidence-dossier #:epic4-evidence-dossier->json
+   #:run-epic4-evidence-dossier-compiler
    ;; Epic 4 fail-closed gate (k2np)
    #:epic4-fail-closed-result #:epic4-fail-closed-result-p #:make-epic4-fail-closed-result
    #:e4fcr-pass-p #:e4fcr-command-match-p #:e4fcr-command-hash #:e4fcr-missing-scenarios
@@ -878,6 +905,21 @@
    #:build-canonicalizer-lock-input #:preflight-verdict->lock-bridge-verdict
    #:run-canonicalizer-lock-bridge #:bridge-verdict->manifest-lock
    #:lock-bridge-verdict->json
+   ;; Closure preflight aggregator (bv0)
+   #:preflight-track-record #:preflight-track-record-p #:make-preflight-track-record
+   #:ptr-framework #:ptr-pass-p #:ptr-command-match-p #:ptr-command-hash
+   #:ptr-required-scenarios #:ptr-complete-scenarios #:ptr-missing-scenarios
+   #:ptr-detail #:ptr-timestamp
+   #:closure-preflight-aggregate #:closure-preflight-aggregate-p #:make-closure-preflight-aggregate
+   #:cpa-schema-version #:cpa-run-id #:cpa-pass-p #:cpa-verdict
+   #:cpa-epic3-track #:cpa-epic4-track
+   #:cpa-epic3-pass-p #:cpa-epic4-pass-p #:cpa-commands-match-p
+   #:cpa-total-scenarios #:cpa-total-complete #:cpa-total-missing
+   #:cpa-blocking-issues #:cpa-detail #:cpa-timestamp
+   #:playwright-verdict->track-record #:mcp-tui-scorecard->track-record
+   #:aggregate-closure-preflight #:aggregate-from-raw-verdicts
+   #:run-closure-preflight-aggregator
+   #:track-record->json #:closure-preflight-aggregate->json
    ;; Evidence recertification gate (f15)
    #:evidence-recertification-result #:evidence-recertification-result-p #:make-evidence-recertification-result
    #:err-stored-pass-p #:err-regenerated-pass-p #:err-parity-pass-p #:err-overall-pass-p
