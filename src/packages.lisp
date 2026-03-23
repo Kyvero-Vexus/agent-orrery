@@ -718,6 +718,18 @@
    #:pctv-pass-p #:pctv-rows #:pctv-mismatch-count #:pctv-missing-count #:pctv-detail #:pctv-timestamp
    #:verify-playwright-command-table #:playwright-cmd-table-verdict->json
    #:*playwright-canonical-command* #:*playwright-canonical-command-hash*
+   ;; Playwright scenario manifest ADTs (2w69)
+   #:playwright-artifact-descriptor #:playwright-artifact-descriptor-p #:make-playwright-artifact-descriptor
+   #:pad-scenario-id #:pad-kind #:pad-path #:pad-present-p #:pad-digest
+   #:playwright-scenario-manifest-entry #:playwright-scenario-manifest-entry-p #:make-playwright-scenario-manifest-entry
+   #:psme-scenario-id #:psme-command #:psme-command-hash #:psme-screenshot #:psme-trace #:psme-complete-p #:psme-detail
+   #:playwright-scenario-manifest #:playwright-scenario-manifest-p #:make-playwright-scenario-manifest
+   #:psm-run-id #:psm-command #:psm-command-hash #:psm-entries #:psm-total-count
+   #:psm-complete-count #:psm-missing-count #:psm-pass-p #:psm-timestamp
+   #:build-playwright-artifact-descriptor
+   #:build-playwright-scenario-manifest-entry
+   #:compile-playwright-scenario-manifest
+   #:playwright-scenario-manifest->json
    ;; Playwright attestation merger (k75i)
    #:pw-envelope-row #:pw-envelope-row-p #:make-pw-envelope-row
    #:pwer-scenario-id #:pwer-pass-p #:pwer-command-hash #:pwer-expected-hash #:pwer-hash-match-p
