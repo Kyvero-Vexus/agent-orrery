@@ -332,6 +332,7 @@
                    (:file "playwright-attestation-merger-tests")
                    (:file "playwright-evidence-notarizer-tests")
                    (:file "playwright-retention-policy-evaluator-tests")
+                   (:file "playwright-retention-policy-regression-tests")
                    (:file "playwright-witness-exporter-tests")
                    (:file "playwright-attestation-cli-tests")
                    (:file "playwright-evidence-pack-index-tests")
