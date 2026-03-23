@@ -832,6 +832,18 @@
    #:pen-chain-digest #:pen-complete-p #:pen-timestamp
    #:canonical-playwright-command-p #:compute-web-attestation-chain
    #:notarize-playwright-evidence #:write-playwright-evidence-notarization #:playwright-evidence-notarization->json
+   ;; Playwright retention policy evaluator (jwv2)
+   #:s1-s6-retention-policy #:s1-s6-retention-policy-p #:make-s1-s6-retention-policy
+   #:srp-scenario-id #:srp-retention-window #:srp-required-kinds #:srp-command-fingerprint
+   #:retention-evaluation-result #:retention-evaluation-result-p #:make-retention-evaluation-result
+   #:rer-scenario-id #:rer-pass-p #:rer-age-secs #:rer-within-window-p
+   #:rer-kinds-present #:rer-kinds-missing #:rer-command-match-p #:rer-provenance-edge-p #:rer-detail
+   #:s1-s6-retention-report #:s1-s6-retention-report-p #:make-s1-s6-retention-report
+   #:srr-run-id #:srr-command #:srr-command-fingerprint #:srr-pass-p
+   #:srr-evaluated-count #:srr-failed-scenarios #:srr-results #:srr-timestamp
+   #:canonical-playwright-command-p/retention #:evaluate-scenario-retention
+   #:evaluate-s1-s6-retention-policy
+   #:retention-evaluation-result->json #:s1-s6-retention-report->json
    ;; Playwright witness exporter (r9xw)
    #:playwright-witness-bundle #:playwright-witness-bundle-p #:make-playwright-witness-bundle
    #:pwb-pass-p #:pwb-deterministic-command #:pwb-command-match-p #:pwb-command-fingerprint
