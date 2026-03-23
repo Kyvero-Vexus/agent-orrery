@@ -638,6 +638,18 @@
    #:trct-deterministic-command #:trct-command-hash #:trct-detail #:trct-timestamp
    #:build-tui-rerun-command-entry #:normalize-tui-rerun-command-table
    #:tui-rerun-command-table->json
+   ;; mcp-tui lineage mismatch explainer (amvi)
+   #:tui-lineage-remediation-step #:tui-lineage-remediation-step-p #:make-tui-lineage-remediation-step
+   #:tlrs-step-id #:tlrs-description #:tlrs-command
+   #:tui-lineage-mismatch-entry #:tui-lineage-mismatch-entry-p #:make-tui-lineage-mismatch-entry
+   #:tlme-scenario-id #:tlme-mismatch-class #:tlme-expected-command #:tlme-actual-command
+   #:tlme-expected-digest #:tlme-actual-digest #:tlme-remediation-steps #:tlme-detail
+   #:tui-lineage-mismatch-report #:tui-lineage-mismatch-report-p #:make-tui-lineage-mismatch-report
+   #:tlmr-pass-p #:tlmr-clean-count #:tlmr-mismatch-count #:tlmr-mismatch-matrix
+   #:tlmr-by-mismatch-class #:tlmr-remediation-matrix
+   #:tlmr-command-hash #:tlmr-detail #:tlmr-timestamp
+   #:build-tui-lineage-mismatch-entry #:explain-tui-lineage-mismatches
+   #:tui-lineage-mismatch-report->json
    ;; mcp-tui closure adapter (5bgp)
    #:tui-closure-gap #:tui-closure-gap-p #:make-tui-closure-gap
    #:tcg-scenario-id #:tcg-missing-kinds #:tcg-score
