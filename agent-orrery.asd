@@ -152,6 +152,7 @@
                    (:file "tui-scenario-contracts")
                    (:file "t1-t6-replay-journal")
                    (:file "t1-t6-command-lock-packager")
+                   (:file "t1-t6-fail-closed-verifier")
                    (:file "ui-protocol-boundary")
                    (:file "replay-protocol-bridge")
                    (:file "ui-protocol-schema")
