@@ -863,6 +863,21 @@
    #:unified-evidence-envelope #:unified-evidence-envelope-p #:make-unified-evidence-envelope
    #:uee-schema-version #:uee-pass-p #:uee-epic3 #:uee-epic4 #:uee-detail #:uee-timestamp
    #:build-unified-evidence-envelope #:unified-evidence-envelope->json
+   ;; Unified closure gate (2wb)
+   #:unified-closure-verdict #:unified-closure-verdict-p #:make-unified-closure-verdict
+   #:closure-rationale-entry #:closure-rationale-entry-p #:make-closure-rationale-entry
+   #:evaluate-unified-closure-gate #:unified-closure-verdict->json
+   #:run-unified-closure-gate-compiler
+   ;; Playwright canonicalizer-lock bridge (8e2)
+   #:canonicalizer-lock-input #:canonicalizer-lock-input-p #:make-canonicalizer-lock-input
+   #:cli-scenario-id #:cli-command #:cli-command-fp #:cli-screenshot-path
+   #:cli-trace-path #:cli-screenshot-ok-p #:cli-trace-ok-p #:cli-canonical-ok-p
+   #:lock-bridge-verdict #:lock-bridge-verdict-p #:make-lock-bridge-verdict
+   #:lbv-pass-p #:lbv-command #:lbv-command-fp #:lbv-artifact-root
+   #:lbv-complete-count #:lbv-missing-scenarios #:lbv-detail #:lbv-timestamp
+   #:build-canonicalizer-lock-input #:preflight-verdict->lock-bridge-verdict
+   #:run-canonicalizer-lock-bridge #:bridge-verdict->manifest-lock
+   #:lock-bridge-verdict->json
    ;; Evidence recertification gate (f15)
    #:evidence-recertification-result #:evidence-recertification-result-p #:make-evidence-recertification-result
    #:err-stored-pass-p #:err-regenerated-pass-p #:err-parity-pass-p #:err-overall-pass-p

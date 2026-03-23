@@ -398,4 +398,12 @@
                 #:cd-diff-id #:cd-deltas #:cd-endpoint-count
                 #:cd-identical-count #:cd-compatible-count #:cd-regressed-count
                 #:cd-improved-count #:cd-new-count #:cd-removed-count #:cd-regressions-p
-                #:diff-endpoint-samples #:diff-capture-results #:capture-diff-to-json))
+                #:diff-endpoint-samples #:diff-capture-results #:capture-diff-to-json
+                ;; Playwright canonicalizer-lock bridge (8e2)
+                #:canonicalizer-lock-input #:canonicalizer-lock-input-p #:make-canonicalizer-lock-input
+                #:cli-scenario-id #:cli-command #:cli-command-fp #:cli-screenshot-path
+                #:cli-trace-path #:cli-screenshot-ok-p #:cli-trace-ok-p #:cli-canonical-ok-p
+                #:lock-bridge-verdict #:lock-bridge-verdict-p #:make-lock-bridge-verdict
+                #:lbv-pass-p #:lbv-command #:lbv-command-fp #:lbv-artifact-root
+                #:lbv-complete-count #:lbv-missing-scenarios #:lbv-detail #:lbv-timestamp
+                #:lock-bridge-verdict->json))
