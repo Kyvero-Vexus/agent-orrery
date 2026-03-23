@@ -139,6 +139,7 @@
                    (:file "epic4-closure-attestation-exporter")
                    (:file "epic4-evidence-dossier-compiler")
                    (:file "dual-framework-closure-certificate")
+                   (:file "unified-closure-gate")
                    (:file "epic4-fail-closed-gate")
                    (:file "tui-artifact-diff-checker")
                    (:file "epic-closure-gate")
