@@ -612,6 +612,14 @@
    #:tcv-pass-p #:tcv-command-ok-p #:tcv-missing-scenarios #:tcv-mismatch-scenarios
    #:tcv-scenario-count #:tcv-complete-count #:tcv-command #:tcv-command-hash #:tcv-detail #:tcv-timestamp
    #:run-tui-continuity-preflight #:tui-continuity-verdict->json
+   ;; T1-T6 replay drift auditor + evidence freshness gate (9vaf)
+   #:tui-drift-row #:tui-drift-row-p #:make-tui-drift-row
+   #:tdr-scenario-id #:tdr-command-hash-ok #:tdr-fingerprint-ok #:tdr-fresh-p
+   #:tdr-baseline-fp #:tdr-current-fp #:tdr-drift-codes #:tdr-detail
+   #:tui-replay-drift-verdict #:tui-replay-drift-verdict-p #:make-tui-replay-drift-verdict
+   #:trdv-pass-p #:trdv-drift-count #:trdv-stale-count #:trdv-rows
+   #:trdv-command-hash #:trdv-timestamp #:trdv-detail
+   #:build-tui-drift-row #:audit-tui-replay-drift #:tui-replay-drift-verdict->json
    ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
    #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
    #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
