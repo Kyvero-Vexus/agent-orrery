@@ -756,6 +756,12 @@
    #:pepi-missing-scenarios #:pepi-detail #:pepi-timestamp
    #:canonical-playwright-command-p #:build-playwright-evidence-pack-index
    #:playwright-evidence-pack-index->json
+   ;; Protocol version negotiation contract (7mki)
+   #:version-contract-entry #:version-contract-entry-p #:make-version-contract-entry
+   #:vce-surface #:vce-schema-version #:vce-compatible-p #:vce-required-fields #:vce-detail
+   #:version-negotiation-contract #:version-negotiation-contract-p #:make-version-negotiation-contract
+   #:vnc-run-id #:vnc-tui-version #:vnc-web-version #:vnc-entries #:vnc-all-compatible-p #:vnc-timestamp #:vnc-detail
+   #:compile-version-negotiation-contract #:version-negotiation-contract->json
    ;; Playwright lockstep checker (3dd4)
    #:playwright-lockstep-result #:playwright-lockstep-result-p #:make-playwright-lockstep-result
    #:plr-pass-p #:plr-command-match-p #:plr-missing-scenarios #:plr-detail #:plr-timestamp

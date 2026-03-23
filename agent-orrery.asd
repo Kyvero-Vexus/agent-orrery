@@ -138,6 +138,7 @@
                    (:file "epic-closure-gate")
                    (:file "protocol-evidence-matrix")
                    (:file "protocol-evidence-gap-explainer")
+                   (:file "protocol-version-contract")
                    (:file "unified-preflight-bundle")
                    (:file "unified-evidence-envelope")
                    (:file "evidence-recertification-gate")
