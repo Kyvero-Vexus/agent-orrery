@@ -208,7 +208,7 @@ Returns an EPIC4-EVIDENCE-DOSSIER with deterministic JSON shape."
 
 ;;; ── JSON serialization ───────────────────────────────────────────────────────
 
-(defun %scenario-record->json (r)
+(defun %epic4-scenario-record->json (r)
   "Serialize EPIC4-SCENARIO-RECORD to JSON string."
   (declare (type epic4-scenario-record r))
   (with-output-to-string (out)
@@ -251,7 +251,7 @@ Returns an EPIC4-EVIDENCE-DOSSIER with deterministic JSON shape."
     (write-string "\"records\":[" out)
     (loop for r in (e4ed-records dossier) for i from 0
           do (progn (when (> i 0) (write-char #\, out))
-                    (write-string (%scenario-record->json r) out)))
+                    (write-string (%epic4-scenario-record->json r) out)))
     
     ;; Screenshot digests
     (write-string "],\"screenshot_digests\":{" out)

@@ -203,7 +203,7 @@ Returns an EPIC3-CLOSURE-DOSSIER with deterministic JSON shape."
                     (format out "\"~A\"" p)))
     (format out "],\"detail\":\"~A\"}" (ed-detail d))))
 
-(defun %scenario-record->json (r)
+(defun %epic3-scenario-record->json (r)
   (declare (type epic3-scenario-record r))
   (with-output-to-string (out)
     (format out "{\"scenario\":\"~A\",\"cmd_fp\":~D,\"tx_digest\":~D,\"artifacts\":~A,\"verdict\":\"~(~A~)\",\"paths\":["
@@ -237,7 +237,7 @@ Returns an EPIC3-CLOSURE-DOSSIER with deterministic JSON shape."
     (write-string "\"records\":[" out)
     (loop for r in (ecd-records dossier) for i from 0
           do (progn (when (> i 0) (write-char #\, out))
-                    (write-string (%scenario-record->json r) out)))
+                    (write-string (%epic3-scenario-record->json r) out)))
     (write-string "],\"artifact_digests\":[" out)
     ;; Digests
     (loop for e in (ecd-artifact-digest-map dossier) for i from 0
