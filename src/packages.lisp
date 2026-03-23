@@ -607,6 +607,11 @@
    #:compile-tui-fingerprint-batch
    #:tui-transcript-fingerprint->json
    #:tui-fingerprint-batch->json
+   ;; T1-T6 continuity preflight CLI (6oh)
+   #:tui-continuity-verdict #:tui-continuity-verdict-p #:make-tui-continuity-verdict
+   #:tcv-pass-p #:tcv-command-ok-p #:tcv-missing-scenarios #:tcv-mismatch-scenarios
+   #:tcv-scenario-count #:tcv-complete-count #:tcv-command #:tcv-command-hash #:tcv-detail #:tcv-timestamp
+   #:run-tui-continuity-preflight #:tui-continuity-verdict->json
    ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
    #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
    #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
