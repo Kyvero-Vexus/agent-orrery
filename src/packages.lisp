@@ -594,6 +594,19 @@
    #:mtwv-closure-semantics-valid-p #:mtwv-detail #:mtwv-timestamp
    #:mcp-tui-witness-expected-signature #:verify-mcp-tui-witness-bundle
    #:mcp-tui-witness-verification->json
+   ;; T1-T6 transcript fingerprint normalizer (309)
+   #:tui-normalized-line #:tui-normalized-line-p #:make-tui-normalized-line
+   #:tnl-original #:tnl-canonical #:tnl-index
+   #:tui-transcript-fingerprint #:tui-transcript-fingerprint-p #:make-tui-transcript-fingerprint
+   #:ttf-scenario-id #:ttf-line-count #:ttf-fingerprint #:ttf-command #:ttf-command-hash
+   #:ttf-canonical-lines #:ttf-detail
+   #:tui-fingerprint-batch #:tui-fingerprint-batch-p #:make-tui-fingerprint-batch
+   #:tfb-run-id #:tfb-command #:tfb-command-hash #:tfb-fingerprints #:tfb-pass-p #:tfb-timestamp
+   #:canonicalize-transcript-line
+   #:build-tui-transcript-fingerprint
+   #:compile-tui-fingerprint-batch
+   #:tui-transcript-fingerprint->json
+   #:tui-fingerprint-batch->json
    ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
    #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
    #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
