@@ -406,4 +406,13 @@
                 #:lock-bridge-verdict #:lock-bridge-verdict-p #:make-lock-bridge-verdict
                 #:lbv-pass-p #:lbv-command #:lbv-command-fp #:lbv-artifact-root
                 #:lbv-complete-count #:lbv-missing-scenarios #:lbv-detail #:lbv-timestamp
-                #:lock-bridge-verdict->json))
+                #:lock-bridge-verdict->json
+                ;; Closure preflight aggregator (bv0)
+                #:preflight-track-record #:preflight-track-record-p #:make-preflight-track-record
+                #:closure-preflight-aggregate #:closure-preflight-aggregate-p
+                #:cpa-pass-p #:cpa-verdict
+                #:cpa-epic3-pass-p #:cpa-epic4-pass-p #:cpa-commands-match-p
+                #:cpa-total-scenarios #:cpa-total-complete #:cpa-total-missing
+                #:cpa-blocking-issues
+                #:aggregate-closure-preflight #:aggregate-from-raw-verdicts
+                #:track-record->json #:closure-preflight-aggregate->json))
