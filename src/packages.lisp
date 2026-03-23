@@ -718,6 +718,18 @@
    #:pctv-pass-p #:pctv-rows #:pctv-mismatch-count #:pctv-missing-count #:pctv-detail #:pctv-timestamp
    #:verify-playwright-command-table #:playwright-cmd-table-verdict->json
    #:*playwright-canonical-command* #:*playwright-canonical-command-hash*
+   ;; Playwright replay table + verifier hooks (0xa)
+   #:playwright-replay-row #:playwright-replay-row-p #:make-playwright-replay-row
+   #:prr-scenario-id #:prr-command #:prr-command-hash #:prr-screenshot-path #:prr-trace-path
+   #:prr-transcript-hash #:prr-preflight-ok-p #:prr-failure-codes
+   #:playwright-replay-table #:playwright-replay-table-p #:make-playwright-replay-table
+   #:prt-run-id #:prt-command #:prt-command-hash #:prt-rows #:prt-pass-p #:prt-fail-count #:prt-timestamp
+   #:playwright-preflight-record #:playwright-preflight-record-p #:make-playwright-preflight-record
+   #:ppr-scenario-id #:ppr-gate-pass-p #:ppr-reason-codes #:ppr-detail
+   #:build-playwright-replay-row
+   #:compile-playwright-replay-table
+   #:replay-row->preflight-record
+   #:playwright-replay-table->json
    ;; Playwright scenario manifest ADTs (2w69)
    #:playwright-artifact-descriptor #:playwright-artifact-descriptor-p #:make-playwright-artifact-descriptor
    #:pad-scenario-id #:pad-kind #:pad-path #:pad-present-p #:pad-digest
