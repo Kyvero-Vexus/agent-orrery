@@ -32,8 +32,8 @@
 
 ;;; ── Preflight hook result ────────────────────────────────────────────────────
 
-(defstruct (playwright-preflight-record (:conc-name ppr-))
-  "Machine-checkable preflight record for one S1-S6 scenario."
+(defstruct (playwright-preflight-hook (:conc-name pph-))
+  "Machine-checkable preflight hook result for one S1-S6 scenario."
   (scenario-id    ""     :type string)
   (gate-pass-p    nil    :type boolean)
   (reason-codes   nil    :type list)
@@ -46,7 +46,7 @@
         build-playwright-replay-row)
  (ftype (function (string string) (values playwright-replay-table &optional))
         compile-playwright-replay-table)
- (ftype (function (playwright-replay-row) (values playwright-preflight-record &optional))
+ (ftype (function (playwright-replay-row) (values playwright-preflight-hook &optional))
         replay-row->preflight-record)
  (ftype (function (playwright-replay-table) (values string &optional))
         playwright-replay-table->json))
@@ -98,7 +98,7 @@
 (defun replay-row->preflight-record (row)
   "Convert one replay row to a machine-checkable preflight record."
   (declare (type playwright-replay-row row))
-  (make-playwright-preflight-record
+  (make-playwright-preflight-hook
    :scenario-id  (prr-scenario-id row)
    :gate-pass-p  (prr-preflight-ok-p row)
    :reason-codes (prr-failure-codes row)

@@ -520,6 +520,11 @@
    #:playwright-preflight-verdict #:playwright-preflight-verdict-p #:make-playwright-preflight-verdict
    #:ppv-pass-p #:ppv-command-ok-p #:ppv-canonical-pass-p #:ppv-missing-scenarios #:ppv-detail
    #:run-playwright-s1-s6-preflight #:playwright-preflight-verdict->json
+   ;; Playwright verifier-hook adapter (3j2)
+   #:playwright-hook-verdict #:playwright-hook-verdict-p #:make-playwright-hook-verdict
+   #:phv-run-id #:phv-command #:phv-command-hash #:phv-records #:phv-pass-p
+   #:phv-fail-count #:phv-closure-verdict #:phv-timestamp #:phv-detail
+   #:run-playwright-s1-s6-hook-preflight #:playwright-hook-verdict->json
    ;; Playwright ingestion adapter (9d8)
    #:playwright-ingestion-scenario #:playwright-ingestion-scenario-p #:make-playwright-ingestion-scenario
    #:pwis-scenario-id #:pwis-pass-p #:pwis-artifact-count #:pwis-missing-artifact-kinds #:pwis-detail
@@ -589,6 +594,26 @@
    #:mtwv-closure-semantics-valid-p #:mtwv-detail #:mtwv-timestamp
    #:mcp-tui-witness-expected-signature #:verify-mcp-tui-witness-bundle
    #:mcp-tui-witness-verification->json
+   ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
+   #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
+   #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
+   #:tui-contract-matrix #:tui-contract-matrix-p #:make-tui-contract-matrix
+   #:tcm-run-id #:tcm-command #:tcm-command-hash #:tcm-contracts #:tcm-pass-p #:tcm-missing-count #:tcm-timestamp
+   #:tui-artifact-index-entry #:tui-artifact-index-entry-p #:make-tui-artifact-index-entry
+   #:taie-scenario-id #:taie-artifact-kind #:taie-present-p #:taie-path
+   #:*tui-required-artifact-kinds*
+   #:build-tui-contract-row #:compile-tui-contract-matrix
+   #:contract-matrix->artifact-index #:tui-contract-matrix->json
+   ;; T1-T6 witness ledger + lockfile emitter (om6o)
+   #:t1-t6-lock-record #:t1-t6-lock-record-p #:make-t1-t6-lock-record
+   #:tlr-scenario-id #:tlr-deterministic-command #:tlr-command-fingerprint
+   #:tlr-artifact-root #:tlr-artifact-pointers #:tlr-transcript-digest
+   #:tlr-all-artifacts-present-p #:tlr-missing-artifacts #:tlr-detail
+   #:t1-t6-witness-ledger #:t1-t6-witness-ledger-p #:make-t1-t6-witness-ledger
+   #:twl-run-id #:twl-deterministic-command #:twl-command-fingerprint
+   #:twl-records #:twl-all-present-p #:twl-missing-count
+   #:twl-closure-verdict #:twl-timestamp #:twl-detail
+   #:contract-row->lock-record #:compile-t1-t6-witness-ledger #:t1-t6-witness-ledger->json
    ;; mcp-tui lineage stamp (e1hc/fnpn)
    #:mcp-tui-rerun-card #:mcp-tui-rerun-card-p #:make-mcp-tui-rerun-card
    #:mtrc-scenario-id #:mtrc-command #:mtrc-command-hash #:mtrc-transcript-path #:mtrc-screenshot-path
@@ -724,8 +749,8 @@
    #:prr-transcript-hash #:prr-preflight-ok-p #:prr-failure-codes
    #:playwright-replay-table #:playwright-replay-table-p #:make-playwright-replay-table
    #:prt-run-id #:prt-command #:prt-command-hash #:prt-rows #:prt-pass-p #:prt-fail-count #:prt-timestamp
-   #:playwright-preflight-record #:playwright-preflight-record-p #:make-playwright-preflight-record
-   #:ppr-scenario-id #:ppr-gate-pass-p #:ppr-reason-codes #:ppr-detail
+   #:playwright-preflight-hook #:playwright-preflight-hook-p #:make-playwright-preflight-hook
+   #:pph-scenario-id #:pph-gate-pass-p #:pph-reason-codes #:pph-detail
    #:build-playwright-replay-row
    #:compile-playwright-replay-table
    #:replay-row->preflight-record

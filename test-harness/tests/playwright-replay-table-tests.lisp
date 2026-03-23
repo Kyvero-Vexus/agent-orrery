@@ -66,9 +66,9 @@
                :preflight-ok-p nil
                :failure-codes '("E4_REPLAY_MISSING_SCR_S2")))
          (rec (orrery/adapter:replay-row->preflight-record row)))
-    (false (orrery/adapter:ppr-gate-pass-p rec))
-    (is string= "S2" (orrery/adapter:ppr-scenario-id rec))
-    (true (not (null (orrery/adapter:ppr-reason-codes rec))))))
+    (false (orrery/adapter:pph-gate-pass-p rec))
+    (is string= "S2" (orrery/adapter:pph-scenario-id rec))
+    (true (not (null (orrery/adapter:pph-reason-codes rec))))))
 
 ;; Command hash pinned to canonical
 (define-test (playwright-replay-table-suite canonical-command-hash)
