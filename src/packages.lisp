@@ -620,6 +620,14 @@
    #:trdv-pass-p #:trdv-drift-count #:trdv-stale-count #:trdv-rows
    #:trdv-command-hash #:trdv-timestamp #:trdv-detail
    #:build-tui-drift-row #:audit-tui-replay-drift #:tui-replay-drift-verdict->json
+   ;; Playwright S1-S6 provenance auditor + drift alarms (kz5)
+   #:playwright-provenance-record #:playwright-provenance-record-p #:make-playwright-provenance-record
+   #:ppr2-scenario-id #:ppr2-screenshot-digest #:ppr2-trace-digest #:ppr2-command-hash
+   #:ppr2-lineage-ok-p #:ppr2-alarm-codes #:ppr2-detail
+   #:playwright-provenance-audit #:playwright-provenance-audit-p #:make-playwright-provenance-audit
+   #:ppa-pass-p #:ppa-alarm-count #:ppa-records #:ppa-command-hash #:ppa-timestamp #:ppa-detail
+   #:build-playwright-provenance-record #:run-playwright-provenance-audit
+   #:playwright-provenance-audit->json
    ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
    #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
    #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
