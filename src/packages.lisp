@@ -636,6 +636,36 @@
    #:peb-bundle-id #:peb-command #:peb-command-hash #:peb-entries
    #:peb-complete-count #:peb-missing-count #:peb-ready-p #:peb-timestamp
    #:compile-playwright-evidence-bundle #:playwright-evidence-bundle->json
+   ;; T1-T6 command fingerprint baseline ledger (0ko9)
+   #:baseline-snapshot #:baseline-snapshot-p #:make-baseline-snapshot
+   #:bsnap-version-id #:bsnap-command #:bsnap-command-fingerprint
+   #:bsnap-scenario-digests #:bsnap-captured-at #:bsnap-canonical-p
+   #:baseline-ledger #:baseline-ledger-p #:make-baseline-ledger
+   #:bldr-snapshots #:bldr-latest-version-id #:bldr-snapshot-count
+   #:drift-delta #:drift-delta-p #:make-drift-delta
+   #:ddelta-scenario-id #:ddelta-status #:ddelta-old-digest #:ddelta-new-digest
+   #:baseline-drift-report #:baseline-drift-report-p #:make-baseline-drift-report
+   #:bdr-baseline-version #:bdr-current-version #:bdr-verdict
+   #:bdr-deltas #:bdr-drifted-count #:bdr-timestamp
+   #:fingerprint-string #:compute-baseline-version-id
+   #:capture-baseline-snapshot #:append-snapshot #:compute-drift-deltas
+   #:build-baseline-drift-report #:verdict-from-baseline-drift-report
+   #:baseline-drift-report->json #:baseline-ledger->json
+   ;; T1-T6 fixture checksum registry + rerun consistency gate (d2it)
+   #:fixture-checksum-entry #:fixture-checksum-entry-p #:make-fixture-checksum-entry
+   #:fce-scenario-id #:fce-command-fingerprint #:fce-transcript-digest
+   #:fce-artifact-checksum-map #:fce-captured-at #:fce-verdict
+   #:fce-drift-keys #:fce-missing-keys
+   #:fixture-checksum-registry #:fixture-checksum-registry-p #:make-fixture-checksum-registry
+   #:fcr-entries #:fcr-canonical-command #:fcr-run-id #:fcr-closure-verdict
+   #:fcr-drift-count #:fcr-missing-count #:fcr-timestamp
+   #:rerun-consistency-verdict #:rerun-consistency-verdict-p #:make-rerun-consistency-verdict
+   #:rcv-scenario-id #:rcv-status #:rcv-old-digest #:rcv-new-digest #:rcv-drift-explanation
+   #:t1-t6-scenario-id #:checksum-verdict #:registry-closure-verdict #:rerun-consistency-status
+   #:hex-fingerprint #:compare-checksum-maps #:make-checksum-entry
+   #:registry-add-entry #:build-registry-from-entries #:evaluate-registry-closure
+   #:compare-entries-for-consistency #:compute-rerun-consistency-verdicts
+   #:registry->json #:rerun-verdicts->json
    ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
    #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
    #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
