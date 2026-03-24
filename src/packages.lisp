@@ -679,6 +679,14 @@
    #:capture-env-fingerprint #:normalize-env-fingerprint
    #:diff-env-fingerprints #:build-env-drift-report #:evaluate-env-drift-gate
    #:env-fingerprint->json #:env-drift-report->json
+   ;; T1-T6 evidence anomaly classifier + remediation hint emitter (8lum)
+   #:t1-t6-anomaly-class #:t1-t6-anomaly-gate-verdict
+   #:t1-t6-anomaly #:t1-t6-anomaly-p #:make-t1-t6-anomaly
+   #:anom-anomaly-class #:anom-scenario-id #:anom-field #:anom-detail #:anom-remediation-hint
+   #:t1-t6-anomaly-report #:t1-t6-anomaly-report-p #:make-t1-t6-anomaly-report
+   #:anomrep-anomalies #:anomrep-gate-verdict #:anomrep-anomaly-count #:anomrep-timestamp
+   #:classify-registry-anomalies #:classify-rerun-anomalies
+   #:evaluate-anomaly-gate #:anomaly-report->json
    ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
    #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
    #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
