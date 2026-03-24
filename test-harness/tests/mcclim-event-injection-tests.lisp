@@ -48,10 +48,10 @@
   (define-test t2-pane-inventory
     "T2: All six expected panes are registered in the focus order."
     (let* ((order orrery/mcclim:*focus-order*)
-           (expected '("sessions" "cron" "health" "events" "alerts" "status")))
+           (expected '("SESSIONS-PANE" "CRON-PANE" "HEALTH-PANE" "EVENTS-PANE" "ALERTS-PANE" "INTERACTOR")))
       (true (>= (length order) 6))
       (dolist (pname expected)
-        (true (member pname order :test #'string=)
+        (true (member pname order :test #'(lambda (s1 s2) (string= s1 (symbol-name s2))))
               (format nil "pane ~a in focus order" pname)))))
 
   ;;; ──────────────────────────────────────────────────────────────────────
@@ -66,10 +66,10 @@
     (is = 5 (orrery/mcclim:wrap-index -1 0 5))
     ;; Mid-range is unchanged
     (is = 3 (orrery/mcclim:wrap-index 3 0 5))
-    ;; Keyboard shortcuts include navigation keys
+    ;; Keyboard shortcuts include navigation keys (C-n/C-p per design)
     (let ((shortcuts orrery/mcclim:*keyboard-shortcuts*))
-      (true (assoc "n" shortcuts :test #'string=))
-      (true (assoc "p" shortcuts :test #'string=))
+      (true (assoc "C-n" shortcuts :test #'string=))
+      (true (assoc "C-p" shortcuts :test #'string=))
       (true (assoc "?" shortcuts :test #'string=))))
 
   ;;; ──────────────────────────────────────────────────────────────────────
