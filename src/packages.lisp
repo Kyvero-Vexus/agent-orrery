@@ -509,6 +509,19 @@
    #:playwright-evidence-lock #:playwright-evidence-lock-p #:make-playwright-evidence-lock
    #:pel-pass-p #:pel-command-match-p #:pel-command #:pel-artifact-count #:pel-missing-scenarios #:pel-detail #:pel-timestamp
    #:build-playwright-evidence-lock #:playwright-evidence-lock->json
+   ;; Playwright provenance timeline indexer (jyhv)
+   #:provenance-timeline-entry #:provenance-timeline-entry-p
+   #:pte-scenario-id #:pte-rerun-index #:pte-timestamp
+   #:pte-screenshot-digest #:pte-trace-digest #:pte-command-fingerprint
+   #:pte-drift-rationale #:pte-stable-p
+   #:scenario-provenance-timeline #:scenario-provenance-timeline-p
+   #:spt-scenario-id #:spt-entries #:spt-fingerprint-lineage
+   #:spt-digest-history #:spt-drift-events #:spt-lineage-stable-p #:spt-entry-count
+   #:playwright-provenance-index #:playwright-provenance-index-p
+   #:ppi-run-id #:ppi-timelines #:ppi-all-stable-p #:ppi-total-drift-events
+   #:ppi-closure-ready-p #:ppi-timestamp #:ppi-alarm-codes
+   #:build-provenance-timeline-entry #:build-scenario-provenance-timeline
+   #:build-playwright-provenance-index
    ;; Playwright artifact canonicalizer core (fwu)
    #:canonical-web-artifact #:canonical-web-artifact-p #:make-canonical-web-artifact
    #:cwa-scenario-id #:cwa-artifact-kind #:cwa-original-path #:cwa-canonical-path #:cwa-present-p
