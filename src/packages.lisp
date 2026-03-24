@@ -612,6 +612,14 @@
    #:tcv-pass-p #:tcv-command-ok-p #:tcv-missing-scenarios #:tcv-mismatch-scenarios
    #:tcv-scenario-count #:tcv-complete-count #:tcv-command #:tcv-command-hash #:tcv-detail #:tcv-timestamp
    #:run-tui-continuity-preflight #:tui-continuity-verdict->json
+   ;; T1-T6 evidence bundle notarizer (xmsd)
+   #:tui-notarization-record #:tui-notarization-record-p #:make-tui-notarization-record
+   #:tnr-scenario-id #:tnr-command #:tnr-command-hash #:tnr-transcript-digest
+   #:tnr-artifact-digest #:tnr-notarized-p #:tnr-notarization-id #:tnr-reject-codes #:tnr-detail
+   #:tui-bundle-notarization #:tui-bundle-notarization-p #:make-tui-bundle-notarization
+   #:tbn-bundle-id #:tbn-command #:tbn-command-hash #:tbn-records
+   #:tbn-notarized-count #:tbn-rejected-count #:tbn-pass-p #:tbn-timestamp
+   #:build-tui-notarization-record #:notarize-tui-evidence-bundle #:tui-bundle-notarization->json
    ;; T1-T6 replay drift auditor + evidence freshness gate (9vaf)
    #:tui-drift-row #:tui-drift-row-p #:make-tui-drift-row
    #:tdr-scenario-id #:tdr-command-hash-ok #:tdr-fingerprint-ok #:tdr-fresh-p
