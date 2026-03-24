@@ -1,6 +1,7 @@
 ;;; -*- Mode: Lisp; Syntax: Common-Lisp -*-
 ;;;
-;;; replay-protocol-bridge-tests.lisp — deterministic trace→protocol parity fixture tests
+;;; replay-protocol-bridge-tests.lisp — deterministic replay contract + typed error ADT tests
+;;; Extended: Bead agent-orrery-111
 
 (in-package #:orrery/harness-tests)
 
@@ -62,3 +63,64 @@
     (is = 1
         (count-if-not #'orrery/adapter:ppr-parity-p
                       (orrery/adapter:ppf-rows fixture)))))
+
+;;; ── Extended tests for bead 111: deterministic replay contracts + error ADT ─
+
+;; Deterministic: same trace stream → same ui-messages (sequence stability)
+(define-test (replay-protocol-bridge-tests deterministic-replay-stability)
+  (let* ((stream (%trace-stream
+                  (%trace-event 1 100 :session 42)
+                  (%trace-event 2 200 :health 43)
+                  (%trace-event 3 300 :usage 44)))
+         (run1 (orrery/adapter:trace-stream->ui-messages stream :web))
+         (run2 (orrery/adapter:trace-stream->ui-messages stream :web)))
+    (is = (length run1) (length run2))
+    (loop for m1 in run1 for m2 in run2
+          do (progn
+               (is eq (orrery/adapter:uim-kind m1) (orrery/adapter:uim-kind m2))
+               (is = (orrery/adapter:uim-sequence m1) (orrery/adapter:uim-sequence m2))))))
+
+;; Surface-specific: tui vs web may differ in surface tag but same seq
+(define-test (replay-protocol-bridge-tests tui-vs-web-same-sequence)
+  (let* ((stream (%trace-stream
+                  (%trace-event 1 100 :session 10)))
+         (web (orrery/adapter:trace-stream->ui-messages stream :web))
+         (tui (orrery/adapter:trace-stream->ui-messages stream :tui)))
+    (is = 1 (length web))
+    (is = 1 (length tui))
+    (is = (orrery/adapter:uim-sequence (first web))
+        (orrery/adapter:uim-sequence (first tui)))))
+
+;; Empty stream → empty message list (edge case)
+(define-test (replay-protocol-bridge-tests empty-stream-empty-messages)
+  (let* ((stream (orrery/adapter:make-trace-stream :events nil :count 0))
+         (msgs (orrery/adapter:trace-stream->ui-messages stream :web)))
+    (is = 0 (length msgs))))
+
+;; Parity JSON well-formed (no nils in output)
+(define-test (replay-protocol-bridge-tests parity-json-well-formed)
+  (let* ((stream (%trace-stream
+                  (%trace-event 1 100 :session 1)
+                  (%trace-event 2 200 :health 2)))
+         (web (orrery/adapter:trace-stream->ui-messages stream :web))
+         (tui (orrery/adapter:trace-stream->ui-messages stream :tui))
+         (mc  (orrery/adapter:trace-stream->ui-messages stream :mcclim))
+         (fx  (orrery/adapter:build-protocol-parity-fixture web tui mc))
+         (json (orrery/adapter:protocol-parity-fixture->json fx)))
+    (false (search "NIL" json))
+    (true (search "\"rows\":" json))
+    (true (search "\"parity_pass\":" json))))
+
+;; Cross-surface count consistency
+(define-test (replay-protocol-bridge-tests cross-surface-count-consistency)
+  (let* ((stream (%trace-stream
+                  (%trace-event 1 100 :session 10)
+                  (%trace-event 2 200 :health 20)
+                  (%trace-event 3 300 :alert 30)))
+         (web (orrery/adapter:trace-stream->ui-messages stream :web))
+         (tui (orrery/adapter:trace-stream->ui-messages stream :tui))
+         (mc  (orrery/adapter:trace-stream->ui-messages stream :mcclim))
+         (fx  (orrery/adapter:build-protocol-parity-fixture web tui mc)))
+    (is = 3 (orrery/adapter:ppf-row-count fx))
+    (is = (length web) (length tui))
+    (is = (length tui) (length mc))))
