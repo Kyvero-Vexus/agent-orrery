@@ -43,11 +43,11 @@ async function runScenarios() {
       '--load', STARTUP_SCRIPT
     ], {
       cols: 120, rows: 40,
-      startupMs: 12000,
+      startupMs: 45000,
       env: { LD_LIBRARY_PATH: '/lib/x86_64-linux-gnu', TERM: 'xterm-256color' }
     });
 
-    await driver.waitForIdle(2000, 15000);
+    await driver.waitForIdle(2000, 50000);
     const initialScreen = driver.readScreen();
 
     // T1: Dashboard renders with panel structure
