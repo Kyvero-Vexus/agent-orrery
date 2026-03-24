@@ -666,6 +666,19 @@
    #:registry-add-entry #:build-registry-from-entries #:evaluate-registry-closure
    #:compare-entries-for-consistency #:compute-rerun-consistency-verdicts
    #:registry->json #:rerun-verdicts->json
+   ;; T1-T6 env-fingerprint normalizer + drift explainer (t1yb)
+   #:env-drift-class #:env-gate-verdict
+   #:env-fingerprint #:env-fingerprint-p #:make-env-fingerprint
+   #:efp-lisp-impl #:efp-os-info #:efp-harness-flags
+   #:efp-deterministic-command #:efp-command-fingerprint #:efp-captured-at
+   #:env-drift-record #:env-drift-record-p #:make-env-drift-record
+   #:edr-drift-class #:edr-field-name #:edr-old-value #:edr-new-value #:edr-rationale
+   #:env-drift-report #:env-drift-report-p #:make-env-drift-report
+   #:ereport-baseline-fp #:ereport-current-fp #:ereport-records
+   #:ereport-gate-verdict #:ereport-drift-count #:ereport-timestamp
+   #:capture-env-fingerprint #:normalize-env-fingerprint
+   #:diff-env-fingerprints #:build-env-drift-report #:evaluate-env-drift-gate
+   #:env-fingerprint->json #:env-drift-report->json
    ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
    #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
    #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
