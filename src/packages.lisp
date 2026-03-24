@@ -620,6 +620,15 @@
    #:tbn-bundle-id #:tbn-command #:tbn-command-hash #:tbn-records
    #:tbn-notarized-count #:tbn-rejected-count #:tbn-pass-p #:tbn-timestamp
    #:build-tui-notarization-record #:notarize-tui-evidence-bundle #:tui-bundle-notarization->json
+   ;; Cross-framework evidence schema harmonizer (uzma)
+   #:harmonized-scenario-row #:harmonized-scenario-row-p #:make-harmonized-scenario-row
+   #:hsr-scenario-id #:hsr-framework #:hsr-command #:hsr-command-hash
+   #:hsr-evidence-ok-p #:hsr-artifact-count #:hsr-digest-key #:hsr-detail
+   #:harmonized-evidence-envelope #:harmonized-evidence-envelope-p #:make-harmonized-evidence-envelope
+   #:hee-envelope-id #:hee-epic3-rows #:hee-epic4-rows #:hee-epic3-pass-p
+   #:hee-epic4-pass-p #:hee-overall-pass-p #:hee-timestamp #:hee-detail
+   #:harmonize-tui-evidence #:harmonize-playwright-evidence
+   #:compile-harmonized-envelope #:harmonized-evidence-envelope->json
    ;; T1-T6 replay drift auditor + evidence freshness gate (9vaf)
    #:tui-drift-row #:tui-drift-row-p #:make-tui-drift-row
    #:tdr-scenario-id #:tdr-command-hash-ok #:tdr-fingerprint-ok #:tdr-fresh-p
@@ -915,6 +924,19 @@
    #:pen-chain-digest #:pen-complete-p #:pen-timestamp
    #:canonical-playwright-command-p #:compute-web-attestation-chain
    #:notarize-playwright-evidence #:write-playwright-evidence-notarization #:playwright-evidence-notarization->json
+   ;; Playwright S1-S6 reproducibility reporter (bxf5)
+   #:s1-s6-rerun-sample #:s1-s6-rerun-sample-p #:make-s1-s6-rerun-sample
+   #:rrs-scenario-id #:rrs-rerun-index #:rrs-screenshot-digest #:rrs-trace-digest
+   #:rrs-command-hash #:rrs-artifact-stable-p
+   #:scenario-reproducibility-score #:scenario-reproducibility-score-p #:make-scenario-reproducibility-score
+   #:srs-scenario-id #:srs-sample-count #:srs-stable-count #:srs-stability-ratio
+   #:srs-command-fingerprint-delta #:srs-artifact-hash-chain #:srs-pass-p #:srs-alarm-codes
+   #:playwright-reproducibility-report #:playwright-reproducibility-report-p #:make-playwright-reproducibility-report
+   #:prr-run-id #:prr-scenarios #:prr-overall-stability-ratio #:prr-closure-ready-p
+   #:prr-command-fingerprint-stable-p #:prr-artifact-hash-chain-ok-p #:prr-alarm-codes
+   #:prr-timestamp #:prr-detail
+   #:build-s1-s6-rerun-sample #:compute-scenario-reproducibility-score
+   #:compile-playwright-reproducibility-report #:playwright-reproducibility-report->json
    ;; Playwright retention policy evaluator (jwv2)
    #:s1-s6-retention-policy #:s1-s6-retention-policy-p #:make-s1-s6-retention-policy
    #:srp-scenario-id #:srp-retention-window #:srp-required-kinds #:srp-command-fingerprint
