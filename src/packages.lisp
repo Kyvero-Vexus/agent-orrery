@@ -628,6 +628,14 @@
    #:ppa-pass-p #:ppa-alarm-count #:ppa-records #:ppa-command-hash #:ppa-timestamp #:ppa-detail
    #:build-playwright-provenance-record #:run-playwright-provenance-audit
    #:playwright-provenance-audit->json
+   ;; Playwright S1-S6 evidence packager + replay index (7r2)
+   #:playwright-bundle-entry #:playwright-bundle-entry-p #:make-playwright-bundle-entry
+   #:pbe-scenario-id #:pbe-screenshot-path #:pbe-trace-path #:pbe-screenshot-hash #:pbe-trace-hash
+   #:pbe-replay-command #:pbe-command-hash #:pbe-complete-p
+   #:playwright-evidence-bundle #:playwright-evidence-bundle-p #:make-playwright-evidence-bundle
+   #:peb-bundle-id #:peb-command #:peb-command-hash #:peb-entries
+   #:peb-complete-count #:peb-missing-count #:peb-ready-p #:peb-timestamp
+   #:compile-playwright-evidence-bundle #:playwright-evidence-bundle->json
    ;; mcp-tui T1-T6 contract matrix + artifact index (b7v)
    #:tui-contract-row #:tui-contract-row-p #:make-tui-contract-row
    #:tcr-scenario-id #:tcr-command #:tcr-command-hash #:tcr-required-artifacts #:tcr-transcript-hash #:tcr-detail
