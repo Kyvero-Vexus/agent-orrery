@@ -61,7 +61,7 @@
     ;; fingerprint changes between rerun-0 and rerun-1 (different rerun-index)
     ;; so lineage-stable-p might be nil; drift-events captures screenshot change
     (is = 2 (orrery/adapter:spt-entry-count tl))
-    (is > (length (orrery/adapter:spt-drift-events tl)) -1)))
+    (true (plusp (length (orrery/adapter:spt-drift-events tl))))))
 
 (define-test (playwright-provenance-timeline-indexer-suite timeline-digest-history-length)
   (let* ((entries (list (%make-pte "S3" 0 :ss "a" :tr "x")

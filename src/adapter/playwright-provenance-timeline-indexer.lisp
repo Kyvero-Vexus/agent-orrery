@@ -54,11 +54,14 @@
 ;;; ─────────────────────────────────────────────────────────────────────────────
 
 (defun %compute-command-fingerprint-from-parts (scenario-id rerun-index)
-  "Deterministic integer fingerprint from scenario + rerun index."
-  (declare (type string scenario-id) (type (integer 0) rerun-index))
-  (let ((raw (format nil "~A:~D" scenario-id rerun-index)))
-    (reduce #'(lambda (acc c) (logxor (ash acc 5) (char-code c)))
-            raw :initial-value 0)))
+  "Deterministic integer fingerprint from scenario command identity.
+   RERUN-INDEX is accepted for API compatibility but does NOT affect
+   the fingerprint — reruns of the same scenario use the same command,
+   so their fingerprints must be identical."
+  (declare (type string scenario-id) (type (integer 0) rerun-index)
+           (ignorable rerun-index))
+  (reduce #'(lambda (acc c) (logxor (ash acc 5) (char-code c)))
+          scenario-id :initial-value 0))
 
 (defun %detect-fingerprint-drift (lineage)
   "Return T if command-fingerprint changes across the lineage list."
@@ -148,9 +151,15 @@
                                :key  #'(lambda (tl) (length (spt-drift-events tl)))
                                :initial-value 0))
          (all-stable   (every #'spt-lineage-stable-p timelines))
-         (closure-ready (and all-stable (zerop total-drift)))
+         ;; All individual entries must also be stable (non-empty digests)
+         (all-entries-stable
+          (every (lambda (tl)
+                   (every #'pte-stable-p (spt-entries tl)))
+                 timelines))
+         (closure-ready (and all-stable all-entries-stable (zerop total-drift)))
          (alarms       (append
                         (unless all-stable        '(:fingerprint-lineage-unstable))
+                        (unless all-entries-stable '(:entries-unstable))
                         (unless (zerop total-drift) '(:drift-events-detected))
                         (unless closure-ready      '(:closure-not-ready)))))
     (make-playwright-provenance-index
