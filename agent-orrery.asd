@@ -304,6 +304,7 @@
                    (:file "mcclim-inspectors-tests")
                    (:file "mcclim-accessibility-tests")
                    (:file "mcclim-e2e-gate-tests")
+                   (:file "mcclim-event-injection-tests")
                    (:file "observability-trace-contract-tests")
                    (:file "cross-ui-evidence-verifier-tests")
                    (:file "playwright-evidence-compiler-tests")
