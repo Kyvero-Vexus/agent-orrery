@@ -10,6 +10,10 @@
 #   2. SBCL + Quicklisp + agent-orrery ASDF system loadable
 #   3. Node.js (for test harness)
 #
+# Optional (recommended):
+#   Run ./scripts/build-tui-core.sh to create a precompiled SBCL core.
+#   This reduces startup from ~31s to <5s.
+#
 # Outputs:
 #   test-results/tui-artifacts/            screenshots, transcripts, recording
 #   test-results/tui-artifacts/tui-e2e-report.json   JSON report
@@ -21,10 +25,18 @@ cd "$(dirname "$0")/.."
 export MCP_TUI_DRIVER="${MCP_TUI_DRIVER:-mcp-tui-driver}"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
+# Precompiled core path (optional but recommended)
+export ORRERY_TUI_CORE="${ORRERY_TUI_CORE:-$PWD/artifacts/tui-core.core}"
+
 echo "=== Agent Orrery TUI E2E (mcp-tui-driver) ==="
 echo "  Driver: $(which "$MCP_TUI_DRIVER" 2>/dev/null || echo 'NOT FOUND')"
 echo "  SBCL:   $(which sbcl 2>/dev/null || echo 'NOT FOUND')"
 echo "  Node:   $(node --version 2>/dev/null || echo 'NOT FOUND')"
+if [[ -f "$ORRERY_TUI_CORE" ]]; then
+  echo "  Core:   $ORRERY_TUI_CORE (precompiled, fast startup)"
+else
+  echo "  Core:   NOT FOUND (run scripts/build-tui-core.sh for fast startup)"
+fi
 echo ""
 
 # Verify prerequisites

@@ -12,6 +12,11 @@
 //   node e2e-tui/tests/tui-scenarios.js
 //   # or via wrapper:
 //   ./e2e-tui/run-tui-e2e.sh
+//
+// Precompiled core (optional, recommended):
+//   Run ./scripts/build-tui-core.sh to create artifacts/tui-core.core.
+//   Set ORRERY_TUI_CORE env var to use it (default: artifacts/tui-core.core).
+//   Reduces startup from ~31s to <5s.
 
 'use strict';
 
@@ -21,10 +26,25 @@ const { McpTuiClient } = require('../lib/mcp-client');
 const { TestRunner } = require('../lib/test-runner');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
-const TUI_LAUNCH_CMD = 'sbcl';
-const TUI_LAUNCH_ARGS = ['--load', path.join(PROJECT_ROOT, 'e2e-tui/start-tui.lisp')];
 const RECORDING_DIR = path.resolve(PROJECT_ROOT, 'test-results/tui-artifacts');
 const SCENARIO_FILTER = process.env.SCENARIO_FILTER || 'ALL';
+
+// Check for precompiled core (fast startup)
+const CORE_PATH = process.env.ORRERY_TUI_CORE || path.join(PROJECT_ROOT, 'artifacts/tui-core.core');
+const USE_CORE = fs.existsSync(CORE_PATH);
+
+let TUI_LAUNCH_CMD = 'sbcl';
+let TUI_LAUNCH_ARGS;
+if (USE_CORE) {
+  // Fast path: use precompiled core
+  TUI_LAUNCH_ARGS = [
+    '--core', CORE_PATH,
+    '--eval', '(orrery/tui-core:launch-dashboard)',
+  ];
+} else {
+  // Slow path: load from source
+  TUI_LAUNCH_ARGS = ['--load', path.join(PROJECT_ROOT, 'e2e-tui/start-tui.lisp')];
+}
 
 // Assertion helper
 function assert(condition, msg) {
@@ -54,7 +74,14 @@ async function main() {
   };
   let sessionId = null;
 
-  console.log('\n=== Agent Orrery TUI E2E (mcp-tui-driver) ===\n');
+  console.log('\n=== Agent Orrery TUI E2E (mcp-tui-driver) ===');
+  if (USE_CORE) {
+    console.log(`  Using precompiled core: ${CORE_PATH} (fast startup)`);
+  } else {
+    console.log('  Loading from source (slow startup)');
+    console.log('  TIP: Run scripts/build-tui-core.sh for fast startup');
+  }
+  console.log();
 
   try {
     // Start MCP driver
