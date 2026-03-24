@@ -43,7 +43,7 @@
 
 ;;; ── Drift classification ─────────────────────────────────────────────────────
 
-(defun %remediation-for-class (drift-class scenario-id)
+(defun %remediation-for-tui-drift (drift-class scenario-id)
   (declare (type tui-drift-class drift-class)
            (type string scenario-id))
   (case drift-class
@@ -66,7 +66,7 @@
                         ((= actual-hash 0) :lineage-unknown)
                         ((= expected-hash actual-hash) :no-drift)
                         (t :command-mismatch)))
-         (remediation (%remediation-for-class drift-class scenario-id)))
+         (remediation (%remediation-for-tui-drift drift-class scenario-id)))
     (make-tui-drift-hint
      :scenario-id scenario-id
      :drift-class drift-class

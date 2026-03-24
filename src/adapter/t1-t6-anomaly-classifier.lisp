@@ -82,7 +82,7 @@
 ;;; Remediation hints
 ;;; ─────────────────────────────────────────────────────────────────────────────
 
-(defun %remediation-for-class (class field)
+(defun %remediation-for-anomaly (class field)
   "Return a standard remediation hint string for ANOMALY-CLASS and FIELD."
   (declare (type t1-t6-anomaly-class class)
            (type string field))
@@ -117,7 +117,7 @@
              :field missing-key
              :detail (format nil "Scenario ~A missing artifact: ~A" sid missing-key)
              :remediation-hint
-             (%remediation-for-class :artifact-missing missing-key))
+             (%remediation-for-anomaly :artifact-missing missing-key))
             anomalies))
     ;; Drifted artifacts
     (dolist (drift-key (fce-drift-keys entry))
@@ -127,7 +127,7 @@
              :field drift-key
              :detail (format nil "Scenario ~A artifact checksum drifted: ~A" sid drift-key)
              :remediation-hint
-             (%remediation-for-class :artifact-checksum-drift drift-key))
+             (%remediation-for-anomaly :artifact-checksum-drift drift-key))
             anomalies))
     (nreverse anomalies)))
 
@@ -146,7 +146,7 @@
                :field (symbol-name sid)
                :detail (format nil "Scenario ~A absent from registry" sid)
                :remediation-hint
-               (%remediation-for-class :missing-scenario (symbol-name sid)))
+               (%remediation-for-anomaly :missing-scenario (symbol-name sid)))
               anomalies)))
     ;; Classify each present entry
     (dolist (entry (fcr-entries registry))
@@ -189,7 +189,7 @@
                   :field (symbol-name sid)
                   :detail (format nil "Scenario ~A absent from new registry" sid)
                   :remediation-hint
-                  (%remediation-for-class :missing-scenario (symbol-name sid)))
+                  (%remediation-for-anomaly :missing-scenario (symbol-name sid)))
                  anomalies))
           ((and old-e
                 (not (string= (fce-transcript-digest old-e)
@@ -203,7 +203,7 @@
                                   (fce-transcript-digest old-e)
                                   (fce-transcript-digest new-e))
                   :remediation-hint
-                  (%remediation-for-class :transcript-digest-mismatch
+                  (%remediation-for-anomaly :transcript-digest-mismatch
                                           (symbol-name sid)))
                  anomalies)))))
     (let* ((anom-count (length anomalies))
