@@ -297,3 +297,85 @@
           (srep-peak-memory-kb report)
           (srep-seed report)
           (mapcar #'soak-timing->json (srep-timings report))))
+
+;;; ---------------------------------------------------------------------------
+;;; Concurrent Session Stress Test
+;;; Spawns N threads, each simulating an independent session-list+filter
+;;; operation, and collects results in a thread-safe manner.
+;;; ---------------------------------------------------------------------------
+
+(defstruct (concurrent-stress-result (:conc-name csr-))
+  "Result of a concurrent session stress run."
+  (thread-count 0 :type fixnum)
+  (total-ops 0 :type fixnum)
+  (success-count 0 :type fixnum)
+  (error-count 0 :type fixnum)
+  (elapsed-ms 0 :type fixnum)
+  (ops-per-sec 0 :type fixnum)
+  (pass-p nil :type boolean))
+
+(declaim
+ (ftype (function (fixnum &key (:seed fixnum)) (values concurrent-stress-result &optional))
+        run-concurrent-session-stress))
+
+(defun run-concurrent-session-stress (thread-count &key (seed 42))
+  "Stress test with THREAD-COUNT concurrent threads each processing a session workload.
+Each thread generates and filters a set of sessions/events deterministically.
+Returns a CONCURRENT-STRESS-RESULT summarizing success rates and throughput."
+  (declare (type fixnum thread-count seed) (optimize (safety 3)))
+  (let* ((start-ms (%get-internal-ms))
+         (results-lock (sb-thread:make-mutex :name "stress-results"))
+         (success-counter 0)
+         (error-counter 0)
+         (ops-counter 0)
+         (threads nil))
+    ;; Spawn threads
+    (dotimes (i thread-count)
+      (let ((thread-seed (+ seed (* i 37))))
+        (push
+         (sb-thread:make-thread
+          (lambda ()
+            (handler-case
+                (let* ((sessions (%gen-sessions 10 thread-seed))
+                       (events (%gen-events 50 thread-seed))
+                       (n-sess (length sessions))
+                       (n-warn (length (remove-if-not
+                                        (lambda (e) (eq :warning (er-kind e)))
+                                        events))))
+                  (declare (ignorable n-sess n-warn))
+                  (sb-thread:with-mutex (results-lock)
+                    (incf success-counter)
+                    (incf ops-counter (+ n-sess n-warn))))
+              (error ()
+                (sb-thread:with-mutex (results-lock)
+                  (incf error-counter)))))
+          :name (format nil "stress-~D" i))
+         threads)))
+    ;; Join all threads
+    (dolist (thr threads)
+      (sb-thread:join-thread thr :default nil))
+    (let* ((end-ms (%get-internal-ms))
+           (elapsed (max 1 (- end-ms start-ms)))
+           (ops-per-sec (truncate (* ops-counter 1000) elapsed))
+           (pass-p (and (zerop error-counter)
+                        (= success-counter thread-count))))
+      (make-concurrent-stress-result
+       :thread-count thread-count
+       :total-ops ops-counter
+       :success-count success-counter
+       :error-count error-counter
+       :elapsed-ms elapsed
+       :ops-per-sec ops-per-sec
+       :pass-p pass-p))))
+
+(defun concurrent-stress-result->json (result)
+  "Serialize CONCURRENT-STRESS-RESULT to JSON string."
+  (declare (type concurrent-stress-result result) (optimize (safety 3)))
+  (format nil "{\"thread_count\":~D,\"total_ops\":~D,\"success\":~D,\"errors\":~D,\"elapsed_ms\":~D,\"ops_per_sec\":~D,\"pass\":~A}"
+          (csr-thread-count result)
+          (csr-total-ops result)
+          (csr-success-count result)
+          (csr-error-count result)
+          (csr-elapsed-ms result)
+          (csr-ops-per-sec result)
+          (if (csr-pass-p result) "true" "false")))

@@ -1108,6 +1108,11 @@
    #:srep-total-ms #:srep-peak-memory-kb #:srep-timestamp #:srep-seed
    #:make-soak-profile-config #:measure-operation #:run-soak-suite
    #:soak-timing->json #:soak-report->json
+   ;; Concurrent stress test (vgwp)
+   #:concurrent-stress-result #:concurrent-stress-result-p #:make-concurrent-stress-result
+   #:csr-thread-count #:csr-total-ops #:csr-success-count #:csr-error-count
+   #:csr-elapsed-ms #:csr-ops-per-sec #:csr-pass-p
+   #:run-concurrent-session-stress #:concurrent-stress-result->json
    ;; Resilience suite (eb0.7.2)
    #:fault-class #:recovery-action
    #:fault-scenario #:fault-scenario-p #:make-fault-scenario

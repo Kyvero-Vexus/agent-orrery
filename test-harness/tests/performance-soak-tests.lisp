@@ -71,3 +71,37 @@
       (let ((json (orrery/adapter:soak-timing->json timing)))
         (true (search "\"op\":\"test\"" json))
         (true (search "\"throughput\":2000" json))))))
+
+(define-test concurrent-session-stress-suite
+
+  (define-test stress-10-threads
+    (let ((result (orrery/adapter:run-concurrent-session-stress 10 :seed 1)))
+      (true (orrery/adapter:csr-pass-p result))
+      (is = 10 (orrery/adapter:csr-thread-count result))
+      (is = 10 (orrery/adapter:csr-success-count result))
+      (is = 0 (orrery/adapter:csr-error-count result))
+      (true (> (orrery/adapter:csr-total-ops result) 0))
+      (true (> (orrery/adapter:csr-elapsed-ms result) 0))))
+
+  (define-test stress-100-threads
+    "Simulate 100+ concurrent sessions — primary soak gate."
+    (let ((result (orrery/adapter:run-concurrent-session-stress 100 :seed 2)))
+      (true (orrery/adapter:csr-pass-p result))
+      (is = 100 (orrery/adapter:csr-thread-count result))
+      (is = 100 (orrery/adapter:csr-success-count result))
+      (is = 0 (orrery/adapter:csr-error-count result))
+      (true (> (orrery/adapter:csr-ops-per-sec result) 0))))
+
+  (define-test stress-200-threads
+    "Extended stress: 200 concurrent sessions."
+    (let ((result (orrery/adapter:run-concurrent-session-stress 200 :seed 3)))
+      (true (orrery/adapter:csr-pass-p result))
+      (is = 200 (orrery/adapter:csr-thread-count result))
+      (is = 0 (orrery/adapter:csr-error-count result))))
+
+  (define-test stress-result-json-shape
+    (let* ((result (orrery/adapter:run-concurrent-session-stress 5 :seed 99))
+           (json (orrery/adapter:concurrent-stress-result->json result)))
+      (true (search "\"thread_count\":5" json))
+      (true (search "\"pass\":" json))
+      (true (search "\"ops_per_sec\":" json)))))
