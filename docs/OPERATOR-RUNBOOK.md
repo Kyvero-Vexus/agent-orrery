@@ -342,6 +342,8 @@ Run the resilience suite to verify fault recovery paths:
 
 ## Release Checklist
 
+### v1.x Checklist
+
 - [ ] All tests pass: `make ci` → PASSED
 - [ ] Type policy enforced: `make check-types` → PASSED
 - [ ] Resilience suite green: 7/7 scenarios pass
@@ -355,3 +357,26 @@ Run the resilience suite to verify fault recovery paths:
 - [ ] Pushed to remote: `git push origin master --tags`
 - [ ] Container image rebuilt and tested
 - [ ] systemd service restarted and health check passes
+
+### v2.0 Additional Checklist
+
+- [ ] **v2 Coalton modules load cleanly**: `(ql:quickload :agent-orrery)` with no errors
+- [ ] **Epic 8 bridges verified**: cost-optimizer, capacity-planner, session-analytics, audit-trail all respond to `cl-*` bridge functions
+- [ ] **Epic 9 E2E Gate** (`ci/check-unified-closure-gate.lisp`): `pass=true`
+  - [ ] Playwright S1-S8: screenshot + trace for all scenarios; command: `cd e2e && ./run-e2e.sh`
+  - [ ] mcp-tui-driver T1-T8: asciicast per scenario; command: `cd e2e-tui && ./run-tui-e2e-t1-t6.sh`
+- [ ] **OpenAPI spec** (`docs/api/openapi.yaml`): validate with `npx @redocly/cli lint docs/api/openapi.yaml`
+- [ ] **Plugin SDK v2**: at least one plugin implementing `plugin-on-audit-event` and `plugin-on-cost-recommendation`
+- [ ] **Protocol boundary gate**: `ci/check-boundary-declarations.lisp` → PASSED
+- [ ] **Architecture doc current**: `docs/ARCHITECTURE.md` reflects all v2 modules
+- [ ] **CHANGELOG.md updated** with all v2 changes
+- [ ] **Version bump**: `(defparameter *orrery-version* "2.0.0")` in `src/packages.lisp`
+
+### Deterministic Command Hashes (v2)
+
+Verify these hashes are stable across all CI runs:
+
+| Command | Expected Hash |
+|---------|--------------|
+| `cd e2e && ./run-e2e.sh` | `2516307036918887468` |
+| `cd e2e-tui && ./run-tui-e2e-t1-t6.sh` | `4091106603851345577` |
