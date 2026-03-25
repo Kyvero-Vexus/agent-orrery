@@ -1,0 +1,319 @@
+openapi: "3.1.0"
+info:
+  title: Agent Orrery Web API
+  version: "2.0"
+  description: |
+    REST API for Agent Orrery v2. Provides session monitoring, cost analytics,
+    capacity planning, audit trail, and system health endpoints.
+    
+    All endpoints return JSON. Authentication is local-only by default.
+    Epic 3 (TUI) and Epic 4 (Web) E2E evidence gates enforce deterministic
+    command contracts for closure validation.
+
+servers:
+  - url: http://localhost:7779
+    description: Local development server
+
+tags:
+  - name: core
+    description: Core dashboard and session endpoints
+  - name: analytics
+    description: Cost, capacity, and usage analytics
+  - name: audit
+    description: Audit trail and operator action logs
+  - name: health
+    description: System health and status
+
+paths:
+  /api/dashboard:
+    get:
+      operationId: getDashboard
+      tags: [core]
+      summary: Dashboard summary
+      description: Returns sessions, cron jobs, health status, and active alerts.
+      responses:
+        "200":
+          description: Dashboard summary JSON
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /api/sessions:
+    get:
+      operationId: listSessions
+      tags: [core]
+      summary: List active sessions
+      description: Returns all currently active agent sessions.
+      responses:
+        "200":
+          description: Session list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionList"
+
+  /api/health:
+    get:
+      operationId: getHealth
+      tags: [health]
+      summary: System health status
+      description: Returns system health metrics including memory, CPU, and service status.
+      responses:
+        "200":
+          description: Health status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /api/audit-trail:
+    get:
+      operationId: getAuditTrail
+      tags: [audit]
+      summary: Audit trail entries
+      description: Returns recent operator action audit trail entries (v2 audit-trail Coalton module).
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 500
+          description: Maximum entries to return
+        - name: since
+          in: query
+          schema:
+            type: integer
+          description: Return entries after this Unix timestamp
+      responses:
+        "200":
+          description: Audit trail entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditTrailResponse"
+
+  /api/analytics:
+    get:
+      operationId: getAnalytics
+      tags: [analytics]
+      summary: Session analytics and cost summary
+      description: |
+        Returns usage analytics, cost optimization recommendations,
+        and capacity planning data (v2 cost-optimizer + capacity-planner + session-analytics modules).
+      parameters:
+        - name: window
+          in: query
+          schema:
+            type: string
+            enum: [hour, day, week, month]
+            default: day
+          description: Analytics time window
+      responses:
+        "200":
+          description: Analytics summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyticsSummary"
+
+  /api/v2/cost-optimizer:
+    get:
+      operationId: getCostOptimizerRecommendations
+      tags: [analytics]
+      summary: Cost optimization recommendations (v2)
+      description: Returns cost optimization recommendations from the v2 Coalton cost-optimizer module.
+      responses:
+        "200":
+          description: Cost optimizer output
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CostOptimizerResult"
+
+  /api/v2/capacity-planner:
+    get:
+      operationId: getCapacityPlan
+      tags: [analytics]
+      summary: Capacity planning forecast (v2)
+      description: Returns capacity forecast from the v2 Coalton capacity-planner module.
+      responses:
+        "200":
+          description: Capacity plan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CapacityPlan"
+
+  /api/v2/session-analytics:
+    get:
+      operationId: getSessionAnalytics
+      tags: [analytics]
+      summary: Per-session analytics (v2)
+      description: Returns detailed per-session analytics from the v2 Coalton session-analytics module.
+      responses:
+        "200":
+          description: Session analytics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionAnalytics"
+
+components:
+  schemas:
+    DashboardSummary:
+      type: object
+      required: [sessions, cron_jobs, health, alerts]
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SessionInfo"
+        cron_jobs:
+          type: array
+          items:
+            $ref: "#/components/schemas/CronJobInfo"
+        health:
+          $ref: "#/components/schemas/HealthStatus"
+        alerts:
+          type: array
+          items:
+            type: string
+
+    SessionInfo:
+      type: object
+      required: [session_id, status]
+      properties:
+        session_id:
+          type: string
+        status:
+          type: string
+          enum: [active, idle, terminated]
+        model:
+          type: string
+        created_at:
+          type: integer
+          description: Unix timestamp
+
+    CronJobInfo:
+      type: object
+      required: [job_id, status]
+      properties:
+        job_id:
+          type: string
+        status:
+          type: string
+        last_run:
+          type: integer
+
+    SessionList:
+      type: object
+      required: [sessions, count]
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SessionInfo"
+        count:
+          type: integer
+
+    HealthStatus:
+      type: object
+      required: [ok, memory_mb, uptime_s]
+      properties:
+        ok:
+          type: boolean
+        memory_mb:
+          type: number
+        uptime_s:
+          type: integer
+        cpu_percent:
+          type: number
+
+    AuditTrailResponse:
+      type: object
+      required: [entries, count]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuditEntry"
+        count:
+          type: integer
+
+    AuditEntry:
+      type: object
+      required: [timestamp, action, actor]
+      properties:
+        timestamp:
+          type: integer
+        action:
+          type: string
+        actor:
+          type: string
+        target:
+          type: string
+        outcome:
+          type: string
+          enum: [success, failure, denied]
+
+    AnalyticsSummary:
+      type: object
+      properties:
+        total_cost_usd:
+          type: number
+        session_count:
+          type: integer
+        duration_buckets:
+          type: array
+          items:
+            type: object
+        efficiency_records:
+          type: array
+          items:
+            type: object
+
+    CostOptimizerResult:
+      type: object
+      required: [recommendations, estimated_savings_usd]
+      properties:
+        recommendations:
+          type: array
+          items:
+            type: string
+        estimated_savings_usd:
+          type: number
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    CapacityPlan:
+      type: object
+      required: [forecast_horizon, capacity_rows]
+      properties:
+        forecast_horizon:
+          type: string
+        capacity_rows:
+          type: array
+          items:
+            type: object
+        threshold_alerts:
+          type: array
+          items:
+            type: string
+
+    SessionAnalytics:
+      type: object
+      required: [sessions, drift_detected]
+      properties:
+        sessions:
+          type: array
+          items:
+            type: object
+        drift_detected:
+          type: boolean
+        anomaly_count:
+          type: integer
