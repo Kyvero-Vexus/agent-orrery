@@ -1,0 +1,24 @@
+{
+  "audit_id": "epic3-audit-20260323",
+  "timestamp": "2026-03-23",
+  "framework": "mcp-tui-driver",
+  "required_scenarios": ["T1", "T2", "T3", "T4", "T5", "T6"],
+  "evidence_dirs_checked": [
+    "test-results/tui-artifacts/",
+    "test-results/tui-regression-matrix/complete/"
+  ],
+  "finding": "NEITHER evidence directory exists on disk",
+  "missing_scenarios": ["T1", "T2", "T3", "T4", "T5", "T6"],
+  "missing_count": 6,
+  "complete_count": 0,
+  "status": "NO_REAL_ARTIFACTS",
+  "note": "No mcp-tui-driver T1-T6 asciicast artifacts exist. All T1-T6 scenarios lack .cast files. The CI gates check for {SID}.cast files in the artifact root. Real E2E requires running: cd e2e-tui && ./run-tui-e2e-t1-t6.sh",
+  "remediation": {
+    "command": "cd e2e-tui && ./run-tui-e2e-t1-t6.sh",
+    "expected_artifacts": {
+      "per_scenario": ["{SID}.cast", "{SID}-transcript.txt"],
+      "total_files": 12
+    },
+    "prerequisite": "mcp-tui-driver installed (https://github.com/michaellee8/mcp-tui-driver), agent-orrery TUI server running"
+  }
+}

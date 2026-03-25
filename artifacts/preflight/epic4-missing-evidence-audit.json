@@ -1,0 +1,25 @@
+{
+  "audit_id": "epic4-audit-20260323",
+  "timestamp": "2026-03-23",
+  "framework": "playwright",
+  "required_scenarios": ["S1", "S2", "S3", "S4", "S5", "S6"],
+  "evidence_dirs_checked": [
+    "test-results/e2e-artifacts/",
+    "test-results/e2e-regression-matrix/complete/"
+  ],
+  "finding": "NEITHER evidence directory exists on disk",
+  "missing_scenarios": ["S1", "S2", "S3", "S4", "S5", "S6"],
+  "missing_count": 6,
+  "complete_count": 0,
+  "status": "NO_REAL_ARTIFACTS",
+  "synthetic_fixture_dir": "test-results/e2e-regression-matrix/complete/",
+  "note": "The CI gates pass because check-playwright-evidence-pack-index.lisp uses test-results/e2e-regression-matrix/complete/ which is a synthetic fixture directory. Real E2E artifacts require running: cd e2e && ./run-e2e.sh",
+  "remediation": {
+    "command": "cd e2e && ./run-e2e.sh",
+    "expected_artifacts": {
+      "per_scenario": ["screenshot.png", "trace.zip"],
+      "total_files": 12
+    },
+    "prerequisite": "Node.js + Playwright installed, agent-orrery server running"
+  }
+}
