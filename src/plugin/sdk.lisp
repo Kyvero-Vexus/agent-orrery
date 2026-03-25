@@ -160,6 +160,16 @@ Supported modules: :audit-trail, :cost-optimizer, :capacity-planner,
   (:documentation "Called when a scenario projection completes.")
   (:method ((p plugin) result) (declare (ignore result)) nil))
 
+;;; v2 extended hooks (bead tm00)
+
+(defgeneric plugin-on-anomaly-detection (plugin anomaly)
+  (:documentation "Called when the anomaly-detector module identifies an anomaly.")
+  (:method ((p plugin) anomaly) (declare (ignore anomaly)) nil))
+
+(defgeneric plugin-on-notification-routed (plugin notification)
+  (:documentation "Called when a notification is routed by the notification-routing module.")
+  (:method ((p plugin) notification) (declare (ignore notification)) nil))
+
 (defun dispatch-lifecycle-hooks (plugin module phase data)
   "Dispatch lifecycle hooks for MODULE at PHASE with DATA.
 Returns list of (hook-name . result) pairs."

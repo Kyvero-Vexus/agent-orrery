@@ -33,6 +33,7 @@
    #:plugin-on-audit-event #:plugin-on-cost-recommendation
    #:plugin-on-capacity-assessment #:plugin-on-session-analytics
    #:plugin-on-scenario-projection
+   #:plugin-on-anomaly-detection #:plugin-on-notification-routed
    #:dispatch-lifecycle-hooks
    #:make-plugin-validation-result
    #:pvr-valid-p #:pvr-errors #:pvr-warnings
