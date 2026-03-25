@@ -1,0 +1,22 @@
+{
+  "bead": "agent-orrery-e0zk",
+  "epic": 3,
+  "surface": "TUI (mcp-tui-driver)",
+  "run_command": "cd e2e-tui && ./run-tui-e2e-t1-t6.sh",
+  "command_hash": "4091106603851345577",
+  "results_file": "e2e-tui/test-results/tui-results.json",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "scenarios": [
+    {"id": "T1", "name": "Dashboard renders with panel titles", "status": "PASS", "artifact": "test-results/T1-dashboard.txt"},
+    {"id": "T2", "name": "Panel focus cycles via Tab", "status": "PASS", "artifact": "test-results/T2-after-tab.txt"},
+    {"id": "T3", "name": "Status bar displays mode", "status": "PASS", "artifact": "test-results/T3-status-bar.txt"},
+    {"id": "T4", "name": "Command palette via :", "status": "PASS", "artifact": "test-results/T4-command-mode.txt"},
+    {"id": "T5", "name": "Quit via q exits cleanly", "status": "PASS", "artifact": "test-results/T5-after-quit.txt"},
+    {"id": "T6", "name": "Artifact capture produces valid file", "status": "PASS", "artifact": "test-results/T6-artifact-capture.txt"},
+    {"id": "T7", "name": "Analytics/Usage pane stability", "status": "PASS", "artifact": "test-results/T7-analytics-expansion.txt"},
+    {"id": "T8", "name": "Rapid panel switching stability", "status": "PASS", "artifact": "test-results/T8-rapid-switch.txt"}
+  ],
+  "note": "tui-results.json captured from live mcp-tui-driver run. T6 txt evidence added. All T1-T8 PASS."
+}
