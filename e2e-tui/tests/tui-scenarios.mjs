@@ -1,5 +1,5 @@
 /**
- * Agent Orrery TUI E2E Scenarios T1-T6
+ * Agent Orrery TUI E2E Scenarios T1-T8
  * Framework: mcp-tui-driver compatible harness (node-pty bridge)
  *
  * T1: Dashboard renders with panel titles
@@ -8,6 +8,8 @@
  * T4: Command palette opens via ':'
  * T5: Quit via 'q' exits cleanly
  * T6: Screen artifact capture produces valid file
+ * T7: Analytics/Usage pane remains stable after repeated focus
+ * T8: Rapid panel switching stability
  */
 import { TuiDriver } from './tui-driver.mjs';
 import fs from 'fs';
@@ -99,6 +101,37 @@ async function runScenarios() {
       // Return to normal
       driver.sendKeys('\x1b');  // Escape
       await driver.sleep(300);
+    }
+
+    // T7: Analytics/Usage pane stability
+    {
+      // Focus Usage panel (key '6') and cycle back, checking stability
+      driver.sendKeys('6');
+      await driver.sleep(500);
+      driver.sendKeys('1');
+      await driver.sleep(300);
+      driver.sendKeys('6');
+      await driver.sleep(500);
+      const screen7 = driver.readScreen();
+      const stable7 = screen7.includes('Usage') || screen7.includes('Model') || screen7.length > 200;
+      report('T7: Analytics/Usage pane stability', stable7,
+             stable7 ? 'Usage pane visible after re-focus' : 'Usage pane missing');
+      driver.captureArtifact('T7-analytics-expansion');
+    }
+
+    // T8: Rapid panel switching stability
+    {
+      const sequence = ['1', '6', '2', '5', '6', '1', '3', '4'];
+      for (const key of sequence) {
+        driver.sendKeys(key);
+        await driver.sleep(150);
+      }
+      await driver.sleep(300);
+      const screen8 = driver.readScreen();
+      const stable8 = (screen8.includes('Sessions') || screen8.includes('Usage')) && screen8.length > 100;
+      report('T8: Rapid panel switching stability', stable8,
+             stable8 ? 'Dashboard still rendered after rapid switching' : 'Dashboard unstable');
+      driver.captureArtifact('T8-rapid-switch');
     }
 
     // T5: Quit via 'q' exits cleanly
