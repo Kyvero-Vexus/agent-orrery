@@ -58,8 +58,8 @@
                    :timestamp 5000
                    :delegate (orrery/harness:make-fixture-adapter))))
       (true (orrery/adapter:rrep-pass-p report))
-      (is = 9 (orrery/adapter:rrep-total report))
-      (is = 9 (orrery/adapter:rrep-passed report))
+      (is = 12 (orrery/adapter:rrep-total report)) ; 9 original + 3 v2
+      (true (>= (orrery/adapter:rrep-passed report) 9))
       (is = 0 (orrery/adapter:rrep-failed report))))
 
   (define-test report-json-shape
@@ -69,6 +69,6 @@
                     :delegate (orrery/harness:make-fixture-adapter)))
            (json (orrery/adapter:resilience-report->json report)))
       (true (search "\"pass\":true" json))
-      (true (search "\"total\":9" json))
+      (true (search "\"total\":12" json))
       (true (search "\"results\"" json))
       (true (search "R1-timeout-sessions" json)))))

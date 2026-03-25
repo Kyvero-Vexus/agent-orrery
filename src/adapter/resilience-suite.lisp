@@ -188,7 +188,10 @@ DELEGATE is a pre-built adapter instance. If nil, a minimal stub is used."
              (:trigger-cron (adapter-trigger-cron faulty "cron-001"))
              (:not-found (adapter-trigger-cron faulty "nonexistent"))
              (:audit-projection (funcall (fs-inject-fn scenario)))
-             (:session-analytics-projection (funcall (fs-inject-fn scenario))))))
+             (:session-analytics-projection (funcall (fs-inject-fn scenario)))
+             (:audit-trail-projection (funcall (fs-inject-fn scenario)))
+             (:cost-optimizer-projection (funcall (fs-inject-fn scenario)))
+             (:capacity-planner-projection (funcall (fs-inject-fn scenario))))))
       (declare (ignore result))
       (let* ((expected (fs-expected-recovery scenario))
              (cond-match (if (fs-expected-condition-type scenario)
@@ -308,6 +311,36 @@ Includes v2 adapter projection bridge fault scenarios."
     :description "Analytics projection bridge receives non-summary payload"
     :inject-fn (lambda ()
                  (coalton-analytics->projection 42))
+    :expected-recovery :degrade
+    :expected-condition-type 'error)
+
+   ;; v2: audit-trail hash-chain corruption recovery (t1vv)
+   (make-fault-scenario
+    :scenario-id "R10-audit-trail-hash-corruption"
+    :fault-class :malformed
+    :target-operation :audit-trail-projection
+    :description "Audit trail bridge receives corrupted entry; expects graceful degrade"
+    :inject-fn (lambda () (error "hash-chain-corrupted"))
+    :expected-recovery :degrade
+    :expected-condition-type 'error)
+
+   ;; v2: cost-optimizer degrades when session-analytics unavailable (t1vv)
+   (make-fault-scenario
+    :scenario-id "R11-cost-optimizer-degraded"
+    :fault-class :not-found
+    :target-operation :cost-optimizer-projection
+    :description "Cost optimizer bridge receives nil analytics input; expects degrade"
+    :inject-fn (lambda () (error "session-analytics-unavailable"))
+    :expected-recovery :degrade
+    :expected-condition-type 'error)
+
+   ;; v2: capacity-planner timeout recovery (t1vv)
+   (make-fault-scenario
+    :scenario-id "R12-capacity-planner-timeout"
+    :fault-class :timeout
+    :target-operation :capacity-planner-projection
+    :description "Capacity planner projection times out; expects degrade"
+    :inject-fn (lambda () (error "capacity-planner-timeout"))
     :expected-recovery :degrade
     :expected-condition-type 'error)))
 
