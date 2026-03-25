@@ -14,7 +14,7 @@
              (:constructor make-protocol-parity-row
                  (&key sequence-id web-kind tui-kind mcclim-kind
                        web-hash tui-hash mcclim-hash parity-p detail))
-             (:conc-name ppr-))
+             (:conc-name protocol-par-))
   "One deterministic parity row for replay fixture comparison."
   (sequence-id 0 :type (integer 0))
   (web-kind :status :type ui-message-kind)
@@ -159,10 +159,10 @@
                (unless first (write-char #\, s))
                (format s
                        "{\"sequence_id\":~D,\"web_kind\":\"~(~A~)\",\"tui_kind\":\"~(~A~)\",\"mcclim_kind\":\"~(~A~)\",\"parity\":~A,\"detail\":\"~A\"}"
-                       (ppr-sequence-id row)
-                       (ppr-web-kind row)
-                       (ppr-tui-kind row)
-                       (ppr-mcclim-kind row)
-                       (if (ppr-parity-p row) "true" "false")
-                       (ppr-detail row))))
+                       (protocol-par-sequence-id row)
+                       (protocol-par-web-kind row)
+                       (protocol-par-tui-kind row)
+                       (protocol-par-mcclim-kind row)
+                       (if (protocol-par-parity-p row) "true" "false")
+                       (protocol-par-detail row))))
     (write-string "]}" s)))

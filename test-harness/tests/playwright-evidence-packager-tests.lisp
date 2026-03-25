@@ -67,14 +67,13 @@
              (orrery/adapter:peb-command-hash b))
       (%cleanup-pkg d))))
 
-;; Ready with full evidence dir
+;; Ready with full evidence dir (requires fixture)
 (define-test (playwright-evidence-packager-suite full-evidence-ready)
-  (let* ((d (%mk-pkg-dir "full"))
-         (b (orrery/adapter:compile-playwright-evidence-bundle
-             "test-results/e2e-regression-matrix/complete/"
-             orrery/adapter:*playwright-canonical-command*)))
-    (unwind-protect
-         (progn
-           (true (orrery/adapter:peb-ready-p b))
-           (is = 6 (orrery/adapter:peb-complete-count b)))
-      (%cleanup-pkg d))))
+  (let* ((evidence-dir "test-results/e2e-regression-matrix/complete/"))
+    (if (not (probe-file evidence-dir))
+        (skip "Skipping: evidence fixture directory not found")
+        (let* ((b (orrery/adapter:compile-playwright-evidence-bundle
+                   evidence-dir
+                   orrery/adapter:*playwright-canonical-command*)))
+          (true (orrery/adapter:peb-ready-p b))
+          (is = 6 (orrery/adapter:peb-complete-count b))))))

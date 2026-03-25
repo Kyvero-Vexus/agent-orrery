@@ -61,7 +61,7 @@
          (fixture (orrery/adapter:build-protocol-parity-fixture web tui mc)))
     (false (orrery/adapter:ppf-parity-pass-p fixture))
     (is = 1
-        (count-if-not #'orrery/adapter:ppr-parity-p
+        (count-if-not #'orrery/adapter:protocol-par-parity-p
                       (orrery/adapter:ppf-rows fixture)))))
 
 ;;; ── Extended tests for bead 111: deterministic replay contracts + error ADT ─

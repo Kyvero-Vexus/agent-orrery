@@ -141,3 +141,14 @@
           do (progn (when (> i 0) (write-char #\, out))
                     (write-string (%prr->json row) out)))
     (write-string "]}" out)))
+
+;;; ── Compatibility aliases ────────────────────────────────────────────────────
+;;; playwright-verifier-hook-adapter uses ppr-* names; provide them here.
+
+(deftype playwright-preflight-record () 'playwright-preflight-hook)
+
+(declaim (inline ppr-scenario-id ppr-gate-pass-p ppr-reason-codes ppr-detail))
+(defun ppr-scenario-id  (r) (pph-scenario-id  r))
+(defun ppr-gate-pass-p  (r) (pph-gate-pass-p  r))
+(defun ppr-reason-codes (r) (pph-reason-codes r))
+(defun ppr-detail       (r) (pph-detail       r))
