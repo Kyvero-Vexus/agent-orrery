@@ -1668,6 +1668,34 @@
    #:ss-last-sync-at #:ss-sync-token
    #:snapshot-from-adapter #:apply-incremental-events #:replay-events #:store->plist))
 
+(defpackage #:orrery/live-adapter
+  (:use #:cl)
+  (:import-from #:orrery/domain
+                #:session-record #:make-session-record
+                #:cron-record #:make-cron-record
+                #:health-record #:make-health-record)
+  (:export
+   ;; Config
+   #:live-adapter-config
+   #:live-adapter-config-p
+   #:make-live-adapter-config
+   #:live-adapter-config-host
+   #:live-adapter-config-port
+   #:live-adapter-config-poll-interval-s
+   #:live-adapter-config-timeout-s
+   #:live-adapter-config-api-token
+   ;; Polling
+   #:check-openclaw-reachable
+   #:poll-openclaw-sessions
+   #:poll-openclaw-cron
+   #:poll-openclaw-health
+   ;; SSE
+   #:sse-subscription
+   #:sse-subscription-p
+   #:sse-subscription-url
+   #:start-sse-subscription
+   #:stop-sse-subscription))
+
 (defpackage #:orrery/provider
   (:use #:cl)
   (:import-from #:orrery/domain

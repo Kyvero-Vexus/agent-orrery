@@ -34,7 +34,7 @@
   :description "Dashboard for OpenClaw-compatible agent systems"
   :version "0.1.0"
   :license "MIT"
-  :depends-on ("agent-orrery/coalton" "dexador" "com.inuoe.jzon" "croatoan" "hunchentoot" "mcclim")
+  :depends-on ("agent-orrery/coalton" "dexador" "com.inuoe.jzon" "croatoan" "hunchentoot" "mcclim" "bordeaux-threads")
   :serial t
   :components
   ((:module "src"
@@ -54,6 +54,7 @@
       :components ((:file "protocol")
                    (:file "generic-starter-kit")
                    (:file "openclaw")
+                   (:file "live-adapter")
                    (:file "contract-probe")
                    (:file "html-fallback")
                    (:file "capability-mapper")
