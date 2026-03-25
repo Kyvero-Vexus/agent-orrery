@@ -18,6 +18,8 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 export BASE_URL="${BASE_URL:-http://localhost:7890}"
+# Ensure Playwright uses its bundled browser (not system chromium)
+export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-$(pwd)/node_modules/.cache}"
 
 echo "=== Agent Orrery E2E (Playwright) ==="
 echo "  BASE_URL: $BASE_URL"
