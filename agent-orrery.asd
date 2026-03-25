@@ -378,6 +378,7 @@
                    (:file "epic-done-state-guard-tests")
                    (:file "evidence-gap-explainer-tests")
                    (:file "cross-ui-parity-suite-tests")
+                   (:file "test-cross-ui-parity-v2")
                    (:file "performance-soak-tests")
                    (:file "resilience-suite-tests")
                    (:file "scenario-planning-tests")
