@@ -297,6 +297,32 @@ kill <PID>  # or change ORRERY_PORT
 2. Use typed `page-request` + `paginate-items` from `v2-projection-bridge`
 3. Ensure sort key/order are fixed per endpoint
 
+#### E2E Playwright test failures (web dashboard)
+
+**Symptom:** Playwright S1-S8 fail during CI or local run.
+
+**Checks:**
+1. Ensure web server is running on port 7890: `curl -s http://localhost:7890/ | head -3`
+2. Start server if needed: `sbcl --load e2e/start-server.lisp &`
+3. Run tests: `cd e2e && npx playwright test --reporter=list`
+4. Inspect traces: `cd e2e && npx playwright show-report`
+5. For S3 session detail: requires fixture sess-001 with `agent-name="gensym"`, `model="claude-opus-4"`, `status=:active`
+
+**Expected all-green:** S1-S8 pass (9 test cases total including API tests)
+
+#### E2E mcp-tui-driver test failures (TUI dashboard)
+
+**Symptom:** mcp-tui-driver T1-T8 fail.
+
+**Checks:**
+1. Ensure TUI server is not already running on expected socket
+2. Run: `cd e2e-tui && node tests/tui-scenarios.mjs`
+3. Inspect artifacts: `ls e2e-tui/test-results/`
+4. T6 (artifact capture): requires write permission to `e2e-tui/test-results/`
+5. T8 (rapid switching): may timeout on heavily loaded systems — retry once
+
+**Expected all-green:** T1-T8 pass (8 scenarios)
+
 ## Observability
 
 ### Anomaly Detection
