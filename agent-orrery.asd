@@ -50,6 +50,7 @@
                    (:file "validators")
                    (:file "serialization")))
      (:module "adapter"
+      :serial t
       :components ((:file "protocol")
                    (:file "generic-starter-kit")
                    (:file "openclaw")

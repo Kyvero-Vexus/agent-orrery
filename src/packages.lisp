@@ -80,7 +80,17 @@
                 #:sr-id #:er-kind
                 #:ur-model #:ur-prompt-tokens #:ur-completion-tokens
                 #:ur-total-tokens #:ur-estimated-cost-cents #:ur-timestamp
-                #:ar-id #:ar-severity #:ar-title #:ar-source #:ar-fired-at)
+                #:ar-id #:ar-severity #:ar-title #:ar-source #:ar-fired-at
+                ;; Analytics types needed by session-analytics-bridge
+                #:analytics-summary #:analytics-summary-p #:make-analytics-summary
+                #:asm-total-sessions #:asm-avg-duration-s #:asm-median-tokens
+                #:asm-avg-tokens-per-msg #:asm-total-cost-cents
+                #:duration-bucket-record #:duration-bucket-record-p
+                #:make-duration-bucket-record #:dbr-label #:dbr-count
+                #:efficiency-record #:efficiency-record-p
+                #:make-efficiency-record
+                #:efr-session-id #:efr-tokens-per-message
+                #:efr-tokens-per-minute #:efr-cost-per-1k)
   (:export
    ;; Core query protocol
    #:adapter-list-sessions
