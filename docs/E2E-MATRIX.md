@@ -103,3 +103,26 @@ A PR touching a closed epic boundary must include:
 4. Run-script gate pass (`make run-scripts-gate`) proving all runtime entrypoints still execute
 
 No exceptions.
+
+## Playwright CI Gate (Epic 4) — Deterministic Run Command
+
+**Single command that starts server, waits, runs S1-S9, reports pass/fail:**
+
+```bash
+bash ci/run-playwright-gate.sh
+# or equivalently:
+make e2e-web-gate
+```
+
+**What the gate does:**
+1. Starts the CL web server (`sbcl --load e2e/start-server.lisp`) on port 7890
+2. Polls `http://localhost:7890/` up to 30s for readiness
+3. Runs `npx playwright test --trace on` (all S1-S9 scenarios)
+4. Captures traces + screenshots to `test-results/e2e-artifacts/`
+5. Kills the server and exits with Playwright's exit code
+
+**Artifacts produced:**
+- `test-results/e2e-report/index.html` — HTML report
+- `test-results/e2e-artifacts/` — traces (`.zip`), screenshots (`.png`)
+
+**Epic 4 is NOT complete without this gate passing cleanly.**
