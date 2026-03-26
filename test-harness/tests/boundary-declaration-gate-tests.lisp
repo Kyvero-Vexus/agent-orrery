@@ -16,14 +16,22 @@
       (delete-package pkg))))
 
 (define-test (boundary-declaration-gate-tests baseline-detects-known-violations)
-  ;; Currently the adapter packages have some undeclared exports.
-  ;; Verify the mechanism detects them correctly.
-  (let ((violations (boundary-export-declaration-violations)))
-    (is eq t (< 0 (length violations)))
-    ;; Verify structure of a violation
-    (let ((v (first violations)))
-      (is eq t (boundary-declaration-violation-p v))
-      (is eq :missing-declaration (bdv-reason v)))))
+  ;; Create a synthetic violation in a temp package to verify the gate mechanism works.
+  ;; (The production packages are now fully declared, so we can't rely on pre-existing violations.)
+  (let* ((package-name (%fresh-temp-package-name "VIOLATION"))
+         (pkg (make-package package-name :use '(:cl)))
+         (raw (intern "UNDECLARED-SYMBOL" pkg)))
+    (unwind-protect
+         (progn
+           ;; Export without any declaration - this IS a violation
+           (export raw pkg)
+           (let ((violations (boundary-export-declaration-violations (list package-name))))
+             (is eq t (< 0 (length violations)))
+             ;; Verify structure of a violation
+             (let ((v (first violations)))
+               (is eq t (boundary-declaration-violation-p v))
+               (is eq :missing-declaration (bdv-reason v)))))
+      (%cleanup-package package-name))))
 
 (define-test (boundary-declaration-gate-tests flags-undeclared-export)
   (let* ((package-name (%fresh-temp-package-name "UNDECLARED"))
