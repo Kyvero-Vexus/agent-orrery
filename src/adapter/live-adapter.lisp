@@ -125,6 +125,20 @@
     (when payload
       (%decode-health payload))))
 
+(declaim (ftype (function (live-adapter-config) (or null orrery/domain:analytics-summary))
+                poll-openclaw-analytics))
+(defun poll-openclaw-analytics (config)
+  "Return ANALYTICS-SUMMARY from /api/analytics, or NIL on failure.
+If /api/analytics is not available, falls back to computing from session list."
+  (let ((payload (%live-get-json config "/api/analytics")))
+    (cond
+      ;; Primary: use /api/analytics endpoint if available
+      (payload (%decode-analytics payload))
+      ;; Fallback: compute from session list
+      (t (let ((sessions (poll-openclaw-sessions config)))
+           (when sessions
+             (%compute-analytics-from-sessions sessions)))))))
+
 ;;; ============================================================
 ;;; Decoders
 ;;; ============================================================
@@ -219,6 +233,52 @@
                     :checked-at (%int (%field item "checked_at"))
                     :latency-ms (%int (%field item "latency_ms")))))
     (t nil)))
+
+(declaim (ftype (function (t) (or null orrery/domain:analytics-summary))
+                %decode-analytics))
+(defun %decode-analytics (payload)
+  "Decode JSON payload into ANALYTICS-SUMMARY record."
+  (when (hash-table-p payload)
+    (orrery/domain:make-analytics-summary
+     :total-sessions     (%int (%field payload "total_sessions"))
+     :avg-duration-s     (%int (%field payload "avg_duration_s"))
+     :median-tokens      (%int (%field payload "median_tokens"))
+     :avg-tokens-per-msg (%int (%field payload "avg_tokens_per_msg"))
+     :total-cost-cents   (%int (%field payload "total_cost_cents")))))
+
+(declaim (ftype (function (list) orrery/domain:analytics-summary)
+                %compute-analytics-from-sessions))
+(defun %compute-analytics-from-sessions (sessions)
+  "Compute ANALYTICS-SUMMARY from a list of SESSION-RECORD objects.
+This is a fallback when /api/analytics endpoint is not available."
+  (let* ((n (length sessions))
+         (total-tokens 0)
+         (total-duration 0)
+         (total-cost 0)
+         (token-list nil))
+    (declare (type fixnum n total-tokens total-duration total-cost))
+    (dolist (s sessions)
+      (let ((tokens (orrery/domain:sr-total-tokens s))
+            (duration (- (orrery/domain:sr-updated-at s)
+                        (orrery/domain:sr-created-at s)))
+            (cost (orrery/domain:sr-estimated-cost-cents s)))
+        (declare (type fixnum tokens duration cost))
+        (incf total-tokens tokens)
+        (incf total-duration (max 0 duration))
+        (incf total-cost cost)
+        (push tokens token-list)))
+    ;; Compute median tokens
+    (let* ((sorted-tokens (sort token-list #'<))
+           (median-tokens (if (zerop n)
+                              0
+                              (nth (floor n 2) sorted-tokens))))
+      (declare (type fixnum median-tokens))
+      (orrery/domain:make-analytics-summary
+       :total-sessions n
+       :avg-duration-s (if (zerop n) 0 (floor total-duration n))
+       :median-tokens median-tokens
+       :avg-tokens-per-msg (if (zerop n) 0 (floor total-tokens n))
+       :total-cost-cents total-cost))))
 
 ;;; ============================================================
 ;;; SSE subscription (eb0.12.2)
