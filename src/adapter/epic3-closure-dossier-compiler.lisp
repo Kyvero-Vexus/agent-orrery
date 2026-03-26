@@ -154,6 +154,7 @@ Returns an EPIC3-CLOSURE-DOSSIER with deterministic JSON shape."
   (declare (type t1-t6-witness-ledger ledger)
            (type t1-t6-replay-journal journal)
            (type t1-t6-closure-verdict verdict)
+           (ignore journal)
            (optimize (safety 3)))
   (let* ((records (mapcar #'lock-record->scenario-record (twl-records ledger)))
          (all-present-p (every #'esr-artifacts-present-p records))

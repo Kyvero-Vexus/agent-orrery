@@ -188,6 +188,7 @@
                    (:file "ui-protocol-schema")
                    (:file "adapter-contract-checker")
                    (:file "boundary-declaration-gate")
+                   (:file "missing-boundary-declarations")
                    (:file "design-doc-sync-gate")))
      (:module "pipeline"
       :components ((:file "events")

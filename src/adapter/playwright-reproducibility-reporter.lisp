@@ -152,8 +152,8 @@
    SCENARIO-SAMPLES-ALIST: ((scenario-id . samples-list) ...)"
   (declare (type string run-id artifact-root)
            (type list scenario-samples-alist)
+           (ignore artifact-root)
            (optimize (safety 3)))
-  (declare (ignore artifact-root))
   (let* ((canonical   (command-fingerprint *playwright-canonical-command*))
          (scores      (mapcar (lambda (entry)
                                 (destructuring-bind (sid . samples) entry

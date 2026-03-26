@@ -111,7 +111,7 @@
  (ftype (function (unified-closure-verdict) (values string &optional))
         unified-closure-verdict->json)
  (ftype (function (closure-rationale-entry) (values string &optional))
-        %rationale-entry->json))
+        %cre->json))
 
 ;;; ── Artifact Manifest Validation ─────────────────────────────────────────────
 
@@ -427,7 +427,7 @@ Returns T if all required S1-S6 artifacts exist and command matches."
 
 ;;; ── JSON Serialization ───────────────────────────────────────────────────────
 
-(defun %rationale-entry->json (entry)
+(defun %cre->json (entry)
   "Serialize CLOSURE-RATIONALE-ENTRY to JSON string."
   (declare (type closure-rationale-entry entry))
   (format nil "{\"framework\":\"~(~A~)\",\"category\":\"~(~A~)\",\"description\":\"~A\",\"blocking\":~A}"
@@ -501,7 +501,7 @@ Returns T if all required S1-S6 artifacts exist and command matches."
     (loop for entry in (ucv-rationale verdict)
           for i from 0 do
             (when (> i 0) (write-char #\, out))
-            (write-string (%rationale-entry->json entry) out))
+            (write-string (%cre->json entry) out))
     
     ;; Blocking issues
     (write-string "],\"blocking_issues\":[" out)

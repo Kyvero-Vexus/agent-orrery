@@ -142,7 +142,6 @@
            (optimize (safety 3)))
   (let* ((records (e4ed-records dossier))
          (passing (count-if #'e4sr-evidence-complete-p records))
-         (all-complete-p (= passing 6))
          (all-screenshots (every (lambda (r) (> (length (e4sr-screenshot-digest r)) 0)) records))
          (all-traces (every (lambda (r) (> (length (e4sr-trace-digest r)) 0)) records)))
     (make-epic4-evidence-proof
@@ -427,7 +426,7 @@ Fail-closed: any missing evidence produces :OPEN verdict with rationale."
     (format out ",\"command_fingerprints\":{\"epic3\":~D,\"epic4\":~D,\"match\":~A}"
             (dfc-epic3-command-fingerprint cert)
             (dfc-epic4-command-fingerprint cert)
-            (if (dfc-command-fingerprints-match-p cert) "true" "false"))
+            (if (dfc-command-fingerprints-match cert) "true" "false"))
     
     ;; Artifact rollup
     (write-string ",\"artifact_rollup\":[" out)
@@ -500,7 +499,7 @@ EPIC4-ARTIFACT-ROOT: path to Epic 4 Playwright artifacts."
             (dfc-scenarios-passing certificate)
             (dfc-total-scenarios certificate))
     (format t "  Coverage: ~4,2F%~%" (* 100 (dfc-scenario-coverage certificate)))
-    (format t "  Command Fingerprints Match: ~A~%" (dfc-command-fingerprints-match-p certificate))
+    (format t "  Command Fingerprints Match: ~A~%" (dfc-command-fingerprints-match certificate))
     (format t "  Rationale Entries: ~D~%" (length (dfc-fail-closed-rationale certificate)))
     (format t "  Blocking Issues: ~D~%" (length (dfc-blocking-issues certificate)))
     (format t "  Written to: ~A~%" output-path)

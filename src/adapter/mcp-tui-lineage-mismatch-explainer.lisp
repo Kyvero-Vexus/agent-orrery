@@ -140,39 +140,36 @@ Returns TUI-LINEAGE-MISMATCH-REPORT with remediation matrix."
     (setf entries (nreverse entries))
     (setf mismatch-classes (nreverse mismatch-classes))
     
-    ;; Build by-mismatch-class index
-    (let ((by-class nil))
+    ;; Build by-mismatch-class index and remediation matrix
+    (let* ((by-class nil)
+           (remediation-matrix nil))
       (dolist (entry entries)
         (let ((class (tlme-mismatch-class entry)))
           (unless (assoc class by-class)
             (push (cons class nil) by-class))
           (push entry (cdr (assoc class by-class)))))
-      (setf by-class (nreverse by-class)))
-    
-    ;; Build consolidated remediation matrix
-    (let ((remediation-matrix nil))
+      (setf by-class (nreverse by-class))
       (dolist (entry mismatch-classes)
         (when (tlme-remediation-steps entry)
           (push (cons (tlme-scenario-id entry)
                       (tlme-remediation-steps entry))
                 remediation-matrix)))
-      (setf remediation-matrix (nreverse remediation-matrix)))
-    
-    (let* ((pass-p (and (not command-drift-p)
-                        (mtsr-pass-p scorecard)
-                        (= 0 mismatch-count)))
-           (detail (format nil "pass=~A clean=~D mismatch=~D cmd_drift=~A"
-                           pass-p clean-count mismatch-count command-drift-p)))
-      (make-tui-lineage-mismatch-report
-       :pass-p pass-p
-       :mismatch-count mismatch-count
-       :clean-count clean-count
-       :mismatch-matrix entries
-       :by-mismatch-class by-class
-       :remediation-matrix remediation-matrix
-       :command-hash provided-hash
-       :detail detail
-       :timestamp (get-universal-time)))))
+      (setf remediation-matrix (nreverse remediation-matrix))
+      (let* ((pass-p (and (not command-drift-p)
+                          (mtsr-pass-p scorecard)
+                          (= 0 mismatch-count)))
+             (detail (format nil "pass=~A clean=~D mismatch=~D cmd_drift=~A"
+                             pass-p clean-count mismatch-count command-drift-p)))
+        (make-tui-lineage-mismatch-report
+         :pass-p pass-p
+         :mismatch-count mismatch-count
+         :clean-count clean-count
+         :mismatch-matrix entries
+         :by-mismatch-class by-class
+         :remediation-matrix remediation-matrix
+         :command-hash provided-hash
+         :detail detail
+         :timestamp (get-universal-time))))))
 
 ;;; ── JSON serializer ───────────────────────────────────────────────────────────
 

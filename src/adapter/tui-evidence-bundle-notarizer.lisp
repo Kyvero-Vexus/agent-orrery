@@ -59,6 +59,7 @@
 (defun build-tui-notarization-record (scenario-id command transcript-digest artifact-digest artifact-root)
   "Build an immutable notarization record for one T1-T6 scenario."
   (declare (type string scenario-id command transcript-digest artifact-digest artifact-root)
+           (ignore artifact-root)
            (optimize (safety 3)))
   (let* ((cmd-hash    (command-fingerprint command))
          (canon-hash  (command-fingerprint *mcp-tui-deterministic-command*))
@@ -73,7 +74,6 @@
          (notar-id    (if all-ok
                           (%make-notarization-id scenario-id cmd-hash transcript-digest artifact-digest)
                           "")))
-    (declare (ignore artifact-root))
     (make-tui-notarization-record
      :scenario-id       scenario-id
      :command           command

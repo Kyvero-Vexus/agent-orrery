@@ -176,15 +176,7 @@
    Recalculates closure verdict, drift-count, missing-count."
   (declare (type fixture-checksum-registry registry)
            (type fixture-checksum-entry entry))
-  (let* ((new-entries (append (fcr-entries registry) (list entry)))
-         (new-reg (make-fixture-checksum-registry
-                   :entries new-entries
-                   :canonical-command (fcr-canonical-command registry)
-                   :run-id (fcr-run-id registry)
-                   :closure-verdict :open
-                   :drift-count 0
-                   :missing-count 0
-                   :timestamp (fcr-timestamp registry))))
+  (let* ((new-entries (append (fcr-entries registry) (list entry))))
     (build-registry-from-entries new-entries)))
 
 (defun build-registry-from-entries (entries)

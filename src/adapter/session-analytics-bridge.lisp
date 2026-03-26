@@ -13,7 +13,7 @@
  (ftype (function (t) (values analytics-summary list list &optional)) coalton-analytics->cl)
  (ftype (function (t) (values duration-bucket-record &optional)) coalton-bucket->cl)
  (ftype (function (t) (values efficiency-record &optional)) coalton-efficiency->cl)
- (ftype (function (analytics-summary) (values string &optional)) analytics-summary->json)
+ (ftype (function (analytics-summary &optional list list) (values string &optional)) analytics-summary->json)
  (ftype (function (duration-bucket-record) (values string &optional)) duration-bucket->json)
  (ftype (function (efficiency-record) (values string &optional)) efficiency-record->json))
 

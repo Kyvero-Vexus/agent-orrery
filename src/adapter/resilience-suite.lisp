@@ -116,7 +116,9 @@
 
 (defun attempt-with-recovery (adapter operation-key thunk)
   "Attempt THUNK, classify recovery action on failure."
-  (declare (type keyword operation-key) (type function thunk) (optimize (safety 3)))
+  (declare (type keyword operation-key) (type function thunk)
+           (ignore adapter operation-key)
+           (optimize (safety 3)))
   (let ((start (get-internal-real-time))
         (result nil)
         (recovery :abort)

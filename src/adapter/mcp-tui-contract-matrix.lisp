@@ -72,8 +72,8 @@
 
 (defun compile-tui-contract-matrix (artifact-root command)
   (declare (type string artifact-root command)
+           (ignore artifact-root)
            (optimize (safety 3)))
-  (declare (ignore artifact-root))
   (let ((contracts (mapcar #'build-tui-contract-row *mcp-tui-required-scenarios*)))
     (make-tui-contract-matrix
      :run-id        (format nil "tcm-~D" (get-universal-time))
