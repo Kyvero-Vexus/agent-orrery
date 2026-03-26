@@ -113,7 +113,7 @@ cat > "${PARITY_CHECK_SCRIPT}" << 'PARITY_LISP'
 PARITY_LISP
 
 # Substitute the quicklisp path
-sed -i "s|#\{QUICKLISP_SETUP\}|${QUICKLISP_SETUP}|g" "${PARITY_CHECK_SCRIPT}"
+sed -i "s|#{QUICKLISP_SETUP}|${QUICKLISP_SETUP}|g" "${PARITY_CHECK_SCRIPT}"
 
 # Set environment for the Lisp script
 export PARITY_TIMESTAMP="${TIMESTAMP}"
