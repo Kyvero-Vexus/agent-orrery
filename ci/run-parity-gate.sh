@@ -79,8 +79,8 @@ cat > "${PARITY_CHECK_SCRIPT}" << 'PARITY_LISP'
        (pass-sym (and pkg (find-symbol "CUC-PASS-P" pkg)))
        (json-sym (and pkg (find-symbol "CROSS-UI-CONFORMANCE-REPORT->JSON" pkg)))
        (mk-collector-sym (and pkg (find-symbol "MAKE-EMPTY-COLLECTOR" pkg)))
-       (web-manifest-sym (and pkg (find-symbol "MAKE-WEB-EVIDENCE-MANIFEST" pkg)))
-       (tui-manifest-sym (and pkg (find-symbol "MAKE-TUI-EVIDENCE-MANIFEST" pkg))))
+       (web-manifest-sym (and pkg (find-symbol "COMPILE-PLAYWRIGHT-EVIDENCE-MANIFEST" pkg)))
+       (tui-manifest-sym (and pkg (find-symbol "COMPILE-MCP-TUI-EVIDENCE-MANIFEST" pkg))))
   (unless (and run-sym pass-sym json-sym mk-collector-sym)
     (format *error-output* "~&ERROR: Required parity suite symbols not found~%")
     (sb-ext:exit :code 2))
@@ -88,11 +88,13 @@ cat > "${PARITY_CHECK_SCRIPT}" << 'PARITY_LISP'
   (let* ((timestamp (parse-integer (or (uiop:getenv "PARITY_TIMESTAMP") "0")))
          (web-dir (or (uiop:getenv "WEB_EVIDENCE_DIR") "test-results/e2e-report/"))
          (tui-dir (or (uiop:getenv "TUI_EVIDENCE_DIR") "test-results/tui-artifacts/"))
+         (web-cmd (or (uiop:getenv "WEB_COMMAND") "cd e2e && ./run-e2e.sh"))
+         (tui-cmd (or (uiop:getenv "TUI_COMMAND") "make e2e-tui"))
          (collector (funcall mk-collector-sym))
          (web-manifest (when (and web-manifest-sym (probe-file web-dir))
-                         (funcall web-manifest-sym web-dir)))
+                         (funcall web-manifest-sym web-dir web-cmd)))
          (tui-manifest (when (and tui-manifest-sym (probe-file tui-dir))
-                         (funcall tui-manifest-sym tui-dir)))
+                         (funcall tui-manifest-sym tui-dir tui-cmd)))
          (report (funcall run-sym collector
                           :timestamp timestamp
                           :web-manifest web-manifest
